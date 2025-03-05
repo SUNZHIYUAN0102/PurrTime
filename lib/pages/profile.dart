@@ -14,6 +14,7 @@ class _ProfileState extends State<Profile> {
     return Scaffold(
       body: Column(
         children: [
+          // Header
           Stack(
             children: [
               Container(
@@ -21,7 +22,7 @@ class _ProfileState extends State<Profile> {
                   color: Color.fromRGBO(249, 229, 172, 1),
                 ),
                 width: double.infinity,
-                height: 300.h,
+                height: 250.h,
                 child: Column(
                   children: [
                     Padding(
@@ -43,6 +44,50 @@ class _ProfileState extends State<Profile> {
                         ],
                       ),
                     ),
+                    Container(
+                      width: 250.w,
+                      height: 80.h,
+                      margin: EdgeInsets.only(top: 20.h),
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          Container(
+                            width: 80.w,
+                            height: 80.h,
+                            margin: EdgeInsets.only(right: 10.w),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              border: Border.all(
+                                color: Colors.white,
+                                width: 2.5.w,
+                              ),
+                              //circle
+                              borderRadius: BorderRadius.circular(50.r),
+                            ),
+                          ),
+                          Container(
+                            width: 30.w,
+                            height: 30.h,
+                            margin: EdgeInsets.only(right: 10.w),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              //circle
+                              borderRadius: BorderRadius.circular(50.r),
+                            ),
+                          ),
+                          Container(
+                            width: 30.w,
+                            height: 30.h,
+                            margin: EdgeInsets.only(right: 10.w),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              //circle
+                              borderRadius: BorderRadius.circular(50.r),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -58,6 +103,7 @@ class _ProfileState extends State<Profile> {
               ),
             ],
           ),
+          // Profile details
           Container(
             height: 140.h,
             decoration: BoxDecoration(color: Color.fromRGBO(254, 254, 254, 1)),
@@ -143,6 +189,7 @@ class _ProfileState extends State<Profile> {
               ],
             ),
           ),
+          // Share the love
           Padding(
             padding: EdgeInsets.only(top: 16.h, left: 16.w, right: 16.w),
             child: Column(

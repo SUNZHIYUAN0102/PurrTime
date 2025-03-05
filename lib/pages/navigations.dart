@@ -12,7 +12,7 @@ class Navigations extends StatefulWidget {
 
 class _NavigationsState extends State<Navigations> {
   int _selectedIndex = 0;
-  final List<Widget> _pages = [const Profile(), const Home()];
+  final List<Widget> _pages = [const Home(), const Profile()];
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,7 @@ class _NavigationsState extends State<Navigations> {
                   width: 320.w,
                   height: 70.h,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
