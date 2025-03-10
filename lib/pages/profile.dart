@@ -56,16 +56,16 @@ class _ProfileState extends State<Profile> {
                       ),
                     ),
                     Container(
-                      width: 280.w,
-                      height: 80.h,
+                      width: 280,
+                      height: 82,
                       margin: EdgeInsets.only(top: 20.h),
                       child: Swiper(
                         itemCount: 3,
-                        viewportFraction: 0.38,
-                        scale: 0.3,
+                        viewportFraction: 0.4,
+                        scale: 0.15,
                         itemBuilder: (context, index) {
                           return Container(
-                            margin: EdgeInsets.only(left: 15.w, right: 15.w),
+                            margin: EdgeInsets.only(left: 15, right: 15),
                             decoration: BoxDecoration(
                               color: Colors.grey[300],
                               border: Border.all(

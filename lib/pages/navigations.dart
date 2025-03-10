@@ -13,7 +13,7 @@ class Navigations extends StatefulWidget {
 }
 
 class _NavigationsState extends State<Navigations> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 3;
   final List<Widget> _pages = [
     const Home(),
     const Charts(),
