@@ -38,6 +38,7 @@ dependencies:
   flutter_screenutil: ^5.9.3
   flutter_native_splash: ^2.4.5
   icons_launcher: ^3.0.1
+  card_swiper: ^3.0.1
 
 flutter_native_splash:
   background_image: "images/splash.png"

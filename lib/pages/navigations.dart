@@ -39,7 +39,7 @@ class _NavigationsState extends State<Navigations> {
             child: Container(
               decoration: BoxDecoration(color: Colors.transparent),
               width: 375.w,
-              height: 120.h,
+              height: 100.h,
               child: Center(
                 child: Container(
                   decoration: BoxDecoration(

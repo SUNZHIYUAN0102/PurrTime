@@ -1,3 +1,4 @@
+import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -19,7 +20,17 @@ class _ProfileState extends State<Profile> {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: Color.fromRGBO(249, 229, 172, 1),
+                  gradient: LinearGradient(
+                    begin: Alignment.bottomLeft,
+                    end: Alignment.topRight,
+                    colors: [
+                      Color(0xFFF9E3A8),
+                      Color(0xFFFAE6AD),
+                      Color(0xFFFAE6AB),
+                      Color(0xffFBE7A9),
+                      Color(0xFFFBE7AC),
+                    ],
+                  ),
                 ),
                 width: double.infinity,
                 height: 250.h,
@@ -27,7 +38,7 @@ class _ProfileState extends State<Profile> {
                   children: [
                     Padding(
                       padding: EdgeInsets.only(
-                        top: 45.h,
+                        top: 55.h,
                         left: 16.w,
                         right: 16.w,
                       ),
@@ -35,9 +46,9 @@ class _ProfileState extends State<Profile> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Your pets",
+                            "My pets",
                             style: TextStyle(
-                              fontSize: 22.sp,
+                              fontSize: 24.sp,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -45,16 +56,16 @@ class _ProfileState extends State<Profile> {
                       ),
                     ),
                     Container(
-                      width: 250.w,
+                      width: 280.w,
                       height: 80.h,
                       margin: EdgeInsets.only(top: 20.h),
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: [
-                          Container(
-                            width: 80.w,
-                            height: 80.h,
-                            margin: EdgeInsets.only(right: 10.w),
+                      child: Swiper(
+                        itemCount: 3,
+                        viewportFraction: 0.38,
+                        scale: 0.3,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            margin: EdgeInsets.only(left: 15.w, right: 15.w),
                             decoration: BoxDecoration(
                               color: Colors.grey[300],
                               border: Border.all(
@@ -64,28 +75,8 @@ class _ProfileState extends State<Profile> {
                               //circle
                               borderRadius: BorderRadius.circular(50.r),
                             ),
-                          ),
-                          Container(
-                            width: 30.w,
-                            height: 30.h,
-                            margin: EdgeInsets.only(right: 10.w),
-                            decoration: BoxDecoration(
-                              color: Colors.grey[300],
-                              //circle
-                              borderRadius: BorderRadius.circular(50.r),
-                            ),
-                          ),
-                          Container(
-                            width: 30.w,
-                            height: 30.h,
-                            margin: EdgeInsets.only(right: 10.w),
-                            decoration: BoxDecoration(
-                              color: Colors.grey[300],
-                              //circle
-                              borderRadius: BorderRadius.circular(50.r),
-                            ),
-                          ),
-                        ],
+                          );
+                        },
                       ),
                     ),
                   ],

@@ -97,7 +97,7 @@ class _HomeState extends State<Home> {
                   return Container(
                     margin:
                         index == 9
-                            ? EdgeInsets.only(bottom: 120.h)
+                            ? EdgeInsets.only(bottom: 100.h)
                             : EdgeInsets.only(bottom: 10.h),
                     width: double.infinity,
                     height: 80.h,
