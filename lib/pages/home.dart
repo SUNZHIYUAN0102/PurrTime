@@ -95,7 +95,10 @@ class _HomeState extends State<Home> {
                 itemCount: 10,
                 itemBuilder: (context, index) {
                   return Container(
-                    margin: EdgeInsets.only(bottom: 10.h),
+                    margin:
+                        index == 9
+                            ? EdgeInsets.only(bottom: 120.h)
+                            : EdgeInsets.only(bottom: 10.h),
                     width: double.infinity,
                     height: 80.h,
                     decoration: BoxDecoration(
