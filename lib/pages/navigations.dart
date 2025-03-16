@@ -13,7 +13,7 @@ class Navigations extends StatefulWidget {
 }
 
 class _NavigationsState extends State<Navigations> {
-  int _selectedIndex = 3;
+  int _selectedIndex = 0;
   final List<Widget> _pages = [
     const Home(),
     const Charts(),
@@ -48,6 +48,7 @@ class _NavigationsState extends State<Navigations> {
                   ),
                   width: 320.w,
                   height: 70.h,
+                  padding: EdgeInsets.only(top: 10.h, bottom: 10.h),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -56,9 +57,24 @@ class _NavigationsState extends State<Navigations> {
                           _onItemTapped(0);
                         },
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Text("Main", style: TextStyle(color: Colors.white)),
+                            Icon(
+                              Icons.reorder,
+                              color:
+                                  _selectedIndex == 0
+                                      ? Colors.white
+                                      : Colors.grey[600],
+                            ),
+                            Text(
+                              "Main",
+                              style: TextStyle(
+                                color:
+                                    _selectedIndex == 0
+                                        ? Colors.white
+                                        : Colors.grey[600],
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -67,11 +83,23 @@ class _NavigationsState extends State<Navigations> {
                           _onItemTapped(1);
                         },
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
+                            Icon(
+                              Icons.leaderboard,
+                              color:
+                                  _selectedIndex == 1
+                                      ? Colors.white
+                                      : Colors.grey[600],
+                            ),
                             Text(
                               "Charts",
-                              style: TextStyle(color: Colors.white),
+                              style: TextStyle(
+                                color:
+                                    _selectedIndex == 1
+                                        ? Colors.white
+                                        : Colors.grey[600],
+                              ),
                             ),
                           ],
                         ),
@@ -81,11 +109,23 @@ class _NavigationsState extends State<Navigations> {
                           _onItemTapped(2);
                         },
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
+                            Icon(
+                              Icons.restaurant_menu,
+                              color:
+                                  _selectedIndex == 2
+                                      ? Colors.white
+                                      : Colors.grey[600],
+                            ),
                             Text(
                               "Recipes",
-                              style: TextStyle(color: Colors.white),
+                              style: TextStyle(
+                                color:
+                                    _selectedIndex == 2
+                                        ? Colors.white
+                                        : Colors.grey[600],
+                              ),
                             ),
                           ],
                         ),
@@ -95,11 +135,23 @@ class _NavigationsState extends State<Navigations> {
                           _onItemTapped(3);
                         },
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
+                            Icon(
+                              Icons.pets_outlined,
+                              color:
+                                  _selectedIndex == 3
+                                      ? Colors.white
+                                      : Colors.grey[600],
+                            ),
                             Text(
                               "My Pets",
-                              style: TextStyle(color: Colors.white),
+                              style: TextStyle(
+                                color:
+                                    _selectedIndex == 3
+                                        ? Colors.white
+                                        : Colors.grey[600],
+                              ),
                             ),
                           ],
                         ),
