@@ -1,6 +1,7 @@
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/route_manager.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -10,6 +11,10 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  toCatPage() {
+    Get.toNamed("/cat");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,16 +69,19 @@ class _ProfileState extends State<Profile> {
                         viewportFraction: 0.4,
                         scale: 0.15,
                         itemBuilder: (context, index) {
-                          return Container(
-                            margin: EdgeInsets.only(left: 15, right: 15),
-                            decoration: BoxDecoration(
-                              color: Colors.grey[300],
-                              border: Border.all(
-                                color: Colors.white,
-                                width: 2.5.w,
+                          return InkWell(
+                            onTap: toCatPage,
+                            child: Container(
+                              margin: EdgeInsets.only(left: 15, right: 15),
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                border: Border.all(
+                                  color: Colors.white,
+                                  width: 2.5.w,
+                                ),
+                                //circle
+                                borderRadius: BorderRadius.circular(50.r),
                               ),
-                              //circle
-                              borderRadius: BorderRadius.circular(50.r),
                             ),
                           );
                         },
@@ -134,14 +142,14 @@ class _ProfileState extends State<Profile> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "3Kg",
+                        "Siberian cat",
                         style: TextStyle(
                           fontSize: 20.sp,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
-                        "Weight",
+                        "Breed",
                         style: TextStyle(
                           color: Colors.grey[400],
                           fontSize: 14.sp,

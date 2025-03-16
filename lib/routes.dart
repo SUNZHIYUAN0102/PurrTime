@@ -1,4 +1,5 @@
 import 'package:purr_time/pages/authentication.dart';
+import 'package:purr_time/pages/cat.dart';
 import 'package:purr_time/pages/login.dart';
 import 'package:purr_time/pages/navigations.dart';
 import 'package:get/get.dart';
@@ -10,5 +11,6 @@ class AppPages {
     GetPage(name: "/authentication", page: () => Authentication()),
     GetPage(name: "/login", page: () => Login()),
     GetPage(name: "/registration", page: () => Registration()),
+    GetPage(name: "/cat", page: () => Cat()),
   ];
 }
