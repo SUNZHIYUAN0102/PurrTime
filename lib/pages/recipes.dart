@@ -12,7 +12,7 @@ class _RecipesState extends State<Recipes> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Colors.white,
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
         title: Text('Recipes'),
         centerTitle: true,
@@ -59,7 +59,9 @@ class _RecipesState extends State<Recipes> {
                     children: [
                       Text("16", style: TextStyle(fontSize: 14.sp)),
                       Text("Sun", style: TextStyle(fontSize: 14.sp)),
-                      Text("●", style: TextStyle(fontSize: 14.sp)),
+                      index == 2
+                          ? Text("●", style: TextStyle(fontSize: 14.sp))
+                          : Text(" ", style: TextStyle(fontSize: 14.sp)),
                     ],
                   ),
                 );
@@ -76,7 +78,7 @@ class _RecipesState extends State<Recipes> {
                     margin: EdgeInsets.only(top: 10.h),
                     height: 200.h,
                     decoration: BoxDecoration(
-                      color: Colors.grey[200],
+                      color: Colors.white,
                       borderRadius: BorderRadius.circular(20.r),
                     ),
                   );

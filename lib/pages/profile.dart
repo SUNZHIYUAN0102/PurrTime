@@ -57,6 +57,12 @@ class _ProfileState extends State<Profile> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
+
+                          IconButton(
+                            iconSize: 30.sp,
+                            icon: Icon(Icons.add),
+                            onPressed: () {},
+                          ),
                         ],
                       ),
                     ),

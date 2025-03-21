@@ -3,6 +3,7 @@ import 'package:purr_time/pages/cat.dart';
 import 'package:purr_time/pages/login.dart';
 import 'package:purr_time/pages/navigations.dart';
 import 'package:get/get.dart';
+import 'package:purr_time/pages/recipeDetail.dart';
 import 'package:purr_time/pages/registration.dart';
 
 class AppPages {
@@ -12,5 +13,6 @@ class AppPages {
     GetPage(name: "/login", page: () => Login()),
     GetPage(name: "/registration", page: () => Registration()),
     GetPage(name: "/cat", page: () => Cat()),
+    GetPage(name: "/recipe/detail", page: () => Recipedetail()),
   ];
 }
