@@ -64,7 +64,119 @@ class _RecordState extends State<Record> with TickerProviderStateMixin {
       body: TabBarView(
         controller: _tabController,
         children: [
-          Icon(Icons.directions_car),
+          Padding(
+            padding: EdgeInsets.only(
+              left: 16.w,
+              right: 16.w,
+              top: 10.h,
+              bottom: 10.h,
+            ),
+            child: Wrap(
+              spacing: 10.75.w,
+              runSpacing: 10.75.h,
+              children: [
+                Column(
+                  spacing: 5.h,
+                  children: [
+                    Container(
+                      width: 60.w,
+                      height: 60.h,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.pest_control_rodent_outlined,
+                        color: Colors.grey[800],
+                        size: 35.sp,
+                      ),
+                    ),
+                    Text("Food", style: TextStyle(fontSize: 14.sp)),
+                  ],
+                ),
+                Column(
+                  spacing: 5.h,
+                  children: [
+                    Container(
+                      width: 60.w,
+                      height: 60.h,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.water_drop_outlined,
+                        color: Colors.grey[800],
+                        size: 35.sp,
+                      ),
+                    ),
+                    Text("Water", style: TextStyle(fontSize: 14.sp)),
+                  ],
+                ),
+                Column(
+                  spacing: 5.h,
+                  children: [
+                    Container(
+                      width: 60.w,
+                      height: 60.h,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.cleaning_services_outlined,
+                        color: Colors.grey[800],
+                        size: 35.sp,
+                      ),
+                    ),
+                    Text("Clean", style: TextStyle(fontSize: 14.sp)),
+                  ],
+                ),
+                Column(
+                  spacing: 5.h,
+                  children: [
+                    Container(
+                      width: 60.w,
+                      height: 60.h,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    Text("Food", style: TextStyle(fontSize: 14.sp)),
+                  ],
+                ),
+                Column(
+                  spacing: 5.h,
+                  children: [
+                    Container(
+                      width: 60.w,
+                      height: 60.h,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    Text("Food", style: TextStyle(fontSize: 14.sp)),
+                  ],
+                ),
+                Column(
+                  spacing: 5.h,
+                  children: [
+                    Container(
+                      width: 60.w,
+                      height: 60.h,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    Text("Food", style: TextStyle(fontSize: 14.sp)),
+                  ],
+                ),
+              ],
+            ),
+          ),
           Icon(Icons.directions_transit),
           Icon(Icons.directions_bike),
         ],
