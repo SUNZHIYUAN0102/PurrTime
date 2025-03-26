@@ -11,9 +11,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  //categories list
-  List<String> categories = ["Daily", "Expense", "Weight"];
-
   String selectedCategory = "Daily";
 
   final _calendarController = AdvancedCalendarController.today();
@@ -23,15 +20,17 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text("Purr Time"),
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
+        scrolledUnderElevation: 0,
         actions: [
           IconButton(
             onPressed: () {},
-            icon: Icon(Icons.more_vert),
+            icon: Icon(Icons.menu),
             color: Colors.black,
           ),
         ],
@@ -39,7 +38,7 @@ class _HomeState extends State<Home> {
       body: Column(
         children: [
           Container(
-            padding: EdgeInsets.only(top: 10.h, bottom: 10.h),
+            padding: EdgeInsets.only(top: 10.h),
             width: double.infinity,
             decoration: BoxDecoration(color: Colors.white),
             child: Column(
@@ -50,7 +49,9 @@ class _HomeState extends State<Home> {
                   controller: _calendarController,
                   events: events,
                 ),
-                SizedBox(
+                Container(
+                  margin: EdgeInsets.only(top: 10.h, bottom: 10.h),
+                  padding: EdgeInsets.only(left: 16.w, right: 16.w),
                   width: double.infinity,
                   height: 55.h,
                   child: Center(
@@ -78,79 +79,59 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                 ),
-                // SizedBox(
-                //   width: double.infinity,
-                //   height: 30.h,
-                //   child: Center(
-                //     child: ListView.builder(
-                //       itemCount: categories.length,
-                //       scrollDirection: Axis.horizontal,
-                //       itemBuilder: (context, index) {
-                //         return Padding(
-                //           padding: EdgeInsets.only(right: 20.w),
-                //           child: Text(
-                //             categories[index],
-                //             style: TextStyle(
-                //               fontSize: 22.sp,
-                //               color:
-                //                   selectedCategory == categories[index]
-                //                       ? Color.fromRGBO(68, 55, 47, 1)
-                //                       : Color.fromRGBO(163, 145, 132, 1),
-                //               fontWeight:
-                //                   selectedCategory == categories[index]
-                //                       ? FontWeight.bold
-                //                       : FontWeight.normal,
-                //             ),
-                //           ),
-                //         );
-                //       },
-                //     ),
-                //   ),
-                // ),
               ],
             ),
           ),
           Expanded(
-            child: Padding(
-              padding: EdgeInsets.only(left: 16.w, right: 16.w),
-              child: ListView.builder(
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  return Container(
-                    // margin:
-                    //     index == 9
-                    //         ? EdgeInsets.only(bottom: 100.h)
-                    //         : EdgeInsets.only(bottom: 10.h),
-                    // width: double.infinity,
-                    // height: 80.h,
-                    // decoration: BoxDecoration(
-                    //   color: Colors.white,
-                    //   borderRadius: BorderRadius.circular(10.r),
-                    // ),
-                    // child: Padding(
-                    //   padding: EdgeInsets.all(8),
-                    //   child: Row(
-                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //     children: [
-                    //       Container(
-                    //         width: 60.w,
-                    //         height: 60.h,
-                    //         decoration: BoxDecoration(
-                    //           color: Colors.pink,
-                    //           borderRadius: BorderRadius.circular(50.r),
-                    //         ),
-                    //       ),
-                    //       Expanded(
-                    //         child: Padding(
-                    //           padding: EdgeInsets.only(left: 10.w, right: 10.w),
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
-                  );
-                },
-              ),
+            child: ListView.builder(
+              itemCount: 10,
+              itemBuilder: (context, index) {
+                return Container(
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(color: Colors.grey[200]!, width: 1.w),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      left: 16.w,
+                      right: 16.w,
+                      top: 10.h,
+                      bottom: 10.h,
+                    ),
+                    child: Column(
+                      spacing: 5.h,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "13:20",
+                          style: TextStyle(fontSize: 14.sp, color: Colors.grey),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(right: 10.w),
+                                  width: 35.w,
+                                  height: 35.h,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.grey[200],
+                                  ),
+                                ),
+                                Text("Food", style: TextStyle(fontSize: 14.sp)),
+                              ],
+                            ),
+                            Text("200g", style: TextStyle(fontSize: 14.sp)),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
             ),
           ),
         ],
