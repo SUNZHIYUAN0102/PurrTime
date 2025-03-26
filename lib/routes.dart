@@ -5,6 +5,7 @@ import 'package:purr_time/pages/navigations.dart';
 import 'package:get/get.dart';
 import 'package:purr_time/pages/recipeDetail.dart';
 import 'package:purr_time/pages/registration.dart';
+import 'package:purr_time/pages/record.dart';
 
 class AppPages {
   static final pages = [
@@ -14,5 +15,6 @@ class AppPages {
     GetPage(name: "/registration", page: () => Registration()),
     GetPage(name: "/cat", page: () => Cat()),
     GetPage(name: "/recipe/detail", page: () => Recipedetail()),
+    GetPage(name: "/record", page: () => Record()),
   ];
 }

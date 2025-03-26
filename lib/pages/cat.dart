@@ -12,13 +12,13 @@ class _CatState extends State<Cat> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey[100],
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
             floating: false,
             pinned: true,
-            backgroundColor: Colors.white,
+            backgroundColor: Colors.grey[100],
           ),
           SliverToBoxAdapter(
             child: SingleChildScrollView(
@@ -43,7 +43,7 @@ class _CatState extends State<Cat> {
                           height: 60.h,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Colors.grey[200],
+                            color: Colors.grey[300],
                           ),
                         ),
                       ],
@@ -70,7 +70,7 @@ class _CatState extends State<Cat> {
                       width: double.infinity,
                       height: 65.h,
                       decoration: BoxDecoration(
-                        color: Colors.grey[200],
+                        color: Colors.grey[300],
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Column(
@@ -99,7 +99,7 @@ class _CatState extends State<Cat> {
                       width: double.infinity,
                       height: 65.h,
                       decoration: BoxDecoration(
-                        color: Colors.grey[200],
+                        color: Colors.grey[300],
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Column(
@@ -131,7 +131,7 @@ class _CatState extends State<Cat> {
                       width: double.infinity,
                       height: 65.h,
                       decoration: BoxDecoration(
-                        color: Colors.grey[200],
+                        color: Colors.grey[300],
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Column(
@@ -163,7 +163,7 @@ class _CatState extends State<Cat> {
                       width: double.infinity,
                       height: 65.h,
                       decoration: BoxDecoration(
-                        color: Colors.grey[200],
+                        color: Colors.grey[300],
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Column(
@@ -192,7 +192,7 @@ class _CatState extends State<Cat> {
                       width: double.infinity,
                       height: 65.h,
                       decoration: BoxDecoration(
-                        color: Colors.grey[200],
+                        color: Colors.grey[300],
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Column(
@@ -233,7 +233,7 @@ class _CatState extends State<Cat> {
                       width: double.infinity,
                       height: 65.h,
                       decoration: BoxDecoration(
-                        color: Colors.grey[200],
+                        color: Colors.grey[300],
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Column(
@@ -262,7 +262,7 @@ class _CatState extends State<Cat> {
                       width: double.infinity,
                       height: 65.h,
                       decoration: BoxDecoration(
-                        color: Colors.grey[200],
+                        color: Colors.grey[300],
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Column(

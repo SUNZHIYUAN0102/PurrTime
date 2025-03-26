@@ -2,6 +2,7 @@ import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_calendar/flutter_advanced_calendar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -16,6 +17,10 @@ class _HomeState extends State<Home> {
   final _calendarController = AdvancedCalendarController.today();
 
   final events = <DateTime>[DateTime.now(), DateTime(2022, 10, 10)];
+
+  toRecordPage() {
+    Get.toNamed("/record");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,19 +64,22 @@ class _HomeState extends State<Home> {
                       scrollDirection: Axis.horizontal,
                       itemCount: 3,
                       itemBuilder: (context, index) {
-                        return Container(
-                          margin: EdgeInsets.only(right: 10.w),
-                          width: 55.w,
-                          height: 55.h,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color:
-                                  index == 0
-                                      ? Color.fromRGBO(249, 229, 172, 1)
-                                      : Colors.grey,
-                              width: 2.w,
+                        return InkWell(
+                          onTap: toRecordPage,
+                          child: Container(
+                            margin: EdgeInsets.only(right: 10.w),
+                            width: 55.w,
+                            height: 55.h,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color:
+                                    index == 0
+                                        ? Color.fromRGBO(249, 229, 172, 1)
+                                        : Colors.grey,
+                                width: 2.w,
+                              ),
                             ),
                           ),
                         );
