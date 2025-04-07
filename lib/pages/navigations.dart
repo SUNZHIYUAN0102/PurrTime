@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:purr_time/dioHelper.dart';
 import 'package:purr_time/pages/charts.dart';
 import 'package:purr_time/pages/home.dart';
 import 'package:purr_time/pages/profile.dart';
@@ -25,6 +26,12 @@ class _NavigationsState extends State<Navigations> {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
   }
 
   @override
