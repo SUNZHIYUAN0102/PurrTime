@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:purr_time/apis/cats.dart';
+import 'package:purr_time/swagger_generated_code/api_json.swagger.dart';
 
 class Cat extends StatefulWidget {
   const Cat({super.key});
@@ -9,6 +13,24 @@ class Cat extends StatefulWidget {
 }
 
 class _CatState extends State<Cat> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    final catId = Get.arguments["catId"];
+    _getCatById(catId);
+  }
+
+  late CatDto cat;
+  _getCatById(catId) async {
+    CatDto res = await CatsApi.getCatById(catId);
+
+    setState(() {
+      cat = res;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,7 +106,7 @@ class _CatState extends State<Cat> {
                               color: Colors.grey[600],
                             ),
                           ),
-                          Text("Ginger", style: TextStyle(fontSize: 18.sp)),
+                          Text(cat.name, style: TextStyle(fontSize: 18.sp)),
                         ],
                       ),
                     ),
@@ -114,7 +136,7 @@ class _CatState extends State<Cat> {
                             ),
                           ),
                           Text(
-                            "Jan 2, 2021",
+                            DateFormat('MMM d, y').format(cat.birth),
                             style: TextStyle(fontSize: 18.sp),
                           ),
                         ],
@@ -145,10 +167,7 @@ class _CatState extends State<Cat> {
                               color: Colors.grey[600],
                             ),
                           ),
-                          Text(
-                            "Siberian cat",
-                            style: TextStyle(fontSize: 18.sp),
-                          ),
+                          Text(cat.breed, style: TextStyle(fontSize: 18.sp)),
                         ],
                       ),
                     ),
@@ -177,7 +196,7 @@ class _CatState extends State<Cat> {
                               color: Colors.grey[600],
                             ),
                           ),
-                          Text("Male", style: TextStyle(fontSize: 18.sp)),
+                          Text(cat.gender, style: TextStyle(fontSize: 18.sp)),
                         ],
                       ),
                     ),
@@ -206,7 +225,10 @@ class _CatState extends State<Cat> {
                               color: Colors.grey[600],
                             ),
                           ),
-                          Text("50cm", style: TextStyle(fontSize: 18.sp)),
+                          Text(
+                            "${cat.length}cm",
+                            style: TextStyle(fontSize: 18.sp),
+                          ),
                         ],
                       ),
                     ),
@@ -247,7 +269,10 @@ class _CatState extends State<Cat> {
                               color: Colors.grey[600],
                             ),
                           ),
-                          Text("Allianz", style: TextStyle(fontSize: 18.sp)),
+                          Text(
+                            cat.insuranceProvider ?? "",
+                            style: TextStyle(fontSize: 18.sp),
+                          ),
                         ],
                       ),
                     ),
@@ -277,7 +302,7 @@ class _CatState extends State<Cat> {
                             ),
                           ),
                           Text(
-                            "98722728282",
+                            cat.insuranceNumber ?? "",
                             style: TextStyle(fontSize: 18.sp),
                           ),
                         ],

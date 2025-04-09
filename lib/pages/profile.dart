@@ -2,6 +2,8 @@ import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
+import 'package:purr_time/apis/cats.dart';
+import 'package:purr_time/swagger_generated_code/api_json.swagger.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -11,8 +13,27 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  toCatPage() {
-    Get.toNamed("/cat");
+  toCatPage(catId) {
+    Get.toNamed("/cat", arguments: {"catId": catId});
+  }
+
+  List<CatDto> cats = [];
+  _getUserCats() async {
+    List<CatDto> res = await CatsApi.getUserCats();
+
+    print(res);
+
+    setState(() {
+      cats = res;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _getUserCats();
   }
 
   @override
@@ -71,12 +92,14 @@ class _ProfileState extends State<Profile> {
                       height: 82,
                       margin: EdgeInsets.only(top: 20.h),
                       child: Swiper(
-                        itemCount: 3,
+                        itemCount: cats.length,
                         viewportFraction: 0.4,
                         scale: 0.15,
                         itemBuilder: (context, index) {
                           return InkWell(
-                            onTap: toCatPage,
+                            onTap: () {
+                              toCatPage(cats[index].id);
+                            },
                             child: Container(
                               margin: EdgeInsets.only(left: 15, right: 15),
                               decoration: BoxDecoration(
@@ -87,6 +110,10 @@ class _ProfileState extends State<Profile> {
                                 ),
                                 //circle
                                 borderRadius: BorderRadius.circular(50.r),
+                                image: DecorationImage(
+                                  image: NetworkImage(cats[index].image ?? ""),
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                           );

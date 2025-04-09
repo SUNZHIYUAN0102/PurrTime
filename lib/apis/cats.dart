@@ -13,4 +13,14 @@ class CatsApi {
       rethrow;
     }
   }
+
+  static Future<CatDto> getCatById(String catId) async {
+    try {
+      final response = await DioHelper.get("/cats/$catId");
+      return CatDto.fromJson(response.data);
+    } catch (e) {
+      print("Error in getCatById: $e");
+      rethrow;
+    }
+  }
 }
