@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:purr_time/apis/cats.dart';
 import 'package:purr_time/dioHelper.dart';
 import 'package:purr_time/pages/charts.dart';
 import 'package:purr_time/pages/home.dart';
 import 'package:purr_time/pages/profile.dart';
 import 'package:purr_time/pages/recipes.dart';
+import 'package:purr_time/swagger_generated_code/api_json.swagger.dart';
 
 class Navigations extends StatefulWidget {
   const Navigations({super.key});
@@ -26,12 +28,6 @@ class _NavigationsState extends State<Navigations> {
     setState(() {
       _selectedIndex = index;
     });
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
   }
 
   @override

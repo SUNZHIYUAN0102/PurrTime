@@ -49,11 +49,7 @@ class _RecordState extends State<Record> with TickerProviderStateMixin {
                   height: 50.h,
                   child: TabBar(
                     controller: _tabController,
-                    tabs: [
-                      Tab(text: "Daily"),
-                      Tab(text: "Expense"),
-                      Tab(text: "Weight"),
-                    ],
+                    tabs: [Tab(text: "Daily"), Tab(text: "Expense")],
                   ),
                 ),
               ],
@@ -142,43 +138,19 @@ class _RecordState extends State<Record> with TickerProviderStateMixin {
                         color: Colors.grey[300],
                         shape: BoxShape.circle,
                       ),
-                    ),
-                    Text("Food", style: TextStyle(fontSize: 14.sp)),
-                  ],
-                ),
-                Column(
-                  spacing: 5.h,
-                  children: [
-                    Container(
-                      width: 60.w,
-                      height: 60.h,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        shape: BoxShape.circle,
+                      child: Icon(
+                        Icons.monitor_weight_outlined,
+                        color: Colors.grey[800],
+                        size: 35.sp,
                       ),
                     ),
-                    Text("Food", style: TextStyle(fontSize: 14.sp)),
-                  ],
-                ),
-                Column(
-                  spacing: 5.h,
-                  children: [
-                    Container(
-                      width: 60.w,
-                      height: 60.h,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                    Text("Food", style: TextStyle(fontSize: 14.sp)),
+                    Text("Weight", style: TextStyle(fontSize: 14.sp)),
                   ],
                 ),
               ],
             ),
           ),
           Icon(Icons.directions_transit),
-          Icon(Icons.directions_bike),
         ],
       ),
     );

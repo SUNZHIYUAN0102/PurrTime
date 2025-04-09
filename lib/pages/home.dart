@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_advanced_calendar/flutter_advanced_calendar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:purr_time/store/user.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -16,7 +17,7 @@ class _HomeState extends State<Home> {
 
   final _calendarController = AdvancedCalendarController.today();
 
-  final events = <DateTime>[DateTime.now(), DateTime(2022, 10, 10)];
+  final events = <DateTime>[DateTime.now()];
 
   toRecordPage() {
     Get.toNamed("/record");
@@ -27,18 +28,27 @@ class _HomeState extends State<Home> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text("Purr Time"),
-        centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
         scrolledUnderElevation: 0,
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.menu),
-            color: Colors.black,
-          ),
-        ],
+        leadingWidth: double.infinity,
+        leading: Obx(() {
+          return Row(
+            spacing: 10.w,
+            children: [
+              Container(
+                margin: EdgeInsets.only(left: 16.w),
+                decoration: BoxDecoration(shape: BoxShape.circle),
+                clipBehavior: Clip.hardEdge,
+                child: Image.network(UserController.to.user["avatar"]!),
+              ),
+              Text(
+                "Welcome, ${UserController.to.user["username"]!}",
+                style: TextStyle(fontSize: 14.sp, color: Colors.black),
+              ),
+            ],
+          );
+        }),
       ),
       body: Column(
         children: [
