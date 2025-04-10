@@ -1,8 +1,10 @@
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/route_manager.dart';
 import 'package:purr_time/apis/cats.dart';
+import 'package:purr_time/store/cat.dart';
 import 'package:purr_time/swagger_generated_code/api_json.swagger.dart';
 
 class Profile extends StatefulWidget {
@@ -17,23 +19,10 @@ class _ProfileState extends State<Profile> {
     Get.toNamed("/cat", arguments: {"catId": catId});
   }
 
-  List<CatDto> cats = [];
-  _getUserCats() async {
-    List<CatDto> res = await CatsApi.getUserCats();
-
-    print(res);
-
-    setState(() {
-      cats = res;
-    });
-  }
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    _getUserCats();
   }
 
   @override
@@ -91,34 +80,39 @@ class _ProfileState extends State<Profile> {
                       width: 280,
                       height: 82,
                       margin: EdgeInsets.only(top: 20.h),
-                      child: Swiper(
-                        itemCount: cats.length,
-                        viewportFraction: 0.4,
-                        scale: 0.15,
-                        itemBuilder: (context, index) {
-                          return InkWell(
-                            onTap: () {
-                              toCatPage(cats[index].id);
-                            },
-                            child: Container(
-                              margin: EdgeInsets.only(left: 15, right: 15),
-                              decoration: BoxDecoration(
-                                color: Colors.grey[300],
-                                border: Border.all(
-                                  color: Colors.white,
-                                  width: 2.5.w,
-                                ),
-                                //circle
-                                borderRadius: BorderRadius.circular(50.r),
-                                image: DecorationImage(
-                                  image: NetworkImage(cats[index].image ?? ""),
-                                  fit: BoxFit.cover,
+                      child: Obx(() {
+                        return Swiper(
+                          itemCount: CatController.to.catList.length,
+                          viewportFraction: 0.4,
+                          scale: 0.15,
+                          itemBuilder: (context, index) {
+                            return InkWell(
+                              onTap: () {
+                                toCatPage(CatController.to.catList[index].id);
+                              },
+                              child: Container(
+                                margin: EdgeInsets.only(left: 15, right: 15),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[300],
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 2.5.w,
+                                  ),
+                                  //circle
+                                  borderRadius: BorderRadius.circular(50.r),
+                                  image: DecorationImage(
+                                    image: NetworkImage(
+                                      CatController.to.catList[index].image ??
+                                          "",
+                                    ),
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
-                        },
-                      ),
+                            );
+                          },
+                        );
+                      }),
                     ),
                   ],
                 ),

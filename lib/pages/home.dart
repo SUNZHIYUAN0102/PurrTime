@@ -1,9 +1,13 @@
-import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_calendar/flutter_advanced_calendar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:purr_time/apis/cats.dart';
+import 'package:purr_time/apis/records.dart';
+import 'package:purr_time/store/cat.dart';
 import 'package:purr_time/store/user.dart';
+import 'package:purr_time/swagger_generated_code/api_json.swagger.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -19,8 +23,71 @@ class _HomeState extends State<Home> {
 
   final events = <DateTime>[DateTime.now()];
 
+  late CatDto _selectedCat;
+
+  late List<RecordDto> _records = [];
+
+  DateTime _selectedDate = DateTime.now();
+
   toRecordPage() {
     Get.toNamed("/record");
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _calendarController.addListener(() {
+      _switchSelectedDate(_calendarController.value);
+    });
+
+    _getUserCats();
+  }
+
+  @override
+  void dispose() {
+    _calendarController.dispose();
+    super.dispose();
+  }
+
+  _getUserCats() async {
+    List<CatDto> res = await CatsApi.getUserCats();
+
+    CatController.to.setCatList(res);
+
+    setState(() {
+      _selectedCat = CatController.to.catList[0];
+    });
+
+    _findRecordsByCatIdAndDate();
+  }
+
+  _switchSelectedCat(CatDto cat) {
+    setState(() {
+      _selectedCat = cat;
+    });
+
+    _findRecordsByCatIdAndDate();
+  }
+
+  _findRecordsByCatIdAndDate() async {
+    List<RecordDto> res = await RecordsApi.findRecordsByCatIdAndDate(
+      _selectedCat.id,
+      date: _selectedDate.toString(),
+    );
+
+    setState(() {
+      _records = res;
+    });
+  }
+
+  _switchSelectedDate(DateTime date) {
+    setState(() {
+      _selectedDate = date;
+    });
+
+    _findRecordsByCatIdAndDate();
   }
 
   @override
@@ -70,31 +137,44 @@ class _HomeState extends State<Home> {
                   width: double.infinity,
                   height: 55.h,
                   child: Center(
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 3,
-                      itemBuilder: (context, index) {
-                        return InkWell(
-                          onTap: toRecordPage,
-                          child: Container(
-                            margin: EdgeInsets.only(right: 10.w),
-                            width: 55.w,
-                            height: 55.h,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color:
-                                    index == 0
-                                        ? Color.fromRGBO(249, 229, 172, 1)
-                                        : Colors.grey,
-                                width: 2.w,
+                    child: Obx(() {
+                      return ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: CatController.to.catList.length,
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () {
+                              _switchSelectedCat(
+                                CatController.to.catList[index],
+                              );
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(right: 10.w),
+                              width: 55.w,
+                              height: 55.h,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color:
+                                      _selectedCat.id ==
+                                              CatController.to.catList[index].id
+                                          ? Color.fromRGBO(249, 229, 172, 1)
+                                          : Colors.grey,
+                                  width: 2.w,
+                                ),
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                    CatController.to.catList[index].image ?? "",
+                                  ),
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      },
-                    ),
+                          );
+                        },
+                      );
+                    }),
                   ),
                 ),
               ],
@@ -102,7 +182,7 @@ class _HomeState extends State<Home> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: 10,
+              itemCount: _records.length,
               itemBuilder: (context, index) {
                 return Container(
                   decoration: BoxDecoration(
@@ -122,7 +202,7 @@ class _HomeState extends State<Home> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "13:20",
+                          DateFormat("hh:mm").format(_records[index].date),
                           style: TextStyle(fontSize: 14.sp, color: Colors.grey),
                         ),
                         Row(

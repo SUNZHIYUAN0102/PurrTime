@@ -6,6 +6,7 @@ import 'package:purr_time/pages/charts.dart';
 import 'package:purr_time/pages/home.dart';
 import 'package:purr_time/pages/profile.dart';
 import 'package:purr_time/pages/recipes.dart';
+import 'package:purr_time/store/cat.dart';
 import 'package:purr_time/swagger_generated_code/api_json.swagger.dart';
 
 class Navigations extends StatefulWidget {
@@ -28,6 +29,12 @@ class _NavigationsState extends State<Navigations> {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
   }
 
   @override
