@@ -23,8 +23,6 @@ class _HomeState extends State<Home> {
 
   final events = <DateTime>[DateTime.now()];
 
-  late CatDto _selectedCat;
-
   late List<RecordDto> _records = [];
 
   DateTime _selectedDate = DateTime.now();
@@ -43,6 +41,12 @@ class _HomeState extends State<Home> {
     });
 
     _getUserCats();
+
+    CatController.to.homeSelectedCat.listen((cat) {
+      if (cat != null) {
+        _findRecordsByCatIdAndDate();
+      }
+    });
   }
 
   @override
@@ -56,30 +60,24 @@ class _HomeState extends State<Home> {
 
     CatController.to.setCatList(res);
 
-    setState(() {
-      _selectedCat = CatController.to.catList[0];
-    });
-
-    _findRecordsByCatIdAndDate();
+    CatController.to.setHomeSelectedCat(res[0]);
   }
 
   _switchSelectedCat(CatDto cat) {
-    setState(() {
-      _selectedCat = cat;
-    });
-
-    _findRecordsByCatIdAndDate();
+    CatController.to.setHomeSelectedCat(cat);
   }
 
   _findRecordsByCatIdAndDate() async {
-    List<RecordDto> res = await RecordsApi.findRecordsByCatIdAndDate(
-      _selectedCat.id,
-      date: _selectedDate.toString(),
-    );
+    if (CatController.to.homeSelectedCat.value != null) {
+      List<RecordDto> res = await RecordsApi.findRecordsByCatIdAndDate(
+        CatController.to.homeSelectedCat.value!.id,
+        date: _selectedDate.toString(),
+      );
 
-    setState(() {
-      _records = res;
-    });
+      setState(() {
+        _records = res;
+      });
+    }
   }
 
   _switchSelectedDate(DateTime date) {
@@ -157,7 +155,11 @@ class _HomeState extends State<Home> {
                                 shape: BoxShape.circle,
                                 border: Border.all(
                                   color:
-                                      _selectedCat.id ==
+                                      CatController
+                                                  .to
+                                                  .homeSelectedCat
+                                                  .value!
+                                                  .id ==
                                               CatController.to.catList[index].id
                                           ? Color.fromRGBO(249, 229, 172, 1)
                                           : Colors.grey,
@@ -181,56 +183,93 @@ class _HomeState extends State<Home> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: _records.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(color: Colors.grey[200]!, width: 1.w),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      left: 16.w,
-                      right: 16.w,
-                      top: 10.h,
-                      bottom: 10.h,
-                    ),
-                    child: Column(
-                      spacing: 5.h,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+            child:
+                _records.isNotEmpty
+                    ? _renderRecordList()
+                    : _renderEmptyWidget(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _renderRecordList() {
+    return ListView.builder(
+      itemCount: _records.length,
+      itemBuilder: (context, index) {
+        return Container(
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(color: Colors.grey[200]!, width: 1.w),
+            ),
+          ),
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: 16.w,
+              right: 16.w,
+              top: 10.h,
+              bottom: 10.h,
+            ),
+            child: Column(
+              spacing: 5.h,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  DateFormat("hh:mm").format(_records[index].date),
+                  style: TextStyle(fontSize: 14.sp, color: Colors.grey),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
                       children: [
-                        Text(
-                          DateFormat("hh:mm").format(_records[index].date),
-                          style: TextStyle(fontSize: 14.sp, color: Colors.grey),
+                        Container(
+                          margin: EdgeInsets.only(right: 10.w),
+                          width: 35.w,
+                          height: 35.h,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.grey[200],
+                          ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.only(right: 10.w),
-                                  width: 35.w,
-                                  height: 35.h,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.grey[200],
-                                  ),
-                                ),
-                                Text("Food", style: TextStyle(fontSize: 14.sp)),
-                              ],
-                            ),
-                            Text("200g", style: TextStyle(fontSize: 14.sp)),
-                          ],
+                        Text(
+                          _records[index].name,
+                          style: TextStyle(fontSize: 14.sp),
                         ),
                       ],
                     ),
-                  ),
-                );
-              },
+                    Text(
+                      _records[index].$value.toString(),
+                      style: TextStyle(fontSize: 14.sp),
+                    ),
+                  ],
+                ),
+              ],
             ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _renderEmptyWidget() {
+    return Center(
+      child: Column(
+        children: [
+          Container(
+            width: 150.w,
+            height: 150.h,
+            margin: EdgeInsets.only(top: 120.h),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("images/empty.png"),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Text(
+            "No records found",
+            style: TextStyle(fontSize: 14.sp, color: Colors.grey),
           ),
         ],
       ),

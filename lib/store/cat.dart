@@ -6,6 +6,8 @@ class CatController extends GetxController {
 
   var catList = <CatDto>[].obs;
 
+  final homeSelectedCat = Rxn<CatDto>();
+
   setCatList(List<CatDto> newCatList) {
     catList.value = newCatList;
   }
@@ -20,5 +22,13 @@ class CatController extends GetxController {
 
   clearCatList() {
     catList.clear();
+  }
+
+  setHomeSelectedCat(CatDto cat) {
+    homeSelectedCat.value = cat;
+  }
+
+  clearHomeSelectedCat() {
+    homeSelectedCat.value = null;
   }
 }

@@ -22,7 +22,14 @@ class _CatState extends State<Cat> {
     _getCatById(catId);
   }
 
-  late CatDto cat;
+  late CatDto cat = CatDto(
+    id: "",
+    name: "",
+    gender: "",
+    breed: "",
+    birth: DateTime.now(),
+    weight: 0,
+  );
   _getCatById(catId) async {
     CatDto res = await CatsApi.getCatById(catId);
 
@@ -226,7 +233,7 @@ class _CatState extends State<Cat> {
                             ),
                           ),
                           Text(
-                            "${cat.length}cm",
+                            "${cat.length} cm",
                             style: TextStyle(fontSize: 18.sp),
                           ),
                         ],

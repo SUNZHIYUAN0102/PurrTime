@@ -12,8 +12,8 @@ void main() {
   Get.put(UserController());
   Get.put(CatController());
 
-  DioHelper.init(baseUrl: 'http://10.0.2.2:3000/');
-  // DioHelper.init(baseUrl: 'http://100.65.24.237:3000/');
+  // DioHelper.init(baseUrl: 'http://10.0.2.2:3000/');
+  DioHelper.init(baseUrl: 'http://100.65.24.237:3000/');
   runApp(const MyApp());
 }
 

@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/route_manager.dart';
-import 'package:purr_time/apis/cats.dart';
 import 'package:purr_time/store/cat.dart';
-import 'package:purr_time/swagger_generated_code/api_json.swagger.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -85,6 +83,7 @@ class _ProfileState extends State<Profile> {
                           itemCount: CatController.to.catList.length,
                           viewportFraction: 0.4,
                           scale: 0.15,
+                          loop: CatController.to.catList.length > 2,
                           itemBuilder: (context, index) {
                             return InkWell(
                               onTap: () {
