@@ -1,3 +1,4 @@
+import 'package:floating_draggable_widget/floating_draggable_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_calendar/flutter_advanced_calendar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -27,10 +28,6 @@ class _HomeState extends State<Home> {
 
   DateTime _selectedDate = DateTime.now();
 
-  toRecordPage() {
-    Get.toNamed("/record");
-  }
-
   @override
   void initState() {
     // TODO: implement initState
@@ -53,6 +50,10 @@ class _HomeState extends State<Home> {
   void dispose() {
     _calendarController.dispose();
     super.dispose();
+  }
+
+  _toRecordPage() {
+    Get.toNamed("/record");
   }
 
   _getUserCats() async {
@@ -90,105 +91,122 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        leadingWidth: double.infinity,
-        leading: Obx(() {
-          return Row(
-            spacing: 10.w,
-            children: [
-              Container(
-                margin: EdgeInsets.only(left: 16.w),
-                decoration: BoxDecoration(shape: BoxShape.circle),
-                clipBehavior: Clip.hardEdge,
-                child: Image.network(UserController.to.user["avatar"]!),
-              ),
-              Text(
-                "Welcome, ${UserController.to.user["username"]!}",
-                style: TextStyle(fontSize: 14.sp, color: Colors.black),
-              ),
-            ],
-          );
-        }),
+    return FloatingDraggableWidget(
+      floatingWidget: FloatingActionButton(
+        //circle
+        shape: const CircleBorder(),
+        backgroundColor: Colors.black,
+        onPressed: _toRecordPage,
+        child: const Icon(Icons.add, size: 30, color: Colors.white),
       ),
-      body: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.only(top: 10.h),
-            width: double.infinity,
-            decoration: BoxDecoration(color: Colors.white),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.start,
+      floatingWidgetHeight: 50.w,
+      floatingWidgetWidth: 50.h,
+      dx: 309.w,
+      dy: 650.h,
+      mainScreenWidget: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          leadingWidth: double.infinity,
+          leading: Obx(() {
+            return Row(
+              spacing: 10.w,
               children: [
-                AdvancedCalendar(
-                  controller: _calendarController,
-                  events: events,
-                ),
                 Container(
-                  margin: EdgeInsets.only(top: 10.h, bottom: 10.h),
-                  padding: EdgeInsets.only(left: 16.w, right: 16.w),
-                  width: double.infinity,
-                  height: 55.h,
-                  child: Center(
-                    child: Obx(() {
-                      return ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: CatController.to.catList.length,
-                        itemBuilder: (context, index) {
-                          return InkWell(
-                            onTap: () {
-                              _switchSelectedCat(
-                                CatController.to.catList[index],
-                              );
-                            },
-                            child: Container(
-                              margin: EdgeInsets.only(right: 10.w),
-                              width: 55.w,
-                              height: 55.h,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color:
-                                      CatController
-                                                  .to
-                                                  .homeSelectedCat
-                                                  .value!
-                                                  .id ==
-                                              CatController.to.catList[index].id
-                                          ? Color.fromRGBO(249, 229, 172, 1)
-                                          : Colors.grey,
-                                  width: 2.w,
-                                ),
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                    CatController.to.catList[index].image ?? "",
-                                  ),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    }),
-                  ),
+                  margin: EdgeInsets.only(left: 16.w),
+                  decoration: BoxDecoration(shape: BoxShape.circle),
+                  clipBehavior: Clip.hardEdge,
+                  child: Image.network(UserController.to.user["avatar"]!),
+                ),
+                Text(
+                  "Welcome, ${UserController.to.user["username"]!}",
+                  style: TextStyle(fontSize: 14.sp, color: Colors.black),
                 ),
               ],
+            );
+          }),
+        ),
+        body: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.only(top: 10.h),
+              width: double.infinity,
+              decoration: BoxDecoration(color: Colors.white),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AdvancedCalendar(
+                    controller: _calendarController,
+                    events: events,
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 10.h, bottom: 10.h),
+                    padding: EdgeInsets.only(left: 16.w, right: 16.w),
+                    width: double.infinity,
+                    height: 55.h,
+                    child: Center(
+                      child: Obx(() {
+                        return ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: CatController.to.catList.length,
+                          itemBuilder: (context, index) {
+                            return InkWell(
+                              onTap: () {
+                                _switchSelectedCat(
+                                  CatController.to.catList[index],
+                                );
+                              },
+                              child: Container(
+                                margin: EdgeInsets.only(right: 10.w),
+                                width: 55.w,
+                                height: 55.h,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color:
+                                        CatController
+                                                    .to
+                                                    .homeSelectedCat
+                                                    .value!
+                                                    .id ==
+                                                CatController
+                                                    .to
+                                                    .catList[index]
+                                                    .id
+                                            ? Color.fromRGBO(249, 229, 172, 1)
+                                            : Colors.grey,
+                                    width: 2.w,
+                                  ),
+                                  image: DecorationImage(
+                                    image: NetworkImage(
+                                      CatController.to.catList[index].image ??
+                                          "",
+                                    ),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      }),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          Expanded(
-            child:
-                _records.isNotEmpty
-                    ? _renderRecordList()
-                    : _renderEmptyWidget(),
-          ),
-        ],
+            Expanded(
+              child:
+                  _records.isNotEmpty
+                      ? _renderRecordList()
+                      : _renderEmptyWidget(),
+            ),
+          ],
+        ),
       ),
     );
   }
