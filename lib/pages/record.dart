@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+class RecordItem {
+  final IconData icon;
+  final String name;
+
+  RecordItem({required this.icon, required this.name});
+}
+
 class Record extends StatefulWidget {
   const Record({super.key});
 
@@ -11,10 +18,26 @@ class Record extends StatefulWidget {
 class _RecordState extends State<Record> with TickerProviderStateMixin {
   late final TabController _tabController;
 
+  final List<RecordItem> _dailyRecordItems = [
+    RecordItem(icon: Icons.pest_control_rodent_outlined, name: "Food"),
+    RecordItem(icon: Icons.water_drop_outlined, name: "Water"),
+    RecordItem(icon: Icons.cleaning_services_outlined, name: "Clean"),
+    RecordItem(icon: Icons.monitor_weight_outlined, name: "Weight"),
+  ];
+
+  final List<RecordItem> _expenseRecordItems = [
+    RecordItem(icon: Icons.pest_control_rodent_outlined, name: "Food"),
+    RecordItem(icon: Icons.emoji_nature_outlined, name: "Litter"),
+    RecordItem(icon: Icons.vaccines_outlined, name: "Vaccinations"),
+    RecordItem(icon: Icons.toys_outlined, name: "Supplies"),
+    RecordItem(icon: Icons.medical_information_outlined, name: "Medical"),
+    RecordItem(icon: Icons.health_and_safety_outlined, name: "Grooming"),
+  ];
+
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
   }
 
   @override
@@ -70,89 +93,44 @@ class _RecordState extends State<Record> with TickerProviderStateMixin {
             child: Wrap(
               spacing: 10.75.w,
               runSpacing: 10.75.h,
-              children: [
-                Column(
-                  spacing: 5.h,
-                  children: [
-                    Container(
-                      width: 60.w,
-                      height: 60.h,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.pest_control_rodent_outlined,
-                        color: Colors.grey[800],
-                        size: 35.sp,
-                      ),
-                    ),
-                    Text("Food", style: TextStyle(fontSize: 14.sp)),
-                  ],
-                ),
-                Column(
-                  spacing: 5.h,
-                  children: [
-                    Container(
-                      width: 60.w,
-                      height: 60.h,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.water_drop_outlined,
-                        color: Colors.grey[800],
-                        size: 35.sp,
-                      ),
-                    ),
-                    Text("Water", style: TextStyle(fontSize: 14.sp)),
-                  ],
-                ),
-                Column(
-                  spacing: 5.h,
-                  children: [
-                    Container(
-                      width: 60.w,
-                      height: 60.h,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.cleaning_services_outlined,
-                        color: Colors.grey[800],
-                        size: 35.sp,
-                      ),
-                    ),
-                    Text("Clean", style: TextStyle(fontSize: 14.sp)),
-                  ],
-                ),
-                Column(
-                  spacing: 5.h,
-                  children: [
-                    Container(
-                      width: 60.w,
-                      height: 60.h,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.monitor_weight_outlined,
-                        color: Colors.grey[800],
-                        size: 35.sp,
-                      ),
-                    ),
-                    Text("Weight", style: TextStyle(fontSize: 14.sp)),
-                  ],
-                ),
-              ],
+              children: _renderRecordItems(_dailyRecordItems),
             ),
           ),
-          Icon(Icons.directions_transit),
+          Padding(
+            padding: EdgeInsets.only(
+              left: 16.w,
+              right: 16.w,
+              top: 10.h,
+              bottom: 10.h,
+            ),
+            child: Wrap(
+              alignment: WrapAlignment.spaceBetween,
+              runSpacing: 10.75.h,
+              children: _renderRecordItems(_expenseRecordItems),
+            ),
+          ),
         ],
       ),
     );
   }
+}
+
+_renderRecordItems(List<RecordItem> items) {
+  return items.map((item) {
+    return Column(
+      spacing: 5.h,
+      children: [
+        Container(
+          width: 60.w,
+          height: 60.h,
+          decoration: BoxDecoration(
+            color: Colors.grey[300],
+            shape: BoxShape.circle,
+          ),
+          child: Icon(item.icon, color: Colors.grey[800], size: 35.sp),
+        ),
+        Text(item.name, style: TextStyle(fontSize: 14.sp)),
+      ],
+    );
+  }).toList();
 }
