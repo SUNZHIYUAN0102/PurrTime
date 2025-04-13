@@ -48,6 +48,8 @@ class _CatState extends State<Cat> {
             floating: false,
             pinned: true,
             backgroundColor: Colors.grey[100],
+            elevation: 0,
+            scrolledUnderElevation: 0,
           ),
           SliverToBoxAdapter(
             child: SingleChildScrollView(
@@ -107,7 +109,7 @@ class _CatState extends State<Cat> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Text(
-                            "Name",
+                            "Name*",
                             style: TextStyle(
                               fontSize: 14.sp,
                               color: Colors.grey[600],
@@ -136,7 +138,7 @@ class _CatState extends State<Cat> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Text(
-                            "Date of birth",
+                            "Date of birth*",
                             style: TextStyle(
                               fontSize: 14.sp,
                               color: Colors.grey[600],
@@ -169,7 +171,7 @@ class _CatState extends State<Cat> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Text(
-                            "Breed",
+                            "Breed*",
                             style: TextStyle(
                               fontSize: 14.sp,
                               color: Colors.grey[600],
@@ -199,7 +201,7 @@ class _CatState extends State<Cat> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Text(
-                            "Gender",
+                            "Gender*",
                             style: TextStyle(
                               fontSize: 14.sp,
                               color: Colors.grey[600],

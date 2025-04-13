@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:purr_time/apis/cats.dart';
 import 'package:purr_time/apis/records.dart';
 import 'package:purr_time/main.dart';
+import 'package:purr_time/pages/records/record.dart';
 import 'package:purr_time/store/cat.dart';
 import 'package:purr_time/store/user.dart';
 import 'package:purr_time/swagger_generated_code/api_json.swagger.dart';
@@ -260,10 +261,32 @@ class _HomeState extends State<Home> with RouteAware {
                             shape: BoxShape.circle,
                             color: Colors.grey[200],
                           ),
+                          child: Icon(
+                            getRecordIcon(_records[index].name),
+                            color: Colors.grey[800],
+                            size: 20.sp,
+                          ),
                         ),
-                        Text(
-                          _records[index].name,
-                          style: TextStyle(fontSize: 14.sp),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              _records[index].name,
+                              style: TextStyle(fontSize: 14.sp),
+                            ),
+                            Text(
+                              _records[index].catalogue.value
+                                      .toString()[0]
+                                      .toUpperCase() +
+                                  _records[index].catalogue.value
+                                      .toString()
+                                      .substring(1),
+                              style: TextStyle(
+                                fontSize: 12.sp,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
