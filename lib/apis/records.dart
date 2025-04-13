@@ -19,4 +19,42 @@ class RecordsApi {
       rethrow;
     }
   }
+
+  static Future<RecordDto> createRecord(CreateRecordDto recordDto) async {
+    try {
+      final response = await DioHelper.post(
+        "/records/",
+        data: recordDto.toJson(),
+      );
+      return RecordDto.fromJson(response.data);
+    } catch (e) {
+      print("Error in createRecord: $e");
+      rethrow;
+    }
+  }
+
+  static Future<RecordDto> updateRecord(
+    String recordId,
+    UpdateRecordDto recordDto,
+  ) async {
+    try {
+      final response = await DioHelper.patch(
+        "/records/$recordId",
+        data: recordDto.toJson(),
+      );
+      return RecordDto.fromJson(response.data);
+    } catch (e) {
+      print("Error in updateRecord: $e");
+      rethrow;
+    }
+  }
+
+  static Future<void> deleteRecord(String recordId) async {
+    try {
+      await DioHelper.delete("/records/$recordId");
+    } catch (e) {
+      print("Error in deleteRecord: $e");
+      rethrow;
+    }
+  }
 }

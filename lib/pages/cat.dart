@@ -149,6 +149,7 @@ class _CatState extends State<Cat> {
                         ],
                       ),
                     ),
+
                     Container(
                       margin: EdgeInsets.only(bottom: 10.h),
                       padding: EdgeInsets.only(
@@ -178,6 +179,7 @@ class _CatState extends State<Cat> {
                         ],
                       ),
                     ),
+
                     Container(
                       margin: EdgeInsets.only(bottom: 10.h),
                       padding: EdgeInsets.only(

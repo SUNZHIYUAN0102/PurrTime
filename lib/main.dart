@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:purr_time/dioHelper.dart';
@@ -7,14 +8,18 @@ import 'package:purr_time/store/cat.dart';
 import 'package:purr_time/store/token.dart';
 import 'package:purr_time/store/user.dart';
 
-void main() {
+final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
+void main() async {
   Get.put(TokenController());
   Get.put(UserController());
   Get.put(CatController());
 
   // DioHelper.init(baseUrl: 'http://10.0.2.2:3000/');
   DioHelper.init(baseUrl: 'http://100.65.24.237:3000/');
-  runApp(const MyApp());
+
+  WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -30,6 +35,7 @@ class MyApp extends StatelessWidget {
           title: 'Flutter Demo',
           debugShowCheckedModeBanner: false,
           initialRoute: "/",
+          navigatorObservers: [routeObserver],
           getPages: AppPages.pages,
         );
       },

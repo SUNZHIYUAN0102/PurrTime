@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:purr_time/apis/cats.dart';
 import 'package:purr_time/apis/records.dart';
+import 'package:purr_time/main.dart';
 import 'package:purr_time/store/cat.dart';
 import 'package:purr_time/store/user.dart';
 import 'package:purr_time/swagger_generated_code/api_json.swagger.dart';
@@ -17,9 +18,7 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
-  String selectedCategory = "Daily";
-
+class _HomeState extends State<Home> with RouteAware {
   final _calendarController = AdvancedCalendarController.today();
 
   final events = <DateTime>[DateTime.now()];
@@ -47,9 +46,21 @@ class _HomeState extends State<Home> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context)!);
+  }
+
+  @override
   void dispose() {
     _calendarController.dispose();
+    routeObserver.unsubscribe(this);
     super.dispose();
+  }
+
+  @override
+  void didPopNext() {
+    _findRecordsByCatIdAndDate();
   }
 
   _toRecordPage() {
@@ -233,7 +244,7 @@ class _HomeState extends State<Home> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  DateFormat("hh:mm").format(_records[index].date),
+                  DateFormat("HH:mm").format(_records[index].date),
                   style: TextStyle(fontSize: 14.sp, color: Colors.grey),
                 ),
                 Row(
