@@ -13,15 +13,6 @@ class Cat extends StatefulWidget {
 }
 
 class _CatState extends State<Cat> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    final catId = Get.arguments["catId"];
-    _getCatById(catId);
-  }
-
   late CatDto cat = CatDto(
     id: "",
     name: "",
@@ -30,6 +21,7 @@ class _CatState extends State<Cat> {
     birth: DateTime.now(),
     weight: 0,
   );
+
   _getCatById(catId) async {
     CatDto res = await CatsApi.getCatById(catId);
 
@@ -38,13 +30,45 @@ class _CatState extends State<Cat> {
     });
   }
 
+  final ScrollController _scrollController = ScrollController();
+  bool _showTitle = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    final catId = Get.arguments["catId"];
+    _getCatById(catId);
+
+    _scrollController.addListener(_handleScroll);
+  }
+
+  void _handleScroll() {
+    if (_scrollController.offset > 10 && !_showTitle) {
+      setState(() {
+        _showTitle = true;
+      });
+    } else if (_scrollController.offset <= 10 && _showTitle) {
+      setState(() {
+        _showTitle = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
       body: CustomScrollView(
+        controller: _scrollController,
+        physics: const BouncingScrollPhysics(),
         slivers: [
           SliverAppBar(
+            title: Text(
+              _showTitle ? "Edit cat" : "",
+              style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w500),
+            ),
             floating: false,
             pinned: true,
             backgroundColor: Colors.grey[100],

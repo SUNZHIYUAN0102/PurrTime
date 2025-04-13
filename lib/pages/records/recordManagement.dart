@@ -53,6 +53,9 @@ class _RecordManagementState extends State<RecordManagement> {
     text: "",
   );
 
+  final ScrollController _scrollController = ScrollController();
+  bool _showTitle = false;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -60,6 +63,20 @@ class _RecordManagementState extends State<RecordManagement> {
 
     catalogue = Get.arguments["catalogue"];
     name = Get.arguments["name"];
+
+    _scrollController.addListener(_handleScroll);
+  }
+
+  void _handleScroll() {
+    if (_scrollController.offset > 10 && !_showTitle) {
+      setState(() {
+        _showTitle = true;
+      });
+    } else if (_scrollController.offset <= 10 && _showTitle) {
+      setState(() {
+        _showTitle = false;
+      });
+    }
   }
 
   @override
@@ -67,8 +84,14 @@ class _RecordManagementState extends State<RecordManagement> {
     return Scaffold(
       backgroundColor: Colors.grey[100],
       body: CustomScrollView(
+        controller: _scrollController,
+        physics: const BouncingScrollPhysics(),
         slivers: [
           SliverAppBar(
+            title: Text(
+              _showTitle ? "Add record" : "",
+              style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w500),
+            ),
             floating: false,
             pinned: true,
             backgroundColor: Colors.grey[100],
