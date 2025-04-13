@@ -8,6 +8,8 @@ class CatController extends GetxController {
 
   final homeSelectedCat = Rxn<CatDto>();
 
+  final profileSelectedCat = Rxn<CatDto>();
+
   setCatList(List<CatDto> newCatList) {
     catList.value = newCatList;
   }
@@ -30,5 +32,13 @@ class CatController extends GetxController {
 
   clearHomeSelectedCat() {
     homeSelectedCat.value = null;
+  }
+
+  setProfileSelectedCat(CatDto cat) {
+    profileSelectedCat.value = cat;
+  }
+
+  clearProfileSelectedCat() {
+    profileSelectedCat.value = null;
   }
 }

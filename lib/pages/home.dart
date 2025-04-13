@@ -74,6 +74,8 @@ class _HomeState extends State<Home> with RouteAware {
     CatController.to.setCatList(res);
 
     CatController.to.setHomeSelectedCat(res[0]);
+
+    CatController.to.setProfileSelectedCat(res[0]);
   }
 
   _switchSelectedCat(CatDto cat) {

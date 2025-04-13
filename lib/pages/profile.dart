@@ -5,6 +5,22 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/route_manager.dart';
 import 'package:purr_time/store/cat.dart';
 
+String formatCatAge(DateTime birthDate) {
+  final now = DateTime.now();
+
+  final ageInDays = now.difference(birthDate).inDays;
+
+  if (ageInDays >= 365) {
+    final years = (ageInDays / 365).floor();
+    return "$years y/o";
+  } else if (ageInDays >= 30) {
+    final months = (ageInDays / 30).floor();
+    return "$months m/o";
+  } else {
+    return "$ageInDays d/o";
+  }
+}
+
 class Profile extends StatefulWidget {
   const Profile({super.key});
 
@@ -84,6 +100,11 @@ class _ProfileState extends State<Profile> {
                           viewportFraction: 0.4,
                           scale: 0.15,
                           loop: CatController.to.catList.length > 2,
+                          onIndexChanged: (value) {
+                            CatController.to.setProfileSelectedCat(
+                              CatController.to.catList[value],
+                            );
+                          },
                           itemBuilder: (context, index) {
                             return InkWell(
                               onTap: () {
@@ -129,91 +150,7 @@ class _ProfileState extends State<Profile> {
             ],
           ),
           // Profile details
-          Container(
-            height: 140.h,
-            decoration: BoxDecoration(color: Color.fromRGBO(254, 254, 254, 1)),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "4 y/o",
-                        style: TextStyle(
-                          fontSize: 20.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        "Age",
-                        style: TextStyle(
-                          color: Colors.grey[400],
-                          fontSize: 14.sp,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  width: 1.w,
-                  height: 100.h,
-                  decoration: BoxDecoration(color: Colors.grey[300]),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Siberian cat",
-                        style: TextStyle(
-                          fontSize: 20.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        "Breed",
-                        style: TextStyle(
-                          color: Colors.grey[400],
-                          fontSize: 14.sp,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  width: 1.w,
-                  height: 100.h,
-                  decoration: BoxDecoration(color: Colors.grey[300]),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Male",
-                        style: TextStyle(
-                          fontSize: 20.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        "Sex",
-                        style: TextStyle(
-                          color: Colors.grey[400],
-                          fontSize: 14.sp,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
+          _renderProfileDetail(context),
           // Share the love
           Padding(
             padding: EdgeInsets.only(top: 16.h, left: 16.w, right: 16.w),
@@ -256,4 +193,87 @@ class _ProfileState extends State<Profile> {
       ),
     );
   }
+}
+
+Widget _renderProfileDetail(BuildContext context) {
+  return Container(
+    height: 140.h,
+    decoration: BoxDecoration(color: Color.fromRGBO(254, 254, 254, 1)),
+    child: Obx(() {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.3,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  formatCatAge(
+                    CatController.to.profileSelectedCat.value!.birth,
+                  ),
+                  style: TextStyle(
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  "Age",
+                  style: TextStyle(color: Colors.grey[400], fontSize: 14.sp),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            width: 1.w,
+            height: 100.h,
+            decoration: BoxDecoration(color: Colors.grey[300]),
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.3,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  CatController.to.profileSelectedCat.value!.breed,
+                  style: TextStyle(
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  "Breed",
+                  style: TextStyle(color: Colors.grey[400], fontSize: 14.sp),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            width: 1.w,
+            height: 100.h,
+            decoration: BoxDecoration(color: Colors.grey[300]),
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.3,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  CatController.to.profileSelectedCat.value!.gender,
+                  style: TextStyle(
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  "Sex",
+                  style: TextStyle(color: Colors.grey[400], fontSize: 14.sp),
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+    }),
+  );
 }
