@@ -1,12 +1,10 @@
 import 'package:board_datetime_picker/board_datetime_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
 import 'package:intl/intl.dart';
 import 'package:purr_time/apis/records.dart';
 import 'package:purr_time/store/cat.dart';
-import 'package:purr_time/swagger_generated_code/api_json.enums.swagger.dart';
 import 'package:purr_time/swagger_generated_code/api_json.swagger.dart';
 
 class RecordManagement extends StatefulWidget {
@@ -19,7 +17,6 @@ class RecordManagement extends StatefulWidget {
 class _RecordManagementState extends State<RecordManagement> {
   late CreateRecordDtoCatalogue catalogue;
   String name = "";
-
   String dateTime = "";
   String amount = "";
 
@@ -53,20 +50,8 @@ class _RecordManagementState extends State<RecordManagement> {
     text: "",
   );
 
-  final ScrollController _scrollController = ScrollController();
   bool _showTitle = false;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    catalogue = Get.arguments["catalogue"];
-    name = Get.arguments["name"];
-
-    _scrollController.addListener(_handleScroll);
-  }
-
+  final ScrollController _scrollController = ScrollController();
   void _handleScroll() {
     if (_scrollController.offset > 10 && !_showTitle) {
       setState(() {
@@ -77,6 +62,17 @@ class _RecordManagementState extends State<RecordManagement> {
         _showTitle = false;
       });
     }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    catalogue = Get.arguments["catalogue"];
+    name = Get.arguments["name"];
+
+    _scrollController.addListener(_handleScroll);
   }
 
   @override
@@ -207,13 +203,17 @@ class _RecordManagementState extends State<RecordManagement> {
                     ),
                     InkWell(
                       onTap: () async {
-                        setDateTime(
-                          DateFormat(
-                            "yyyy-MM-dd HH:mm",
-                          ).format(DateTime.now()).toString(),
-                        );
+                        if (dateTime.isEmpty) {
+                          setDateTime(
+                            DateFormat(
+                              "yyyy-MM-dd HH:mm",
+                            ).format(DateTime.now()).toString(),
+                          );
+                        }
+
                         await showBoardDateTimePicker(
                           context: context,
+                          initialDate: DateTime.parse(dateTime),
                           pickerType: DateTimePickerType.datetime,
                           onChanged: (p0) {
                             setDateTime(
