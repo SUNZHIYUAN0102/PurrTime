@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
 import 'package:intl/intl.dart';
 import 'package:purr_time/apis/records.dart';
+import 'package:purr_time/components/notifierInputField.dart';
 import 'package:purr_time/store/cat.dart';
 import 'package:purr_time/swagger_generated_code/api_json.swagger.dart';
 
@@ -20,17 +21,12 @@ class _RecordManagementState extends State<RecordManagement> {
   String name = "";
   String dateTime = "";
   String amount = "";
+  ValueNotifier<String> amountNotifier = ValueNotifier<String>("");
   bool isEdit = false;
 
   _setDateTime(String value) {
     setState(() {
       dateTime = value;
-    });
-  }
-
-  _setAmount(String value) {
-    setState(() {
-      amount = value;
     });
   }
 
@@ -43,7 +39,7 @@ class _RecordManagementState extends State<RecordManagement> {
                 ? CreateRecordDtoCatalogue.daily
                 : CreateRecordDtoCatalogue.expense,
         name: name,
-        date: DateTime.parse(dateTime),
+        date: DateFormat("yyyy-MM-dd HH:mm").parse(dateTime, true).toLocal(),
         $value: double.parse(amount),
       ),
     );
@@ -60,7 +56,7 @@ class _RecordManagementState extends State<RecordManagement> {
                 ? UpdateRecordDtoCatalogue.daily
                 : UpdateRecordDtoCatalogue.expense,
         name: name,
-        date: DateTime.parse(dateTime),
+        date: DateFormat("yyyy-MM-dd HH:mm").parse(dateTime, true).toLocal(),
         $value: double.parse(amount),
       ),
     );
@@ -75,10 +71,6 @@ class _RecordManagementState extends State<RecordManagement> {
       _submitRecord();
     }
   }
-
-  final TextEditingController _inputController = TextEditingController(
-    text: "",
-  );
 
   bool _showTitle = false;
   final ScrollController _scrollController = ScrollController();
@@ -107,7 +99,7 @@ class _RecordManagementState extends State<RecordManagement> {
       name = record.name.toString();
       dateTime = DateFormat("yyyy-MM-dd HH:mm").format(record.date);
       amount = record.$value.toString();
-      _inputController.text = amount;
+      amountNotifier.value = amount;
       isEdit = true;
     } else {
       catalogue = Get.arguments["catalogue"];
@@ -115,6 +107,20 @@ class _RecordManagementState extends State<RecordManagement> {
     }
 
     _scrollController.addListener(_handleScroll);
+
+    amountNotifier.addListener(() {
+      setState(() {
+        amount = amountNotifier.value;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+
+    amountNotifier.dispose();
   }
 
   @override
@@ -304,44 +310,14 @@ class _RecordManagementState extends State<RecordManagement> {
                         ),
                       ),
                     ),
+
                     Container(
                       margin: EdgeInsets.only(bottom: 25.h),
-                      padding: EdgeInsets.only(
-                        top: 10.h,
-                        bottom: 10.h,
-                        left: 20.w,
-                        right: 20.w,
-                      ),
-                      width: double.infinity,
-                      height: 65.h,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            "Amount",
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                          TextField(
-                            controller: _inputController,
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                              isDense: true,
-                              contentPadding: EdgeInsets.symmetric(vertical: 0),
-                              border: InputBorder.none,
-                            ),
-                            onChanged: (value) {
-                              _setAmount(value);
-                            },
-                          ),
-                        ],
+                      child: NotifierInputField(
+                        label: "Amount",
+                        notifier: amountNotifier,
+                        keyboardType: TextInputType.number,
+                        hintText: "Enter amount",
                       ),
                     ),
 
