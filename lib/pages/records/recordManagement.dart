@@ -15,35 +15,65 @@ class RecordManagement extends StatefulWidget {
 }
 
 class _RecordManagementState extends State<RecordManagement> {
-  late CreateRecordDtoCatalogue catalogue;
+  late RecordDto record;
+  String catalogue = "";
   String name = "";
   String dateTime = "";
   String amount = "";
+  bool isEdit = false;
 
-  setDateTime(String value) {
+  _setDateTime(String value) {
     setState(() {
       dateTime = value;
     });
   }
 
-  setAmount(String value) {
+  _setAmount(String value) {
     setState(() {
       amount = value;
     });
   }
 
-  submitRecord() async {
+  _submitRecord() async {
     RecordDto res = await RecordsApi.createRecord(
+      CatController.to.homeSelectedCat.value!.id,
       CreateRecordDto(
-        catalogue: catalogue,
+        catalogue:
+            catalogue == "Daily"
+                ? CreateRecordDtoCatalogue.daily
+                : CreateRecordDtoCatalogue.expense,
         name: name,
         date: DateTime.parse(dateTime),
         $value: double.parse(amount),
-        catId: CatController.to.homeSelectedCat.value!.id,
       ),
     );
 
     Get.back();
+  }
+
+  _updateRecord() async {
+    RecordDto res = await RecordsApi.updateRecord(
+      record.id,
+      UpdateRecordDto(
+        catalogue:
+            catalogue == "Daily"
+                ? UpdateRecordDtoCatalogue.daily
+                : UpdateRecordDtoCatalogue.expense,
+        name: name,
+        date: DateTime.parse(dateTime),
+        $value: double.parse(amount),
+      ),
+    );
+
+    Get.back();
+  }
+
+  _handleButtonPress() {
+    if (isEdit) {
+      _updateRecord();
+    } else {
+      _submitRecord();
+    }
   }
 
   final TextEditingController _inputController = TextEditingController(
@@ -69,8 +99,20 @@ class _RecordManagementState extends State<RecordManagement> {
     // TODO: implement initState
     super.initState();
 
-    catalogue = Get.arguments["catalogue"];
-    name = Get.arguments["name"];
+    if (Get.arguments["record"] is RecordDto) {
+      record = Get.arguments["record"];
+      catalogue =
+          record.catalogue.value.toString()[0].toUpperCase() +
+          record.catalogue.value.toString().substring(1);
+      name = record.name.toString();
+      dateTime = DateFormat("yyyy-MM-dd HH:mm").format(record.date);
+      amount = record.$value.toString();
+      _inputController.text = amount;
+      isEdit = true;
+    } else {
+      catalogue = Get.arguments["catalogue"];
+      name = Get.arguments["name"];
+    }
 
     _scrollController.addListener(_handleScroll);
   }
@@ -85,7 +127,7 @@ class _RecordManagementState extends State<RecordManagement> {
         slivers: [
           SliverAppBar(
             title: Text(
-              _showTitle ? "Add record" : "",
+              _showTitle ? (isEdit ? "Edit record" : "Add record") : "",
               style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w500),
             ),
             floating: false,
@@ -105,7 +147,7 @@ class _RecordManagementState extends State<RecordManagement> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Add record",
+                          isEdit ? "Edit record" : "Add record",
                           style: TextStyle(
                             fontSize: 35.sp,
                             fontWeight: FontWeight.w600,
@@ -164,11 +206,7 @@ class _RecordManagementState extends State<RecordManagement> {
                               color: Colors.grey[600],
                             ),
                           ),
-                          Text(
-                            catalogue.value.toString()[0].toUpperCase() +
-                                catalogue.value.toString().substring(1),
-                            style: TextStyle(fontSize: 18.sp),
-                          ),
+                          Text(catalogue, style: TextStyle(fontSize: 18.sp)),
                         ],
                       ),
                     ),
@@ -204,10 +242,10 @@ class _RecordManagementState extends State<RecordManagement> {
                     InkWell(
                       onTap: () async {
                         if (dateTime.isEmpty) {
-                          setDateTime(
+                          _setDateTime(
                             DateFormat(
                               "yyyy-MM-dd HH:mm",
-                            ).format(DateTime.now()).toString(),
+                            ).format(DateTime.now()),
                           );
                         }
 
@@ -216,10 +254,8 @@ class _RecordManagementState extends State<RecordManagement> {
                           initialDate: DateTime.parse(dateTime),
                           pickerType: DateTimePickerType.datetime,
                           onChanged: (p0) {
-                            setDateTime(
-                              DateFormat(
-                                "yyyy-MM-dd HH:mm",
-                              ).format(p0).toString(),
+                            _setDateTime(
+                              DateFormat("yyyy-MM-dd HH:mm").format(p0),
                             );
                           },
                           customCloseButtonBuilder: (
@@ -302,7 +338,7 @@ class _RecordManagementState extends State<RecordManagement> {
                               border: InputBorder.none,
                             ),
                             onChanged: (value) {
-                              setAmount(value);
+                              _setAmount(value);
                             },
                           ),
                         ],
@@ -310,7 +346,7 @@ class _RecordManagementState extends State<RecordManagement> {
                     ),
 
                     ElevatedButton(
-                      onPressed: submitRecord,
+                      onPressed: _handleButtonPress,
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(
                           Colors.black,
@@ -321,7 +357,7 @@ class _RecordManagementState extends State<RecordManagement> {
                         height: 50.h,
                         child: Center(
                           child: Text(
-                            "Add Record",
+                            isEdit ? "Update record" : "Add record",
                             style: TextStyle(
                               fontSize: 18.sp,
                               color: Colors.white,

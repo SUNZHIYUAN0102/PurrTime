@@ -164,20 +164,26 @@ abstract class ApiJson extends ChopperService {
       {@Body() required CreateUserDto? body});
 
   ///
-  Future<chopper.Response<RecordDto>> recordsPost(
-      {required CreateRecordDto? body}) {
+  ///@param catId
+  Future<chopper.Response<RecordDto>> recordsCatIdPost({
+    required String? catId,
+    required CreateRecordDto? body,
+  }) {
     generatedMapping.putIfAbsent(RecordDto, () => RecordDto.fromJsonFactory);
 
-    return _recordsPost(body: body);
+    return _recordsCatIdPost(catId: catId, body: body);
   }
 
   ///
+  ///@param catId
   @Post(
-    path: '/records',
+    path: '/records/{catId}',
     optionalBody: true,
   )
-  Future<chopper.Response<RecordDto>> _recordsPost(
-      {@Body() required CreateRecordDto? body});
+  Future<chopper.Response<RecordDto>> _recordsCatIdPost({
+    @Path('catId') required String? catId,
+    @Body() required CreateRecordDto? body,
+  });
 
   ///
   ///@param catId
@@ -202,12 +208,10 @@ abstract class ApiJson extends ChopperService {
 
   ///
   ///@param id
-  Future<chopper.Response<RecordDto>> recordsIdPatch({
+  Future<chopper.Response> recordsIdPatch({
     required String? id,
     required UpdateRecordDto? body,
   }) {
-    generatedMapping.putIfAbsent(RecordDto, () => RecordDto.fromJsonFactory);
-
     return _recordsIdPatch(id: id, body: body);
   }
 
@@ -217,7 +221,7 @@ abstract class ApiJson extends ChopperService {
     path: '/records/{id}',
     optionalBody: true,
   )
-  Future<chopper.Response<RecordDto>> _recordsIdPatch({
+  Future<chopper.Response> _recordsIdPatch({
     @Path('id') required String? id,
     @Body() required UpdateRecordDto? body,
   });
@@ -705,7 +709,6 @@ class CreateRecordDto {
     required this.name,
     required this.date,
     required this.$value,
-    required this.catId,
   });
 
   factory CreateRecordDto.fromJson(Map<String, dynamic> json) =>
@@ -726,8 +729,6 @@ class CreateRecordDto {
   final DateTime date;
   @JsonKey(name: 'value')
   final double $value;
-  @JsonKey(name: 'catId')
-  final String catId;
   static const fromJsonFactory = _$CreateRecordDtoFromJson;
 
   @override
@@ -742,9 +743,7 @@ class CreateRecordDto {
             (identical(other.date, date) ||
                 const DeepCollectionEquality().equals(other.date, date)) &&
             (identical(other.$value, $value) ||
-                const DeepCollectionEquality().equals(other.$value, $value)) &&
-            (identical(other.catId, catId) ||
-                const DeepCollectionEquality().equals(other.catId, catId)));
+                const DeepCollectionEquality().equals(other.$value, $value)));
   }
 
   @override
@@ -756,7 +755,6 @@ class CreateRecordDto {
       const DeepCollectionEquality().hash(name) ^
       const DeepCollectionEquality().hash(date) ^
       const DeepCollectionEquality().hash($value) ^
-      const DeepCollectionEquality().hash(catId) ^
       runtimeType.hashCode;
 }
 
@@ -765,28 +763,24 @@ extension $CreateRecordDtoExtension on CreateRecordDto {
       {enums.CreateRecordDtoCatalogue? catalogue,
       String? name,
       DateTime? date,
-      double? $value,
-      String? catId}) {
+      double? $value}) {
     return CreateRecordDto(
         catalogue: catalogue ?? this.catalogue,
         name: name ?? this.name,
         date: date ?? this.date,
-        $value: $value ?? this.$value,
-        catId: catId ?? this.catId);
+        $value: $value ?? this.$value);
   }
 
   CreateRecordDto copyWithWrapped(
       {Wrapped<enums.CreateRecordDtoCatalogue>? catalogue,
       Wrapped<String>? name,
       Wrapped<DateTime>? date,
-      Wrapped<double>? $value,
-      Wrapped<String>? catId}) {
+      Wrapped<double>? $value}) {
     return CreateRecordDto(
         catalogue: (catalogue != null ? catalogue.value : this.catalogue),
         name: (name != null ? name.value : this.name),
         date: (date != null ? date.value : this.date),
-        $value: ($value != null ? $value.value : this.$value),
-        catId: (catId != null ? catId.value : this.catId));
+        $value: ($value != null ? $value.value : this.$value));
   }
 }
 
@@ -899,7 +893,6 @@ class UpdateRecordDto {
     this.name,
     this.date,
     this.$value,
-    this.catId,
   });
 
   factory UpdateRecordDto.fromJson(Map<String, dynamic> json) =>
@@ -920,8 +913,6 @@ class UpdateRecordDto {
   final DateTime? date;
   @JsonKey(name: 'value')
   final double? $value;
-  @JsonKey(name: 'catId')
-  final String? catId;
   static const fromJsonFactory = _$UpdateRecordDtoFromJson;
 
   @override
@@ -936,9 +927,7 @@ class UpdateRecordDto {
             (identical(other.date, date) ||
                 const DeepCollectionEquality().equals(other.date, date)) &&
             (identical(other.$value, $value) ||
-                const DeepCollectionEquality().equals(other.$value, $value)) &&
-            (identical(other.catId, catId) ||
-                const DeepCollectionEquality().equals(other.catId, catId)));
+                const DeepCollectionEquality().equals(other.$value, $value)));
   }
 
   @override
@@ -950,7 +939,6 @@ class UpdateRecordDto {
       const DeepCollectionEquality().hash(name) ^
       const DeepCollectionEquality().hash(date) ^
       const DeepCollectionEquality().hash($value) ^
-      const DeepCollectionEquality().hash(catId) ^
       runtimeType.hashCode;
 }
 
@@ -959,28 +947,24 @@ extension $UpdateRecordDtoExtension on UpdateRecordDto {
       {enums.UpdateRecordDtoCatalogue? catalogue,
       String? name,
       DateTime? date,
-      double? $value,
-      String? catId}) {
+      double? $value}) {
     return UpdateRecordDto(
         catalogue: catalogue ?? this.catalogue,
         name: name ?? this.name,
         date: date ?? this.date,
-        $value: $value ?? this.$value,
-        catId: catId ?? this.catId);
+        $value: $value ?? this.$value);
   }
 
   UpdateRecordDto copyWithWrapped(
       {Wrapped<enums.UpdateRecordDtoCatalogue?>? catalogue,
       Wrapped<String?>? name,
       Wrapped<DateTime?>? date,
-      Wrapped<double?>? $value,
-      Wrapped<String?>? catId}) {
+      Wrapped<double?>? $value}) {
     return UpdateRecordDto(
         catalogue: (catalogue != null ? catalogue.value : this.catalogue),
         name: (name != null ? name.value : this.name),
         date: (date != null ? date.value : this.date),
-        $value: ($value != null ? $value.value : this.$value),
-        catId: (catId != null ? catId.value : this.catId));
+        $value: ($value != null ? $value.value : this.$value));
   }
 }
 

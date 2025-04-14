@@ -103,7 +103,6 @@ CreateRecordDto _$CreateRecordDtoFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String,
       date: DateTime.parse(json['date'] as String),
       $value: (json['value'] as num).toDouble(),
-      catId: json['catId'] as String,
     );
 
 Map<String, dynamic> _$CreateRecordDtoToJson(CreateRecordDto instance) =>
@@ -112,7 +111,6 @@ Map<String, dynamic> _$CreateRecordDtoToJson(CreateRecordDto instance) =>
       'name': instance.name,
       'date': instance.date.toIso8601String(),
       'value': instance.$value,
-      'catId': instance.catId,
     };
 
 RecordDto _$RecordDtoFromJson(Map<String, dynamic> json) => RecordDto(
@@ -140,7 +138,6 @@ UpdateRecordDto _$UpdateRecordDtoFromJson(Map<String, dynamic> json) =>
       date:
           json['date'] == null ? null : DateTime.parse(json['date'] as String),
       $value: (json['value'] as num?)?.toDouble(),
-      catId: json['catId'] as String?,
     );
 
 Map<String, dynamic> _$UpdateRecordDtoToJson(UpdateRecordDto instance) =>
@@ -149,5 +146,4 @@ Map<String, dynamic> _$UpdateRecordDtoToJson(UpdateRecordDto instance) =>
       'name': instance.name,
       'date': instance.date?.toIso8601String(),
       'value': instance.$value,
-      'catId': instance.catId,
     };

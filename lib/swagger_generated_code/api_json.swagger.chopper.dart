@@ -118,8 +118,11 @@ final class _$ApiJson extends ApiJson {
   }
 
   @override
-  Future<Response<RecordDto>> _recordsPost({required CreateRecordDto? body}) {
-    final Uri $url = Uri.parse('/records');
+  Future<Response<RecordDto>> _recordsCatIdPost({
+    required String? catId,
+    required CreateRecordDto? body,
+  }) {
+    final Uri $url = Uri.parse('/records/${catId}');
     final $body = body;
     final Request $request = Request(
       'POST',
@@ -147,7 +150,7 @@ final class _$ApiJson extends ApiJson {
   }
 
   @override
-  Future<Response<RecordDto>> _recordsIdPatch({
+  Future<Response<dynamic>> _recordsIdPatch({
     required String? id,
     required UpdateRecordDto? body,
   }) {
@@ -159,7 +162,7 @@ final class _$ApiJson extends ApiJson {
       client.baseUrl,
       body: $body,
     );
-    return client.send<RecordDto, RecordDto>($request);
+    return client.send<dynamic, dynamic>($request);
   }
 
   @override

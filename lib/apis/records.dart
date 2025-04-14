@@ -20,10 +20,13 @@ class RecordsApi {
     }
   }
 
-  static Future<RecordDto> createRecord(CreateRecordDto recordDto) async {
+  static Future<RecordDto> createRecord(
+    String catId,
+    CreateRecordDto recordDto,
+  ) async {
     try {
       final response = await DioHelper.post(
-        "/records/",
+        "/records/$catId",
         data: recordDto.toJson(),
       );
       return RecordDto.fromJson(response.data);

@@ -111,6 +111,10 @@ class _HomeState extends State<Home> with RouteAware {
     });
   }
 
+  _toRecordManagementPage(RecordDto record) {
+    Get.toNamed("/recordManagement", arguments: {"record": record});
+  }
+
   @override
   Widget build(BuildContext context) {
     return FloatingDraggableWidget(
@@ -253,76 +257,81 @@ class _HomeState extends State<Home> with RouteAware {
             ],
           ),
 
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(color: Colors.grey[200]!, width: 1.w),
+          child: InkWell(
+            onTap: () {
+              _toRecordManagementPage(_records[index]);
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(color: Colors.grey[200]!, width: 1.w),
+                ),
               ),
-            ),
-            child: Padding(
-              padding: EdgeInsets.only(
-                left: 16.w,
-                right: 16.w,
-                top: 10.h,
-                bottom: 10.h,
-              ),
-              child: Column(
-                spacing: 5.h,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    DateFormat("HH:mm").format(_records[index].date),
-                    style: TextStyle(fontSize: 14.sp, color: Colors.grey),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Container(
-                            margin: EdgeInsets.only(right: 10.w),
-                            width: 35.w,
-                            height: 35.h,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.grey[200],
-                            ),
-                            child: Icon(
-                              getRecordIcon(_records[index].name),
-                              color: Colors.grey[800],
-                              size: 20.sp,
-                            ),
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                _records[index].name,
-                                style: TextStyle(fontSize: 14.sp),
+              child: Padding(
+                padding: EdgeInsets.only(
+                  left: 16.w,
+                  right: 16.w,
+                  top: 10.h,
+                  bottom: 10.h,
+                ),
+                child: Column(
+                  spacing: 5.h,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      DateFormat("HH:mm").format(_records[index].date),
+                      style: TextStyle(fontSize: 14.sp, color: Colors.grey),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(right: 10.w),
+                              width: 35.w,
+                              height: 35.h,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.grey[200],
                               ),
-                              Text(
-                                _records[index].catalogue.value
-                                        .toString()[0]
-                                        .toUpperCase() +
-                                    _records[index].catalogue.value
-                                        .toString()
-                                        .substring(1),
-                                style: TextStyle(
-                                  fontSize: 12.sp,
-                                  color: Colors.grey,
+                              child: Icon(
+                                getRecordIcon(_records[index].name),
+                                color: Colors.grey[800],
+                                size: 20.sp,
+                              ),
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  _records[index].name,
+                                  style: TextStyle(fontSize: 14.sp),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      Text(
-                        _records[index].$value.toString(),
-                        style: TextStyle(fontSize: 14.sp),
-                      ),
-                    ],
-                  ),
-                ],
+                                Text(
+                                  _records[index].catalogue.value
+                                          .toString()[0]
+                                          .toUpperCase() +
+                                      _records[index].catalogue.value
+                                          .toString()
+                                          .substring(1),
+                                  style: TextStyle(
+                                    fontSize: 12.sp,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        Text(
+                          _records[index].$value.toString(),
+                          style: TextStyle(fontSize: 14.sp),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

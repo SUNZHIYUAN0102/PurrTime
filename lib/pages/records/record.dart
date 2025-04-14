@@ -87,10 +87,7 @@ class _RecordState extends State<Record> with TickerProviderStateMixin {
     Get.toNamed(
       "/recordManagement",
       arguments: {
-        "catalogue":
-            _currentTabIndex == 0
-                ? CreateRecordDtoCatalogue.daily
-                : CreateRecordDtoCatalogue.expense,
+        "catalogue": _currentTabIndex == 0 ? "Daily" : "Expense",
         "name": selectedItemName,
       },
     );
