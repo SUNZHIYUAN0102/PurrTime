@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
 import 'package:intl/intl.dart';
 import 'package:purr_time/apis/records.dart';
+import 'package:purr_time/components/notiferDateTimeInputField.dart';
 import 'package:purr_time/components/notifierInputField.dart';
 import 'package:purr_time/store/cat.dart';
 import 'package:purr_time/swagger_generated_code/api_json.swagger.dart';
@@ -20,15 +21,11 @@ class _RecordManagementState extends State<RecordManagement> {
   String catalogue = "";
   String name = "";
   String dateTime = "";
+  ValueNotifier<String> dateTimeNotifier = ValueNotifier<String>("");
+
   String amount = "";
   ValueNotifier<String> amountNotifier = ValueNotifier<String>("");
   bool isEdit = false;
-
-  _setDateTime(String value) {
-    setState(() {
-      dateTime = value;
-    });
-  }
 
   _submitRecord() async {
     RecordDto res = await RecordsApi.createRecord(
@@ -65,6 +62,15 @@ class _RecordManagementState extends State<RecordManagement> {
   }
 
   _handleButtonPress() {
+    if (dateTime.isEmpty) {
+      Get.snackbar("Error", "Please select a date and time");
+      return;
+    }
+    if (amount.isEmpty) {
+      Get.snackbar("Error", "Please enter an amount");
+      return;
+    }
+
     if (isEdit) {
       _updateRecord();
     } else {
@@ -98,6 +104,7 @@ class _RecordManagementState extends State<RecordManagement> {
           record.catalogue.value.toString().substring(1);
       name = record.name.toString();
       dateTime = DateFormat("yyyy-MM-dd HH:mm").format(record.date);
+      dateTimeNotifier.value = dateTime;
       amount = record.$value.toString();
       amountNotifier.value = amount;
       isEdit = true;
@@ -111,6 +118,12 @@ class _RecordManagementState extends State<RecordManagement> {
     amountNotifier.addListener(() {
       setState(() {
         amount = amountNotifier.value;
+      });
+    });
+
+    dateTimeNotifier.addListener(() {
+      setState(() {
+        dateTime = dateTimeNotifier.value;
       });
     });
   }
@@ -245,69 +258,12 @@ class _RecordManagementState extends State<RecordManagement> {
                         ],
                       ),
                     ),
-                    InkWell(
-                      onTap: () async {
-                        if (dateTime.isEmpty) {
-                          _setDateTime(
-                            DateFormat(
-                              "yyyy-MM-dd HH:mm",
-                            ).format(DateTime.now()),
-                          );
-                        }
 
-                        await showBoardDateTimePicker(
-                          context: context,
-                          initialDate: DateTime.parse(dateTime),
-                          pickerType: DateTimePickerType.datetime,
-                          onChanged: (p0) {
-                            _setDateTime(
-                              DateFormat("yyyy-MM-dd HH:mm").format(p0),
-                            );
-                          },
-                          customCloseButtonBuilder: (
-                            context,
-                            isModal,
-                            onClose,
-                          ) {
-                            return IconButton(
-                              icon: Icon(Icons.close),
-                              onPressed: () {
-                                if (isModal) {
-                                  Navigator.pop(context);
-                                }
-                              },
-                            );
-                          },
-                        );
-                      },
-                      child: Container(
-                        margin: EdgeInsets.only(bottom: 10.h),
-                        padding: EdgeInsets.only(
-                          top: 10.h,
-                          bottom: 10.h,
-                          left: 20.w,
-                          right: 20.w,
-                        ),
-                        width: double.infinity,
-                        height: 65.h,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[300],
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Text(
-                              "Date & Time",
-                              style: TextStyle(
-                                fontSize: 14.sp,
-                                color: Colors.grey[600],
-                              ),
-                            ),
-                            Text(dateTime, style: TextStyle(fontSize: 18.sp)),
-                          ],
-                        ),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 10.h),
+                      child: NotiferDateTimeInputField(
+                        label: "Date & Time",
+                        notifier: dateTimeNotifier,
                       ),
                     ),
 

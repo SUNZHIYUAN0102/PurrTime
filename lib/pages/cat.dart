@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:purr_time/apis/cats.dart';
+import 'package:purr_time/components/notifierInputField.dart';
 import 'package:purr_time/swagger_generated_code/api_json.swagger.dart';
 
 class Cat extends StatefulWidget {
@@ -13,23 +14,28 @@ class Cat extends StatefulWidget {
 }
 
 class _CatState extends State<Cat> {
-  late CatDto cat = CatDto(
-    id: "",
-    name: "",
-    gender: "",
-    breed: "",
-    birth: DateTime.now(),
-    weight: 0,
-  );
+  String name = "";
+  ValueNotifier<String> nameNotifier = ValueNotifier<String>("");
 
-  _getCatById(catId) async {
-    CatDto res = await CatsApi.getCatById(catId);
+  String gender = "";
+  String birth = "";
 
-    setState(() {
-      cat = res;
-    });
-  }
+  String weight = "";
+  ValueNotifier<String> weightNotifier = ValueNotifier<String>("");
 
+  String breed = "";
+  ValueNotifier<String> breedNotifier = ValueNotifier<String>("");
+
+  String length = "";
+  ValueNotifier<String> lengthNotifier = ValueNotifier<String>("");
+
+  String insuranceProvider = "";
+  ValueNotifier<String> insuranceProviderNotifier = ValueNotifier<String>("");
+
+  String insuranceNumber = "";
+  ValueNotifier<String> insuranceNumberNotifier = ValueNotifier<String>("");
+
+  bool isEdit = false;
   final ScrollController _scrollController = ScrollController();
   bool _showTitle = false;
 
@@ -38,8 +44,47 @@ class _CatState extends State<Cat> {
     // TODO: implement initState
     super.initState();
 
-    final catId = Get.arguments["catId"];
-    _getCatById(catId);
+    if (Get.arguments["catId"] != null) {
+      final catId = Get.arguments["catId"];
+      isEdit = true;
+      _getCatById(catId);
+    }
+
+    nameNotifier.addListener(() {
+      setState(() {
+        name = nameNotifier.value;
+      });
+    });
+
+    weightNotifier.addListener(() {
+      setState(() {
+        weight = weightNotifier.value;
+      });
+    });
+
+    breedNotifier.addListener(() {
+      setState(() {
+        breed = breedNotifier.value;
+      });
+    });
+
+    lengthNotifier.addListener(() {
+      setState(() {
+        length = lengthNotifier.value;
+      });
+    });
+
+    insuranceProviderNotifier.addListener(() {
+      setState(() {
+        insuranceProvider = insuranceProviderNotifier.value;
+      });
+    });
+
+    insuranceNumberNotifier.addListener(() {
+      setState(() {
+        insuranceNumber = insuranceNumberNotifier.value;
+      });
+    });
 
     _scrollController.addListener(_handleScroll);
   }
@@ -56,6 +101,57 @@ class _CatState extends State<Cat> {
     }
   }
 
+  _getCatById(catId) async {
+    CatDto res = await CatsApi.getCatById(catId);
+
+    setState(() {
+      name = res.name;
+      nameNotifier.value = res.name;
+
+      weight = res.weight.toString();
+      weightNotifier.value = res.weight.toString();
+
+      breed = res.breed;
+      breedNotifier.value = res.breed;
+
+      length = res.length.toString();
+      lengthNotifier.value = res.length.toString();
+
+      insuranceProvider = res.insuranceNumber ?? "";
+      insuranceProviderNotifier.value = res.insuranceProvider ?? "";
+
+      insuranceNumber = res.insuranceNumber ?? "";
+      insuranceNumberNotifier.value = res.insuranceNumber ?? "";
+    });
+  }
+
+  _handleButtonPress() {
+    if (name.isEmpty) {
+      Get.snackbar("Error", "Please enter cat name");
+      return;
+    }
+
+    if (birth.isEmpty) {
+      Get.snackbar("Error", "Please enter cat birth date");
+      return;
+    }
+
+    if (weight.isEmpty) {
+      Get.snackbar("Error", "Please enter cat weight");
+      return;
+    }
+
+    if (breed.isEmpty) {
+      Get.snackbar("Error", "Please enter cat breed");
+      return;
+    }
+
+    if (gender.isEmpty) {
+      Get.snackbar("Error", "Please enter cat gender");
+      return;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,7 +162,7 @@ class _CatState extends State<Cat> {
         slivers: [
           SliverAppBar(
             title: Text(
-              _showTitle ? "Edit cat" : "",
+              _showTitle ? (isEdit ? "Edit cat" : "Add cat") : "",
               style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w500),
             ),
             floating: false,
@@ -86,7 +182,7 @@ class _CatState extends State<Cat> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Edit cat",
+                          isEdit ? "Edit cat" : "Add cat",
                           style: TextStyle(
                             fontSize: 35.sp,
                             fontWeight: FontWeight.w600,
@@ -114,35 +210,18 @@ class _CatState extends State<Cat> {
                         ),
                       ),
                     ),
+
+                    // Cat name
                     Container(
                       margin: EdgeInsets.only(bottom: 10.h),
-                      padding: EdgeInsets.only(
-                        top: 10.h,
-                        bottom: 10.h,
-                        left: 20.w,
-                        right: 20.w,
-                      ),
-                      width: double.infinity,
-                      height: 65.h,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            "Name*",
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                          Text(cat.name, style: TextStyle(fontSize: 18.sp)),
-                        ],
+                      child: NotifierInputField(
+                        label: "Name*",
+                        notifier: nameNotifier,
+                        keyboardType: TextInputType.text,
+                        hintText: "Enter cat name",
                       ),
                     ),
+
                     Container(
                       margin: EdgeInsets.only(bottom: 10.h),
                       padding: EdgeInsets.only(
@@ -169,40 +248,33 @@ class _CatState extends State<Cat> {
                             ),
                           ),
                           Text(
-                            DateFormat('MMM d, y').format(cat.birth),
+                            // DateFormat('MMM d, y').format(""),
+                            "",
                             style: TextStyle(fontSize: 18.sp),
                           ),
                         ],
                       ),
                     ),
 
+                    // Cat weight
                     Container(
                       margin: EdgeInsets.only(bottom: 10.h),
-                      padding: EdgeInsets.only(
-                        top: 10.h,
-                        bottom: 10.h,
-                        left: 20.w,
-                        right: 20.w,
+                      child: NotifierInputField(
+                        label: "Weight*",
+                        notifier: weightNotifier,
+                        keyboardType: TextInputType.text,
+                        hintText: "Enter cat weight",
                       ),
-                      width: double.infinity,
-                      height: 65.h,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            "Breed*",
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                          Text(cat.breed, style: TextStyle(fontSize: 18.sp)),
-                        ],
+                    ),
+
+                    // Cat breed
+                    Container(
+                      margin: EdgeInsets.only(bottom: 10.h),
+                      child: NotifierInputField(
+                        label: "Breed*",
+                        notifier: breedNotifier,
+                        keyboardType: TextInputType.text,
+                        hintText: "Enter cat breed",
                       ),
                     ),
 
@@ -231,40 +303,19 @@ class _CatState extends State<Cat> {
                               color: Colors.grey[600],
                             ),
                           ),
-                          Text(cat.gender, style: TextStyle(fontSize: 18.sp)),
+                          Text("Male", style: TextStyle(fontSize: 18.sp)),
                         ],
                       ),
                     ),
+
+                    //Cat length
                     Container(
                       margin: EdgeInsets.only(bottom: 10.h),
-                      padding: EdgeInsets.only(
-                        top: 10.h,
-                        bottom: 10.h,
-                        left: 20.w,
-                        right: 20.w,
-                      ),
-                      width: double.infinity,
-                      height: 65.h,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            "Length",
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                          Text(
-                            "${cat.length} cm",
-                            style: TextStyle(fontSize: 18.sp),
-                          ),
-                        ],
+                      child: NotifierInputField(
+                        label: "Length (centimeters)",
+                        notifier: lengthNotifier,
+                        keyboardType: TextInputType.number,
+                        hintText: "Enter cat length",
                       ),
                     ),
 
@@ -281,66 +332,45 @@ class _CatState extends State<Cat> {
                     ),
                     Container(
                       margin: EdgeInsets.only(bottom: 10.h),
-                      padding: EdgeInsets.only(
-                        top: 10.h,
-                        bottom: 10.h,
-                        left: 20.w,
-                        right: 20.w,
-                      ),
-                      width: double.infinity,
-                      height: 65.h,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            "Insurance provider",
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                          Text(
-                            cat.insuranceProvider ?? "",
-                            style: TextStyle(fontSize: 18.sp),
-                          ),
-                        ],
+                      child: NotifierInputField(
+                        label: "Insurance provider",
+                        notifier: insuranceProviderNotifier,
+                        keyboardType: TextInputType.text,
+                        hintText: "Enter insurance provider",
                       ),
                     ),
                     Container(
                       margin: EdgeInsets.only(bottom: 10.h),
-                      padding: EdgeInsets.only(
-                        top: 10.h,
-                        bottom: 10.h,
-                        left: 20.w,
-                        right: 20.w,
+                      child: NotifierInputField(
+                        label: "Insurance number",
+                        notifier: insuranceNumberNotifier,
+                        keyboardType: TextInputType.text,
+                        hintText: "Enter insurance number",
                       ),
-                      width: double.infinity,
-                      height: 65.h,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            "Insurance number",
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                              color: Colors.grey[600],
+                    ),
+
+                    Container(
+                      margin: EdgeInsets.only(bottom: 10.h),
+                      child: ElevatedButton(
+                        onPressed: _handleButtonPress,
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                            Colors.black,
+                          ),
+                        ),
+                        child: SizedBox(
+                          width: double.infinity,
+                          height: 50.h,
+                          child: Center(
+                            child: Text(
+                              isEdit ? "Update cat" : "Add cat",
+                              style: TextStyle(
+                                fontSize: 18.sp,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
-                          Text(
-                            cat.insuranceNumber ?? "",
-                            style: TextStyle(fontSize: 18.sp),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                   ],

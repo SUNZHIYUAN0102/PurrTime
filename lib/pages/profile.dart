@@ -29,7 +29,7 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  toCatPage(catId) {
+  _toCatPage({String? catId}) {
     Get.toNamed("/cat", arguments: {"catId": catId});
   }
 
@@ -85,7 +85,7 @@ class _ProfileState extends State<Profile> {
                           IconButton(
                             iconSize: 30.sp,
                             icon: Icon(Icons.add),
-                            onPressed: () {},
+                            onPressed: _toCatPage,
                           ),
                         ],
                       ),
@@ -108,7 +108,9 @@ class _ProfileState extends State<Profile> {
                           itemBuilder: (context, index) {
                             return InkWell(
                               onTap: () {
-                                toCatPage(CatController.to.catList[index].id);
+                                _toCatPage(
+                                  catId: CatController.to.catList[index].id,
+                                );
                               },
                               child: Container(
                                 margin: EdgeInsets.only(left: 15, right: 15),
