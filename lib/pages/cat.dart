@@ -1,9 +1,12 @@
+import 'package:board_datetime_picker/board_datetime_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:purr_time/apis/cats.dart';
+import 'package:purr_time/components/notiferDatetimeInputField.dart';
 import 'package:purr_time/components/notifierInputField.dart';
+import 'package:purr_time/store/cat.dart';
 import 'package:purr_time/swagger_generated_code/api_json.swagger.dart';
 
 class Cat extends StatefulWidget {
@@ -17,8 +20,10 @@ class _CatState extends State<Cat> {
   String name = "";
   ValueNotifier<String> nameNotifier = ValueNotifier<String>("");
 
-  String gender = "";
+  String gender = "Male";
+
   String birth = "";
+  ValueNotifier<String> birthNotifier = ValueNotifier<String>("");
 
   String weight = "";
   ValueNotifier<String> weightNotifier = ValueNotifier<String>("");
@@ -53,6 +58,12 @@ class _CatState extends State<Cat> {
     nameNotifier.addListener(() {
       setState(() {
         name = nameNotifier.value;
+      });
+    });
+
+    birthNotifier.addListener(() {
+      setState(() {
+        birth = birthNotifier.value;
       });
     });
 
@@ -108,6 +119,9 @@ class _CatState extends State<Cat> {
       name = res.name;
       nameNotifier.value = res.name;
 
+      birth = res.birth.toString();
+      birthNotifier.value = res.birth.toString();
+
       weight = res.weight.toString();
       weightNotifier.value = res.weight.toString();
 
@@ -150,6 +164,49 @@ class _CatState extends State<Cat> {
       Get.snackbar("Error", "Please enter cat gender");
       return;
     }
+
+    if (isEdit) {
+      _updateCat();
+    } else {
+      _addCat();
+    }
+
+    Get.back();
+  }
+
+  _addCat() async {
+    CatDto cat = await CatsApi.createCat(
+      CreateCatDto(
+        name: name,
+        gender: gender,
+        breed: breed,
+        birth: DateFormat("yyyy-MM-dd HH:mm").parse(birth, true).toLocal(),
+        length: double.parse(length),
+        weight: double.parse(weight),
+        insuranceProvider: insuranceProvider,
+        insuranceNumber: insuranceNumber,
+      ),
+    );
+
+    CatController.to.addCat(cat);
+  }
+
+  _updateCat() async {
+    CatDto cat = await CatsApi.updateCat(
+      Get.arguments["catId"],
+      UpdateCatDto(
+        name: name,
+        gender: gender,
+        breed: breed,
+        birth: DateFormat("yyyy-MM-dd HH:mm").parse(birth, true).toLocal(),
+        length: double.parse(length),
+        weight: double.parse(weight),
+        insuranceProvider: insuranceProvider,
+        insuranceNumber: insuranceNumber,
+      ),
+    );
+
+    CatController.to.updateCat(cat);
   }
 
   @override
@@ -222,37 +279,14 @@ class _CatState extends State<Cat> {
                       ),
                     ),
 
+                    // Cat birth date
                     Container(
                       margin: EdgeInsets.only(bottom: 10.h),
-                      padding: EdgeInsets.only(
-                        top: 10.h,
-                        bottom: 10.h,
-                        left: 20.w,
-                        right: 20.w,
-                      ),
-                      width: double.infinity,
-                      height: 65.h,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            "Date of birth*",
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                          Text(
-                            // DateFormat('MMM d, y').format(""),
-                            "",
-                            style: TextStyle(fontSize: 18.sp),
-                          ),
-                        ],
+                      child: NotiferDateTimeInputField(
+                        label: "Date of birth*",
+                        notifier: birthNotifier,
+                        formatRule: "MMM d, y",
+                        pickerType: DateTimePickerType.date,
                       ),
                     ),
 

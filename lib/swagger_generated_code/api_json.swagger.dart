@@ -208,10 +208,12 @@ abstract class ApiJson extends ChopperService {
 
   ///
   ///@param id
-  Future<chopper.Response> recordsIdPatch({
+  Future<chopper.Response<RecordDto>> recordsIdPatch({
     required String? id,
     required UpdateRecordDto? body,
   }) {
+    generatedMapping.putIfAbsent(RecordDto, () => RecordDto.fromJsonFactory);
+
     return _recordsIdPatch(id: id, body: body);
   }
 
@@ -221,7 +223,7 @@ abstract class ApiJson extends ChopperService {
     path: '/records/{id}',
     optionalBody: true,
   )
-  Future<chopper.Response> _recordsIdPatch({
+  Future<chopper.Response<RecordDto>> _recordsIdPatch({
     @Path('id') required String? id,
     @Body() required UpdateRecordDto? body,
   });
@@ -515,7 +517,17 @@ extension $CatDtoExtension on CatDto {
 
 @JsonSerializable(explicitToJson: true)
 class UpdateCatDto {
-  const UpdateCatDto();
+  const UpdateCatDto({
+    required this.name,
+    required this.gender,
+    required this.breed,
+    required this.birth,
+    required this.length,
+    this.insuranceProvider,
+    this.insuranceNumber,
+    this.image,
+    required this.weight,
+  });
 
   factory UpdateCatDto.fromJson(Map<String, dynamic> json) =>
       _$UpdateCatDtoFromJson(json);
@@ -523,13 +535,117 @@ class UpdateCatDto {
   static const toJsonFactory = _$UpdateCatDtoToJson;
   Map<String, dynamic> toJson() => _$UpdateCatDtoToJson(this);
 
+  @JsonKey(name: 'name')
+  final String name;
+  @JsonKey(name: 'gender')
+  final String gender;
+  @JsonKey(name: 'breed')
+  final String breed;
+  @JsonKey(name: 'birth')
+  final DateTime birth;
+  @JsonKey(name: 'length')
+  final double length;
+  @JsonKey(name: 'insuranceProvider')
+  final String? insuranceProvider;
+  @JsonKey(name: 'insuranceNumber')
+  final String? insuranceNumber;
+  @JsonKey(name: 'image')
+  final String? image;
+  @JsonKey(name: 'weight')
+  final double weight;
   static const fromJsonFactory = _$UpdateCatDtoFromJson;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is UpdateCatDto &&
+            (identical(other.name, name) ||
+                const DeepCollectionEquality().equals(other.name, name)) &&
+            (identical(other.gender, gender) ||
+                const DeepCollectionEquality().equals(other.gender, gender)) &&
+            (identical(other.breed, breed) ||
+                const DeepCollectionEquality().equals(other.breed, breed)) &&
+            (identical(other.birth, birth) ||
+                const DeepCollectionEquality().equals(other.birth, birth)) &&
+            (identical(other.length, length) ||
+                const DeepCollectionEquality().equals(other.length, length)) &&
+            (identical(other.insuranceProvider, insuranceProvider) ||
+                const DeepCollectionEquality()
+                    .equals(other.insuranceProvider, insuranceProvider)) &&
+            (identical(other.insuranceNumber, insuranceNumber) ||
+                const DeepCollectionEquality()
+                    .equals(other.insuranceNumber, insuranceNumber)) &&
+            (identical(other.image, image) ||
+                const DeepCollectionEquality().equals(other.image, image)) &&
+            (identical(other.weight, weight) ||
+                const DeepCollectionEquality().equals(other.weight, weight)));
+  }
 
   @override
   String toString() => jsonEncode(this);
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode =>
+      const DeepCollectionEquality().hash(name) ^
+      const DeepCollectionEquality().hash(gender) ^
+      const DeepCollectionEquality().hash(breed) ^
+      const DeepCollectionEquality().hash(birth) ^
+      const DeepCollectionEquality().hash(length) ^
+      const DeepCollectionEquality().hash(insuranceProvider) ^
+      const DeepCollectionEquality().hash(insuranceNumber) ^
+      const DeepCollectionEquality().hash(image) ^
+      const DeepCollectionEquality().hash(weight) ^
+      runtimeType.hashCode;
+}
+
+extension $UpdateCatDtoExtension on UpdateCatDto {
+  UpdateCatDto copyWith(
+      {String? name,
+      String? gender,
+      String? breed,
+      DateTime? birth,
+      double? length,
+      String? insuranceProvider,
+      String? insuranceNumber,
+      String? image,
+      double? weight}) {
+    return UpdateCatDto(
+        name: name ?? this.name,
+        gender: gender ?? this.gender,
+        breed: breed ?? this.breed,
+        birth: birth ?? this.birth,
+        length: length ?? this.length,
+        insuranceProvider: insuranceProvider ?? this.insuranceProvider,
+        insuranceNumber: insuranceNumber ?? this.insuranceNumber,
+        image: image ?? this.image,
+        weight: weight ?? this.weight);
+  }
+
+  UpdateCatDto copyWithWrapped(
+      {Wrapped<String>? name,
+      Wrapped<String>? gender,
+      Wrapped<String>? breed,
+      Wrapped<DateTime>? birth,
+      Wrapped<double>? length,
+      Wrapped<String?>? insuranceProvider,
+      Wrapped<String?>? insuranceNumber,
+      Wrapped<String?>? image,
+      Wrapped<double>? weight}) {
+    return UpdateCatDto(
+        name: (name != null ? name.value : this.name),
+        gender: (gender != null ? gender.value : this.gender),
+        breed: (breed != null ? breed.value : this.breed),
+        birth: (birth != null ? birth.value : this.birth),
+        length: (length != null ? length.value : this.length),
+        insuranceProvider: (insuranceProvider != null
+            ? insuranceProvider.value
+            : this.insuranceProvider),
+        insuranceNumber: (insuranceNumber != null
+            ? insuranceNumber.value
+            : this.insuranceNumber),
+        image: (image != null ? image.value : this.image),
+        weight: (weight != null ? weight.value : this.weight));
+  }
 }
 
 @JsonSerializable(explicitToJson: true)

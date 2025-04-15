@@ -57,11 +57,30 @@ Map<String, dynamic> _$CatDtoToJson(CatDto instance) => <String, dynamic>{
       'weight': instance.weight,
     };
 
-UpdateCatDto _$UpdateCatDtoFromJson(Map<String, dynamic> json) =>
-    UpdateCatDto();
+UpdateCatDto _$UpdateCatDtoFromJson(Map<String, dynamic> json) => UpdateCatDto(
+      name: json['name'] as String,
+      gender: json['gender'] as String,
+      breed: json['breed'] as String,
+      birth: DateTime.parse(json['birth'] as String),
+      length: (json['length'] as num).toDouble(),
+      insuranceProvider: json['insuranceProvider'] as String?,
+      insuranceNumber: json['insuranceNumber'] as String?,
+      image: json['image'] as String?,
+      weight: (json['weight'] as num).toDouble(),
+    );
 
 Map<String, dynamic> _$UpdateCatDtoToJson(UpdateCatDto instance) =>
-    <String, dynamic>{};
+    <String, dynamic>{
+      'name': instance.name,
+      'gender': instance.gender,
+      'breed': instance.breed,
+      'birth': instance.birth.toIso8601String(),
+      'length': instance.length,
+      'insuranceProvider': instance.insuranceProvider,
+      'insuranceNumber': instance.insuranceNumber,
+      'image': instance.image,
+      'weight': instance.weight,
+    };
 
 CreateUserDto _$CreateUserDtoFromJson(Map<String, dynamic> json) =>
     CreateUserDto(

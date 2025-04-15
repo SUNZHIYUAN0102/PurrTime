@@ -150,7 +150,7 @@ final class _$ApiJson extends ApiJson {
   }
 
   @override
-  Future<Response<dynamic>> _recordsIdPatch({
+  Future<Response<RecordDto>> _recordsIdPatch({
     required String? id,
     required UpdateRecordDto? body,
   }) {
@@ -162,7 +162,7 @@ final class _$ApiJson extends ApiJson {
       client.baseUrl,
       body: $body,
     );
-    return client.send<dynamic, dynamic>($request);
+    return client.send<RecordDto, RecordDto>($request);
   }
 
   @override

@@ -18,6 +18,22 @@ class CatController extends GetxController {
     catList.add(newCat);
   }
 
+  updateCat(CatDto updatedCat) {
+    int index = catList.indexWhere((cat) => cat.id == updatedCat.id);
+    if (index != -1) {
+      catList[index] = updatedCat;
+    }
+
+    if (homeSelectedCat.value != null &&
+        homeSelectedCat.value!.id == updatedCat.id) {
+      homeSelectedCat.value = updatedCat;
+    }
+    if (profileSelectedCat.value != null &&
+        profileSelectedCat.value!.id == updatedCat.id) {
+      profileSelectedCat.value = updatedCat;
+    }
+  }
+
   removeCat(CatDto cat) {
     catList.remove(cat);
   }

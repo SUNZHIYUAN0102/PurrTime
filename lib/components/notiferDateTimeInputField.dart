@@ -6,11 +6,15 @@ import 'package:intl/intl.dart';
 class NotiferDateTimeInputField extends StatelessWidget {
   final String label;
   final ValueNotifier<String> notifier;
+  final String formatRule;
+  final DateTimePickerType pickerType;
 
   const NotiferDateTimeInputField({
     super.key,
     required this.label,
     required this.notifier,
+    this.formatRule = "yyyy-MM-dd HH:mm",
+    this.pickerType = DateTimePickerType.datetime,
   });
 
   @override
@@ -29,7 +33,7 @@ class NotiferDateTimeInputField extends StatelessWidget {
             await showBoardDateTimePicker(
               context: context,
               initialDate: DateFormat("yyyy-MM-dd HH:mm").parse(notifier.value),
-              pickerType: DateTimePickerType.datetime,
+              pickerType: pickerType,
               onChanged: (p0) {
                 notifier.value = DateFormat("yyyy-MM-dd HH:mm").format(p0);
               },
@@ -66,7 +70,14 @@ class NotiferDateTimeInputField extends StatelessWidget {
                   label,
                   style: TextStyle(fontSize: 14.sp, color: Colors.grey[600]),
                 ),
-                Text(value, style: TextStyle(fontSize: 18.sp)),
+                Text(
+                  notifier.value.isEmpty
+                      ? ""
+                      : DateFormat(
+                        formatRule,
+                      ).format(DateTime.parse(notifier.value)),
+                  style: TextStyle(fontSize: 18.sp),
+                ),
               ],
             ),
           ),
