@@ -22,6 +22,9 @@ class _CatState extends State<Cat> {
 
   String gender = "Male";
 
+  String catPhoto =
+      "https://fastly.picsum.photos/id/237/300/300.jpg?hmac=9iUR3VHqf0Y9abGyuPZTpEIxHJL0sSvyNtJtDIMSylM";
+
   String birth = "";
   ValueNotifier<String> birthNotifier = ValueNotifier<String>("");
 
@@ -117,25 +120,33 @@ class _CatState extends State<Cat> {
 
     setState(() {
       name = res.name;
-      nameNotifier.value = res.name;
+      nameNotifier.value = name;
+
+      gender = res.gender;
+
+      catPhoto = res.image;
 
       birth = res.birth.toString();
-      birthNotifier.value = res.birth.toString();
+      birthNotifier.value = birth;
 
       weight = res.weight.toString();
-      weightNotifier.value = res.weight.toString();
+      weightNotifier.value = weight;
 
       breed = res.breed;
-      breedNotifier.value = res.breed;
+      breedNotifier.value = breed;
 
-      length = res.length.toString();
-      lengthNotifier.value = res.length.toString();
+      if (res.length != null) {
+        length = res.length.toString();
+      } else {
+        length = "";
+      }
+      lengthNotifier.value = length;
 
       insuranceProvider = res.insuranceNumber ?? "";
-      insuranceProviderNotifier.value = res.insuranceProvider ?? "";
+      insuranceProviderNotifier.value = insuranceProvider;
 
       insuranceNumber = res.insuranceNumber ?? "";
-      insuranceNumberNotifier.value = res.insuranceNumber ?? "";
+      insuranceNumberNotifier.value = insuranceNumber;
     });
   }
 
@@ -175,38 +186,48 @@ class _CatState extends State<Cat> {
   }
 
   _addCat() async {
-    CatDto cat = await CatsApi.createCat(
-      CreateCatDto(
-        name: name,
-        gender: gender,
-        breed: breed,
-        birth: DateFormat("yyyy-MM-dd HH:mm").parse(birth, true).toLocal(),
-        length: double.parse(length),
-        weight: double.parse(weight),
-        insuranceProvider: insuranceProvider,
-        insuranceNumber: insuranceNumber,
-      ),
-    );
+    try {
+      CatDto cat = await CatsApi.createCat(
+        CreateCatDto(
+          name: name,
+          image: catPhoto,
+          gender: gender,
+          breed: breed,
+          birth: DateFormat("yyyy-MM-dd HH:mm").parse(birth, true).toLocal(),
+          length: length.isEmpty ? null : double.parse(length),
+          weight: double.parse(weight),
+          insuranceProvider: insuranceProvider,
+          insuranceNumber: insuranceNumber,
+        ),
+      );
 
-    CatController.to.addCat(cat);
+      CatController.to.addCat(cat);
+    } catch (e) {
+      Get.snackbar("Error", "Failed to add cat. Please try again.");
+    }
   }
 
   _updateCat() async {
-    CatDto cat = await CatsApi.updateCat(
-      Get.arguments["catId"],
-      UpdateCatDto(
-        name: name,
-        gender: gender,
-        breed: breed,
-        birth: DateFormat("yyyy-MM-dd HH:mm").parse(birth, true).toLocal(),
-        length: double.parse(length),
-        weight: double.parse(weight),
-        insuranceProvider: insuranceProvider,
-        insuranceNumber: insuranceNumber,
-      ),
-    );
+    try {
+      CatDto cat = await CatsApi.updateCat(
+        Get.arguments["catId"],
+        UpdateCatDto(
+          name: name,
+          image: catPhoto,
+          gender: gender,
+          breed: breed,
+          birth: DateFormat("yyyy-MM-dd HH:mm").parse(birth, true).toLocal(),
+          length: length.isEmpty ? null : double.parse(length),
+          weight: double.parse(weight),
+          insuranceProvider: insuranceProvider,
+          insuranceNumber: insuranceNumber,
+        ),
+      );
 
-    CatController.to.updateCat(cat);
+      CatController.to.updateCat(cat);
+    } catch (e) {
+      Get.snackbar("Error", "Failed to update cat. Please try again.");
+    }
   }
 
   @override
@@ -252,6 +273,10 @@ class _CatState extends State<Cat> {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: Colors.grey[300],
+                            image: DecorationImage(
+                              image: NetworkImage(catPhoto),
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ],
@@ -287,6 +312,7 @@ class _CatState extends State<Cat> {
                         notifier: birthNotifier,
                         formatRule: "MMM d, y",
                         pickerType: DateTimePickerType.date,
+                        maximumDate: DateTime.now(),
                       ),
                     ),
 
@@ -312,16 +338,17 @@ class _CatState extends State<Cat> {
                       ),
                     ),
 
+                    // Cat gender
                     Container(
                       margin: EdgeInsets.only(bottom: 10.h),
                       padding: EdgeInsets.only(
                         top: 10.h,
-                        bottom: 10.h,
+                        // bottom: 10.h,
                         left: 20.w,
                         right: 20.w,
                       ),
                       width: double.infinity,
-                      height: 65.h,
+                      // height: 65.h,
                       decoration: BoxDecoration(
                         color: Colors.grey[300],
                         borderRadius: BorderRadius.circular(10),
@@ -337,7 +364,42 @@ class _CatState extends State<Cat> {
                               color: Colors.grey[600],
                             ),
                           ),
-                          Text("Male", style: TextStyle(fontSize: 18.sp)),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    Radio<String>(
+                                      value: "Male",
+                                      groupValue: gender,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          gender = value!;
+                                        });
+                                      },
+                                    ),
+                                    const Text("Male"),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    Radio<String>(
+                                      value: "Female",
+                                      groupValue: gender,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          gender = value!;
+                                        });
+                                      },
+                                    ),
+                                    const Text("Female"),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                     ),

@@ -11,10 +11,10 @@ CreateCatDto _$CreateCatDtoFromJson(Map<String, dynamic> json) => CreateCatDto(
       gender: json['gender'] as String,
       breed: json['breed'] as String,
       birth: DateTime.parse(json['birth'] as String),
-      length: (json['length'] as num).toDouble(),
+      length: (json['length'] as num?)?.toDouble(),
       insuranceProvider: json['insuranceProvider'] as String?,
       insuranceNumber: json['insuranceNumber'] as String?,
-      image: json['image'] as String?,
+      image: json['image'] as String,
       weight: (json['weight'] as num).toDouble(),
     );
 
@@ -40,7 +40,7 @@ CatDto _$CatDtoFromJson(Map<String, dynamic> json) => CatDto(
       length: (json['length'] as num?)?.toDouble(),
       insuranceProvider: json['insuranceProvider'] as String?,
       insuranceNumber: json['insuranceNumber'] as String?,
-      image: json['image'] as String?,
+      image: json['image'] as String,
       weight: (json['weight'] as num).toDouble(),
     );
 
@@ -62,10 +62,10 @@ UpdateCatDto _$UpdateCatDtoFromJson(Map<String, dynamic> json) => UpdateCatDto(
       gender: json['gender'] as String,
       breed: json['breed'] as String,
       birth: DateTime.parse(json['birth'] as String),
-      length: (json['length'] as num).toDouble(),
+      length: (json['length'] as num?)?.toDouble(),
       insuranceProvider: json['insuranceProvider'] as String?,
       insuranceNumber: json['insuranceNumber'] as String?,
-      image: json['image'] as String?,
+      image: json['image'] as String,
       weight: (json['weight'] as num).toDouble(),
     );
 

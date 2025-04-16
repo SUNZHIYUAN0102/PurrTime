@@ -72,11 +72,13 @@ class _HomeState extends State<Home> with RouteAware {
   _getUserCats() async {
     List<CatDto> res = await CatsApi.getUserCats();
 
-    CatController.to.setCatList(res);
+    if (res.isNotEmpty) {
+      CatController.to.setCatList(res);
 
-    CatController.to.setHomeSelectedCat(res[0]);
+      CatController.to.setHomeSelectedCat(res[0]);
 
-    CatController.to.setProfileSelectedCat(res[0]);
+      CatController.to.setProfileSelectedCat(res[0]);
+    }
   }
 
   _switchSelectedCat(CatDto cat) {

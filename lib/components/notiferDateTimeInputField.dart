@@ -8,6 +8,7 @@ class NotiferDateTimeInputField extends StatelessWidget {
   final ValueNotifier<String> notifier;
   final String formatRule;
   final DateTimePickerType pickerType;
+  final DateTime? maximumDate;
 
   const NotiferDateTimeInputField({
     super.key,
@@ -15,6 +16,7 @@ class NotiferDateTimeInputField extends StatelessWidget {
     required this.notifier,
     this.formatRule = "yyyy-MM-dd HH:mm",
     this.pickerType = DateTimePickerType.datetime,
+    this.maximumDate,
   });
 
   @override
@@ -34,6 +36,7 @@ class NotiferDateTimeInputField extends StatelessWidget {
               context: context,
               initialDate: DateFormat("yyyy-MM-dd HH:mm").parse(notifier.value),
               pickerType: pickerType,
+              maximumDate: maximumDate,
               onChanged: (p0) {
                 notifier.value = DateFormat("yyyy-MM-dd HH:mm").format(p0);
               },

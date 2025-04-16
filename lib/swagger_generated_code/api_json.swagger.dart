@@ -247,10 +247,10 @@ class CreateCatDto {
     required this.gender,
     required this.breed,
     required this.birth,
-    required this.length,
+    this.length,
     this.insuranceProvider,
     this.insuranceNumber,
-    this.image,
+    required this.image,
     required this.weight,
   });
 
@@ -269,13 +269,13 @@ class CreateCatDto {
   @JsonKey(name: 'birth')
   final DateTime birth;
   @JsonKey(name: 'length')
-  final double length;
+  final double? length;
   @JsonKey(name: 'insuranceProvider')
   final String? insuranceProvider;
   @JsonKey(name: 'insuranceNumber')
   final String? insuranceNumber;
   @JsonKey(name: 'image')
-  final String? image;
+  final String image;
   @JsonKey(name: 'weight')
   final double weight;
   static const fromJsonFactory = _$CreateCatDtoFromJson;
@@ -351,10 +351,10 @@ extension $CreateCatDtoExtension on CreateCatDto {
       Wrapped<String>? gender,
       Wrapped<String>? breed,
       Wrapped<DateTime>? birth,
-      Wrapped<double>? length,
+      Wrapped<double?>? length,
       Wrapped<String?>? insuranceProvider,
       Wrapped<String?>? insuranceNumber,
-      Wrapped<String?>? image,
+      Wrapped<String>? image,
       Wrapped<double>? weight}) {
     return CreateCatDto(
         name: (name != null ? name.value : this.name),
@@ -384,7 +384,7 @@ class CatDto {
     this.length,
     this.insuranceProvider,
     this.insuranceNumber,
-    this.image,
+    required this.image,
     required this.weight,
   });
 
@@ -410,7 +410,7 @@ class CatDto {
   @JsonKey(name: 'insuranceNumber')
   final String? insuranceNumber;
   @JsonKey(name: 'image')
-  final String? image;
+  final String image;
   @JsonKey(name: 'weight')
   final double weight;
   static const fromJsonFactory = _$CatDtoFromJson;
@@ -495,7 +495,7 @@ extension $CatDtoExtension on CatDto {
       Wrapped<double?>? length,
       Wrapped<String?>? insuranceProvider,
       Wrapped<String?>? insuranceNumber,
-      Wrapped<String?>? image,
+      Wrapped<String>? image,
       Wrapped<double>? weight}) {
     return CatDto(
         id: (id != null ? id.value : this.id),
@@ -522,10 +522,10 @@ class UpdateCatDto {
     required this.gender,
     required this.breed,
     required this.birth,
-    required this.length,
+    this.length,
     this.insuranceProvider,
     this.insuranceNumber,
-    this.image,
+    required this.image,
     required this.weight,
   });
 
@@ -544,13 +544,13 @@ class UpdateCatDto {
   @JsonKey(name: 'birth')
   final DateTime birth;
   @JsonKey(name: 'length')
-  final double length;
+  final double? length;
   @JsonKey(name: 'insuranceProvider')
   final String? insuranceProvider;
   @JsonKey(name: 'insuranceNumber')
   final String? insuranceNumber;
   @JsonKey(name: 'image')
-  final String? image;
+  final String image;
   @JsonKey(name: 'weight')
   final double weight;
   static const fromJsonFactory = _$UpdateCatDtoFromJson;
@@ -626,10 +626,10 @@ extension $UpdateCatDtoExtension on UpdateCatDto {
       Wrapped<String>? gender,
       Wrapped<String>? breed,
       Wrapped<DateTime>? birth,
-      Wrapped<double>? length,
+      Wrapped<double?>? length,
       Wrapped<String?>? insuranceProvider,
       Wrapped<String?>? insuranceNumber,
-      Wrapped<String?>? image,
+      Wrapped<String>? image,
       Wrapped<double>? weight}) {
     return UpdateCatDto(
         name: (name != null ? name.value : this.name),
