@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 import 'package:board_datetime_picker/board_datetime_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -46,6 +48,25 @@ class _CatState extends State<Cat> {
   bool isEdit = false;
   final ScrollController _scrollController = ScrollController();
   bool _showTitle = false;
+
+  final ImagePicker picker = new ImagePicker();
+  //用户本地图片
+  // File _userImage; //存放获取到的本地路径
+
+  // Future _getImage() async {
+  //   //选择相册
+  //   final pickerImages = await picker.pickImage(source: ImageSource.gallery);
+  //   if (mounted) {
+  //     setState(() {
+  //       if (pickerImages != null) {
+  //         _userImage = File(pickerImages.path);
+  //         print('你选择的本地路径是：${_userImage.toString()}');
+  //       } else {
+  //         print('没有照片可以选择');
+  //       }
+  //     });
+  //   }
+  // }
 
   @override
   void initState() {

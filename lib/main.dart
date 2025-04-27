@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:purr_time/dioHelper.dart';
@@ -19,6 +20,9 @@ void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   runApp(MyApp());
 }
 
@@ -34,7 +38,7 @@ class MyApp extends StatelessWidget {
         return GetMaterialApp(
           title: 'Flutter Demo',
           debugShowCheckedModeBanner: false,
-          initialRoute: "/",
+          initialRoute: "/welcome",
           navigatorObservers: [routeObserver],
           getPages: AppPages.pages,
         );
