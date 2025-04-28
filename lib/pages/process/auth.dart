@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:purr_time/apis/user.dart';
+import 'package:purr_time/store/token.dart';
+import 'package:purr_time/store/user.dart';
+import 'package:purr_time/swagger_generated_code/api_json.swagger.dart';
 
 class Auth extends StatefulWidget {
   const Auth({super.key});
@@ -98,8 +102,22 @@ class _AuthState extends State<Auth> {
     return null;
   }
 
-  _toNavigations() {
-    Get.offAllNamed("/navigations");
+  _registerUser() async {
+    try {
+      AuthDto response = await UserApi.register(
+        CreateUserDto(
+          email: _emailController.text,
+          password: _passwordController.text,
+        ),
+      );
+
+      TokenController.to.setToken(response.token);
+      UserController.to.setUser(response.user);
+
+      Get.offAllNamed("/");
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -241,7 +259,7 @@ class _AuthState extends State<Auth> {
                     child: ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState?.validate() ?? false) {
-                          _toNavigations();
+                          _registerUser();
                         }
                       },
                       style: ElevatedButton.styleFrom(

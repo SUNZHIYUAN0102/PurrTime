@@ -146,10 +146,12 @@ class _HomeState extends State<Home> with RouteAware {
                   margin: EdgeInsets.only(left: 16.w),
                   decoration: BoxDecoration(shape: BoxShape.circle),
                   clipBehavior: Clip.hardEdge,
-                  child: Image.network(UserController.to.user["avatar"]!),
+                  child: Image.network(
+                    "https://fastly.picsum.photos/id/866/300/300.jpg?hmac=9qmLpcaT9TgKd6PD37aZJZ_7QvgrVFMcvI3JQKWVUIQ",
+                  ),
                 ),
                 Text(
-                  "Welcome, ${UserController.to.user["username"]!}",
+                  "Welcome, ${UserController.to.user.value!.email}",
                   style: TextStyle(fontSize: 14.sp, color: Colors.black),
                 ),
               ],

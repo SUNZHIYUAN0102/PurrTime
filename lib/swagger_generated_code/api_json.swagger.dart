@@ -247,11 +247,11 @@ class CreateCatDto {
     required this.gender,
     required this.breed,
     required this.birth,
+    required this.image,
+    required this.weight,
     this.length,
     this.insuranceProvider,
     this.insuranceNumber,
-    required this.image,
-    required this.weight,
   });
 
   factory CreateCatDto.fromJson(Map<String, dynamic> json) =>
@@ -268,16 +268,16 @@ class CreateCatDto {
   final String breed;
   @JsonKey(name: 'birth')
   final DateTime birth;
+  @JsonKey(name: 'image')
+  final String image;
+  @JsonKey(name: 'weight')
+  final double weight;
   @JsonKey(name: 'length')
   final double? length;
   @JsonKey(name: 'insuranceProvider')
   final String? insuranceProvider;
   @JsonKey(name: 'insuranceNumber')
   final String? insuranceNumber;
-  @JsonKey(name: 'image')
-  final String image;
-  @JsonKey(name: 'weight')
-  final double weight;
   static const fromJsonFactory = _$CreateCatDtoFromJson;
 
   @override
@@ -292,6 +292,10 @@ class CreateCatDto {
                 const DeepCollectionEquality().equals(other.breed, breed)) &&
             (identical(other.birth, birth) ||
                 const DeepCollectionEquality().equals(other.birth, birth)) &&
+            (identical(other.image, image) ||
+                const DeepCollectionEquality().equals(other.image, image)) &&
+            (identical(other.weight, weight) ||
+                const DeepCollectionEquality().equals(other.weight, weight)) &&
             (identical(other.length, length) ||
                 const DeepCollectionEquality().equals(other.length, length)) &&
             (identical(other.insuranceProvider, insuranceProvider) ||
@@ -299,11 +303,7 @@ class CreateCatDto {
                     .equals(other.insuranceProvider, insuranceProvider)) &&
             (identical(other.insuranceNumber, insuranceNumber) ||
                 const DeepCollectionEquality()
-                    .equals(other.insuranceNumber, insuranceNumber)) &&
-            (identical(other.image, image) ||
-                const DeepCollectionEquality().equals(other.image, image)) &&
-            (identical(other.weight, weight) ||
-                const DeepCollectionEquality().equals(other.weight, weight)));
+                    .equals(other.insuranceNumber, insuranceNumber)));
   }
 
   @override
@@ -315,11 +315,11 @@ class CreateCatDto {
       const DeepCollectionEquality().hash(gender) ^
       const DeepCollectionEquality().hash(breed) ^
       const DeepCollectionEquality().hash(birth) ^
+      const DeepCollectionEquality().hash(image) ^
+      const DeepCollectionEquality().hash(weight) ^
       const DeepCollectionEquality().hash(length) ^
       const DeepCollectionEquality().hash(insuranceProvider) ^
       const DeepCollectionEquality().hash(insuranceNumber) ^
-      const DeepCollectionEquality().hash(image) ^
-      const DeepCollectionEquality().hash(weight) ^
       runtimeType.hashCode;
 }
 
@@ -329,21 +329,21 @@ extension $CreateCatDtoExtension on CreateCatDto {
       String? gender,
       String? breed,
       DateTime? birth,
+      String? image,
+      double? weight,
       double? length,
       String? insuranceProvider,
-      String? insuranceNumber,
-      String? image,
-      double? weight}) {
+      String? insuranceNumber}) {
     return CreateCatDto(
         name: name ?? this.name,
         gender: gender ?? this.gender,
         breed: breed ?? this.breed,
         birth: birth ?? this.birth,
+        image: image ?? this.image,
+        weight: weight ?? this.weight,
         length: length ?? this.length,
         insuranceProvider: insuranceProvider ?? this.insuranceProvider,
-        insuranceNumber: insuranceNumber ?? this.insuranceNumber,
-        image: image ?? this.image,
-        weight: weight ?? this.weight);
+        insuranceNumber: insuranceNumber ?? this.insuranceNumber);
   }
 
   CreateCatDto copyWithWrapped(
@@ -351,25 +351,25 @@ extension $CreateCatDtoExtension on CreateCatDto {
       Wrapped<String>? gender,
       Wrapped<String>? breed,
       Wrapped<DateTime>? birth,
+      Wrapped<String>? image,
+      Wrapped<double>? weight,
       Wrapped<double?>? length,
       Wrapped<String?>? insuranceProvider,
-      Wrapped<String?>? insuranceNumber,
-      Wrapped<String>? image,
-      Wrapped<double>? weight}) {
+      Wrapped<String?>? insuranceNumber}) {
     return CreateCatDto(
         name: (name != null ? name.value : this.name),
         gender: (gender != null ? gender.value : this.gender),
         breed: (breed != null ? breed.value : this.breed),
         birth: (birth != null ? birth.value : this.birth),
+        image: (image != null ? image.value : this.image),
+        weight: (weight != null ? weight.value : this.weight),
         length: (length != null ? length.value : this.length),
         insuranceProvider: (insuranceProvider != null
             ? insuranceProvider.value
             : this.insuranceProvider),
         insuranceNumber: (insuranceNumber != null
             ? insuranceNumber.value
-            : this.insuranceNumber),
-        image: (image != null ? image.value : this.image),
-        weight: (weight != null ? weight.value : this.weight));
+            : this.insuranceNumber));
   }
 }
 
@@ -381,11 +381,11 @@ class CatDto {
     required this.gender,
     required this.breed,
     required this.birth,
+    required this.image,
+    required this.weight,
     this.length,
     this.insuranceProvider,
     this.insuranceNumber,
-    required this.image,
-    required this.weight,
   });
 
   factory CatDto.fromJson(Map<String, dynamic> json) => _$CatDtoFromJson(json);
@@ -403,16 +403,16 @@ class CatDto {
   final String breed;
   @JsonKey(name: 'birth')
   final DateTime birth;
+  @JsonKey(name: 'image')
+  final String image;
+  @JsonKey(name: 'weight')
+  final double weight;
   @JsonKey(name: 'length')
   final double? length;
   @JsonKey(name: 'insuranceProvider')
   final String? insuranceProvider;
   @JsonKey(name: 'insuranceNumber')
   final String? insuranceNumber;
-  @JsonKey(name: 'image')
-  final String image;
-  @JsonKey(name: 'weight')
-  final double weight;
   static const fromJsonFactory = _$CatDtoFromJson;
 
   @override
@@ -429,6 +429,10 @@ class CatDto {
                 const DeepCollectionEquality().equals(other.breed, breed)) &&
             (identical(other.birth, birth) ||
                 const DeepCollectionEquality().equals(other.birth, birth)) &&
+            (identical(other.image, image) ||
+                const DeepCollectionEquality().equals(other.image, image)) &&
+            (identical(other.weight, weight) ||
+                const DeepCollectionEquality().equals(other.weight, weight)) &&
             (identical(other.length, length) ||
                 const DeepCollectionEquality().equals(other.length, length)) &&
             (identical(other.insuranceProvider, insuranceProvider) ||
@@ -436,11 +440,7 @@ class CatDto {
                     .equals(other.insuranceProvider, insuranceProvider)) &&
             (identical(other.insuranceNumber, insuranceNumber) ||
                 const DeepCollectionEquality()
-                    .equals(other.insuranceNumber, insuranceNumber)) &&
-            (identical(other.image, image) ||
-                const DeepCollectionEquality().equals(other.image, image)) &&
-            (identical(other.weight, weight) ||
-                const DeepCollectionEquality().equals(other.weight, weight)));
+                    .equals(other.insuranceNumber, insuranceNumber)));
   }
 
   @override
@@ -453,11 +453,11 @@ class CatDto {
       const DeepCollectionEquality().hash(gender) ^
       const DeepCollectionEquality().hash(breed) ^
       const DeepCollectionEquality().hash(birth) ^
+      const DeepCollectionEquality().hash(image) ^
+      const DeepCollectionEquality().hash(weight) ^
       const DeepCollectionEquality().hash(length) ^
       const DeepCollectionEquality().hash(insuranceProvider) ^
       const DeepCollectionEquality().hash(insuranceNumber) ^
-      const DeepCollectionEquality().hash(image) ^
-      const DeepCollectionEquality().hash(weight) ^
       runtimeType.hashCode;
 }
 
@@ -468,22 +468,22 @@ extension $CatDtoExtension on CatDto {
       String? gender,
       String? breed,
       DateTime? birth,
+      String? image,
+      double? weight,
       double? length,
       String? insuranceProvider,
-      String? insuranceNumber,
-      String? image,
-      double? weight}) {
+      String? insuranceNumber}) {
     return CatDto(
         id: id ?? this.id,
         name: name ?? this.name,
         gender: gender ?? this.gender,
         breed: breed ?? this.breed,
         birth: birth ?? this.birth,
+        image: image ?? this.image,
+        weight: weight ?? this.weight,
         length: length ?? this.length,
         insuranceProvider: insuranceProvider ?? this.insuranceProvider,
-        insuranceNumber: insuranceNumber ?? this.insuranceNumber,
-        image: image ?? this.image,
-        weight: weight ?? this.weight);
+        insuranceNumber: insuranceNumber ?? this.insuranceNumber);
   }
 
   CatDto copyWithWrapped(
@@ -492,26 +492,26 @@ extension $CatDtoExtension on CatDto {
       Wrapped<String>? gender,
       Wrapped<String>? breed,
       Wrapped<DateTime>? birth,
+      Wrapped<String>? image,
+      Wrapped<double>? weight,
       Wrapped<double?>? length,
       Wrapped<String?>? insuranceProvider,
-      Wrapped<String?>? insuranceNumber,
-      Wrapped<String>? image,
-      Wrapped<double>? weight}) {
+      Wrapped<String?>? insuranceNumber}) {
     return CatDto(
         id: (id != null ? id.value : this.id),
         name: (name != null ? name.value : this.name),
         gender: (gender != null ? gender.value : this.gender),
         breed: (breed != null ? breed.value : this.breed),
         birth: (birth != null ? birth.value : this.birth),
+        image: (image != null ? image.value : this.image),
+        weight: (weight != null ? weight.value : this.weight),
         length: (length != null ? length.value : this.length),
         insuranceProvider: (insuranceProvider != null
             ? insuranceProvider.value
             : this.insuranceProvider),
         insuranceNumber: (insuranceNumber != null
             ? insuranceNumber.value
-            : this.insuranceNumber),
-        image: (image != null ? image.value : this.image),
-        weight: (weight != null ? weight.value : this.weight));
+            : this.insuranceNumber));
   }
 }
 
@@ -522,11 +522,11 @@ class UpdateCatDto {
     required this.gender,
     required this.breed,
     required this.birth,
+    required this.image,
+    required this.weight,
     this.length,
     this.insuranceProvider,
     this.insuranceNumber,
-    required this.image,
-    required this.weight,
   });
 
   factory UpdateCatDto.fromJson(Map<String, dynamic> json) =>
@@ -543,16 +543,16 @@ class UpdateCatDto {
   final String breed;
   @JsonKey(name: 'birth')
   final DateTime birth;
+  @JsonKey(name: 'image')
+  final String image;
+  @JsonKey(name: 'weight')
+  final double weight;
   @JsonKey(name: 'length')
   final double? length;
   @JsonKey(name: 'insuranceProvider')
   final String? insuranceProvider;
   @JsonKey(name: 'insuranceNumber')
   final String? insuranceNumber;
-  @JsonKey(name: 'image')
-  final String image;
-  @JsonKey(name: 'weight')
-  final double weight;
   static const fromJsonFactory = _$UpdateCatDtoFromJson;
 
   @override
@@ -567,6 +567,10 @@ class UpdateCatDto {
                 const DeepCollectionEquality().equals(other.breed, breed)) &&
             (identical(other.birth, birth) ||
                 const DeepCollectionEquality().equals(other.birth, birth)) &&
+            (identical(other.image, image) ||
+                const DeepCollectionEquality().equals(other.image, image)) &&
+            (identical(other.weight, weight) ||
+                const DeepCollectionEquality().equals(other.weight, weight)) &&
             (identical(other.length, length) ||
                 const DeepCollectionEquality().equals(other.length, length)) &&
             (identical(other.insuranceProvider, insuranceProvider) ||
@@ -574,11 +578,7 @@ class UpdateCatDto {
                     .equals(other.insuranceProvider, insuranceProvider)) &&
             (identical(other.insuranceNumber, insuranceNumber) ||
                 const DeepCollectionEquality()
-                    .equals(other.insuranceNumber, insuranceNumber)) &&
-            (identical(other.image, image) ||
-                const DeepCollectionEquality().equals(other.image, image)) &&
-            (identical(other.weight, weight) ||
-                const DeepCollectionEquality().equals(other.weight, weight)));
+                    .equals(other.insuranceNumber, insuranceNumber)));
   }
 
   @override
@@ -590,11 +590,11 @@ class UpdateCatDto {
       const DeepCollectionEquality().hash(gender) ^
       const DeepCollectionEquality().hash(breed) ^
       const DeepCollectionEquality().hash(birth) ^
+      const DeepCollectionEquality().hash(image) ^
+      const DeepCollectionEquality().hash(weight) ^
       const DeepCollectionEquality().hash(length) ^
       const DeepCollectionEquality().hash(insuranceProvider) ^
       const DeepCollectionEquality().hash(insuranceNumber) ^
-      const DeepCollectionEquality().hash(image) ^
-      const DeepCollectionEquality().hash(weight) ^
       runtimeType.hashCode;
 }
 
@@ -604,21 +604,21 @@ extension $UpdateCatDtoExtension on UpdateCatDto {
       String? gender,
       String? breed,
       DateTime? birth,
+      String? image,
+      double? weight,
       double? length,
       String? insuranceProvider,
-      String? insuranceNumber,
-      String? image,
-      double? weight}) {
+      String? insuranceNumber}) {
     return UpdateCatDto(
         name: name ?? this.name,
         gender: gender ?? this.gender,
         breed: breed ?? this.breed,
         birth: birth ?? this.birth,
+        image: image ?? this.image,
+        weight: weight ?? this.weight,
         length: length ?? this.length,
         insuranceProvider: insuranceProvider ?? this.insuranceProvider,
-        insuranceNumber: insuranceNumber ?? this.insuranceNumber,
-        image: image ?? this.image,
-        weight: weight ?? this.weight);
+        insuranceNumber: insuranceNumber ?? this.insuranceNumber);
   }
 
   UpdateCatDto copyWithWrapped(
@@ -626,25 +626,25 @@ extension $UpdateCatDtoExtension on UpdateCatDto {
       Wrapped<String>? gender,
       Wrapped<String>? breed,
       Wrapped<DateTime>? birth,
+      Wrapped<String>? image,
+      Wrapped<double>? weight,
       Wrapped<double?>? length,
       Wrapped<String?>? insuranceProvider,
-      Wrapped<String?>? insuranceNumber,
-      Wrapped<String>? image,
-      Wrapped<double>? weight}) {
+      Wrapped<String?>? insuranceNumber}) {
     return UpdateCatDto(
         name: (name != null ? name.value : this.name),
         gender: (gender != null ? gender.value : this.gender),
         breed: (breed != null ? breed.value : this.breed),
         birth: (birth != null ? birth.value : this.birth),
+        image: (image != null ? image.value : this.image),
+        weight: (weight != null ? weight.value : this.weight),
         length: (length != null ? length.value : this.length),
         insuranceProvider: (insuranceProvider != null
             ? insuranceProvider.value
             : this.insuranceProvider),
         insuranceNumber: (insuranceNumber != null
             ? insuranceNumber.value
-            : this.insuranceNumber),
-        image: (image != null ? image.value : this.image),
-        weight: (weight != null ? weight.value : this.weight));
+            : this.insuranceNumber));
   }
 }
 

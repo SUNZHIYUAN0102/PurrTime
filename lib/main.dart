@@ -38,11 +38,19 @@ class MyApp extends StatelessWidget {
         return GetMaterialApp(
           title: 'Flutter Demo',
           debugShowCheckedModeBanner: false,
-          initialRoute: "/",
+          initialRoute: configInitialRoute(),
           navigatorObservers: [routeObserver],
           getPages: AppPages.pages,
         );
       },
     );
+  }
+}
+
+String configInitialRoute() {
+  if (TokenController.to.token.value == "") {
+    return "/welcome";
+  } else {
+    return "/";
   }
 }
