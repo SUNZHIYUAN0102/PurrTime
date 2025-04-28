@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
 
 class Welcome extends StatefulWidget {
@@ -36,6 +37,10 @@ class _WelcomeState extends State<Welcome> {
     _videoPlayerController.dispose();
   }
 
+  _toAuthPage() {
+    Get.toNamed("/auth");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +56,6 @@ class _WelcomeState extends State<Welcome> {
               ),
             ),
           ),
-
           Positioned(
             top: 140.h,
             child: SizedBox(
@@ -76,7 +80,6 @@ class _WelcomeState extends State<Welcome> {
               ),
             ),
           ),
-
           Positioned(
             bottom: 45.h,
             child: SizedBox(
@@ -90,11 +93,15 @@ class _WelcomeState extends State<Welcome> {
                       textAlign: TextAlign.center,
                       text: TextSpan(
                         text:
-                            "By tapping `Sign in`/`Create account` you agree to our ",
-                        style: TextStyle(color: Colors.white, fontSize: 10.sp),
+                            "By tapping 'Sign in' / 'Create account', you agree to our ",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10.sp,
+                          height: 1.5,
+                        ),
                         children: [
                           TextSpan(
-                            text: "Terms of Service. ",
+                            text: "Terms of Service.",
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 10.sp,
@@ -103,7 +110,7 @@ class _WelcomeState extends State<Welcome> {
                             ),
                           ),
                           TextSpan(
-                            text: "Learn how we process your data in our ",
+                            text: " Learn how we process your data in our ",
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 10.sp,
@@ -143,9 +150,7 @@ class _WelcomeState extends State<Welcome> {
                     width: 290.w,
                     height: 60.h,
                     child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, "/login");
-                      },
+                      onPressed: _toAuthPage,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,
                         shape: RoundedRectangleBorder(

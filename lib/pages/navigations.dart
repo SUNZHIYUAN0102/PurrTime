@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:purr_time/pages/charts.dart';
 import 'package:purr_time/pages/home.dart';
@@ -31,6 +32,8 @@ class _NavigationsState extends State<Navigations> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    FlutterNativeSplash.remove(); // remove the splash screen
   }
 
   @override
