@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:purr_time/apis/user.dart';
+import 'package:purr_time/pages/process/components/customInputField.dart';
 import 'package:purr_time/store/token.dart';
 import 'package:purr_time/store/user.dart';
 import 'package:purr_time/swagger_generated_code/api_json.swagger.dart';
@@ -163,83 +163,39 @@ class _AuthState extends State<Auth> {
 
                       Container(
                         margin: EdgeInsets.only(top: 20.h),
-                        child: Column(
-                          children: [
-                            TextFormField(
-                              key: _emailFieldKey,
-                              controller: _emailController,
-                              focusNode: _emailFocusNode,
-                              decoration: InputDecoration(
-                                hintText: 'Please enter your email',
-                                errorStyle: TextStyle(
-                                  fontSize: 12.sp,
-                                  height: 2,
-                                ),
-                              ),
-                              style: TextStyle(
-                                fontSize: 18.sp,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              keyboardType: TextInputType.emailAddress,
-                              validator: _validateEmail,
-                            ),
-                          ],
+                        child: CustomInputField(
+                          fieldKey: _emailFieldKey,
+                          focusNode: _emailFocusNode,
+                          controller: _emailController,
+                          hintText: "Please enter your email",
+                          validator: _validateEmail,
+                          keyboardType: TextInputType.emailAddress,
                         ),
                       ),
 
                       Container(
                         margin: EdgeInsets.only(top: 20.h),
-                        child: Column(
-                          children: [
-                            TextFormField(
-                              key: _passwordFieldKey,
-                              controller: _passwordController,
-                              focusNode: _passwordFocusNode,
-                              obscureText: true,
-                              decoration: InputDecoration(
-                                hintText: 'Please enter your password',
-                                errorStyle: TextStyle(
-                                  fontSize: 12.sp,
-                                  height: 2,
-                                ),
-                                errorMaxLines: 3,
-                              ),
-                              style: TextStyle(
-                                fontSize: 18.sp,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              keyboardType: TextInputType.visiblePassword,
-                              validator: _validatePassword,
-                            ),
-                          ],
+                        child: CustomInputField(
+                          fieldKey: _passwordFieldKey,
+                          focusNode: _passwordFocusNode,
+                          controller: _passwordController,
+                          hintText: "Please enter your password",
+                          obscureText: true,
+                          validator: _validatePassword,
+                          keyboardType: TextInputType.visiblePassword,
                         ),
                       ),
 
                       Container(
                         margin: EdgeInsets.only(top: 20.h),
-                        child: Column(
-                          children: [
-                            TextFormField(
-                              key: _confirmPasswordFieldKey,
-                              controller: _confirmPasswordController,
-                              focusNode: _confirmPasswordFocusNode,
-                              obscureText: true,
-                              decoration: InputDecoration(
-                                hintText: 'Please confirm your password',
-                                errorStyle: TextStyle(
-                                  fontSize: 12.sp,
-                                  height: 2,
-                                ),
-                                errorMaxLines: 3,
-                              ),
-                              style: TextStyle(
-                                fontSize: 18.sp,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              keyboardType: TextInputType.visiblePassword,
-                              validator: _validateConfirmPassword,
-                            ),
-                          ],
+                        child: CustomInputField(
+                          fieldKey: _confirmPasswordFieldKey,
+                          focusNode: _confirmPasswordFocusNode,
+                          controller: _confirmPasswordController,
+                          hintText: "Please confirm your password",
+                          obscureText: true,
+                          validator: _validateConfirmPassword,
+                          keyboardType: TextInputType.visiblePassword,
                         ),
                       ),
                     ],
