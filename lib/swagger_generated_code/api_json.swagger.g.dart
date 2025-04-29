@@ -6,6 +6,32 @@ part of 'api_json.swagger.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+UpdateUserDto _$UpdateUserDtoFromJson(Map<String, dynamic> json) =>
+    UpdateUserDto(
+      username: json['username'] as String?,
+      avatar: json['avatar'] as String?,
+    );
+
+Map<String, dynamic> _$UpdateUserDtoToJson(UpdateUserDto instance) =>
+    <String, dynamic>{
+      'username': instance.username,
+      'avatar': instance.avatar,
+    };
+
+UserDto _$UserDtoFromJson(Map<String, dynamic> json) => UserDto(
+      id: json['id'] as String,
+      email: json['email'] as String,
+      username: json['username'] as String?,
+      avatar: json['avatar'] as String?,
+    );
+
+Map<String, dynamic> _$UserDtoToJson(UserDto instance) => <String, dynamic>{
+      'id': instance.id,
+      'email': instance.email,
+      'username': instance.username,
+      'avatar': instance.avatar,
+    };
+
 CreateCatDto _$CreateCatDtoFromJson(Map<String, dynamic> json) => CreateCatDto(
       name: json['name'] as String,
       gender: json['gender'] as String,
@@ -92,18 +118,6 @@ Map<String, dynamic> _$CreateUserDtoToJson(CreateUserDto instance) =>
     <String, dynamic>{
       'email': instance.email,
       'password': instance.password,
-    };
-
-UserDto _$UserDtoFromJson(Map<String, dynamic> json) => UserDto(
-      id: json['id'] as String,
-      email: json['email'] as String,
-      username: json['username'] as String?,
-    );
-
-Map<String, dynamic> _$UserDtoToJson(UserDto instance) => <String, dynamic>{
-      'id': instance.id,
-      'email': instance.email,
-      'username': instance.username,
     };
 
 AuthDto _$AuthDtoFromJson(Map<String, dynamic> json) => AuthDto(

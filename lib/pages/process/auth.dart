@@ -125,7 +125,7 @@ class _AuthState extends State<Auth> {
       TokenController.to.setToken(response.token);
       // UserController.to.setUser(response.user);
 
-      Get.offAllNamed("/");
+      Get.offAllNamed("/process/userInfo");
     } catch (e) {
       print(e);
     }
@@ -143,7 +143,7 @@ class _AuthState extends State<Auth> {
       TokenController.to.setToken(response.token);
       // UserController.to.setUser(response.user);
 
-      Get.offAllNamed("/");
+      Get.offAllNamed("/process/userInfo");
     } catch (e) {
       Get.snackbar(
         "Login Error",

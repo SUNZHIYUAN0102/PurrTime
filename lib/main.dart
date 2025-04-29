@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
         return GetMaterialApp(
           title: 'Flutter Demo',
           debugShowCheckedModeBanner: false,
-          initialRoute: configInitialRoute(),
+          initialRoute: "/process/userInfo",
           navigatorObservers: [routeObserver],
           getPages: AppPages.pages,
         );
@@ -50,7 +50,9 @@ class MyApp extends StatelessWidget {
 String configInitialRoute() {
   if (TokenController.to.token.value == "") {
     return "/welcome";
+  } else if (UserController.to.user.value?.username == "") {
+    return "/process/userInfo";
   } else {
-    return "/";
+    return "/home";
   }
 }

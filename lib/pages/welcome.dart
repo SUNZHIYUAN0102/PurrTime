@@ -38,7 +38,7 @@ class _WelcomeState extends State<Welcome> {
   }
 
   _toAuthPage(String authMode) {
-    Get.toNamed("/auth", arguments: {"authMode": authMode});
+    Get.toNamed("/process/auth", arguments: {"authMode": authMode});
   }
 
   @override

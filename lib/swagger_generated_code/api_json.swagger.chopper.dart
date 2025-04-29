@@ -30,6 +30,19 @@ final class _$ApiJson extends ApiJson {
   }
 
   @override
+  Future<Response<UserDto>> _usersPatch({required UpdateUserDto? body}) {
+    final Uri $url = Uri.parse('/users');
+    final $body = body;
+    final Request $request = Request(
+      'PATCH',
+      $url,
+      client.baseUrl,
+      body: $body,
+    );
+    return client.send<UserDto, UserDto>($request);
+  }
+
+  @override
   Future<Response<CatDto>> _catsPost({required CreateCatDto? body}) {
     final Uri $url = Uri.parse('/cats');
     final $body = body;

@@ -58,6 +58,21 @@ abstract class ApiJson extends ChopperService {
   Future<chopper.Response> _get();
 
   ///
+  Future<chopper.Response<UserDto>> usersPatch({required UpdateUserDto? body}) {
+    generatedMapping.putIfAbsent(UserDto, () => UserDto.fromJsonFactory);
+
+    return _usersPatch(body: body);
+  }
+
+  ///
+  @Patch(
+    path: '/users',
+    optionalBody: true,
+  )
+  Future<chopper.Response<UserDto>> _usersPatch(
+      {@Body() required UpdateUserDto? body});
+
+  ///
   Future<chopper.Response<CatDto>> catsPost({required CreateCatDto? body}) {
     generatedMapping.putIfAbsent(CatDto, () => CatDto.fromJsonFactory);
 
@@ -238,6 +253,135 @@ abstract class ApiJson extends ChopperService {
   ///@param id
   @Delete(path: '/records/{id}')
   Future<chopper.Response> _recordsIdDelete({@Path('id') required String? id});
+}
+
+@JsonSerializable(explicitToJson: true)
+class UpdateUserDto {
+  const UpdateUserDto({
+    this.username,
+    this.avatar,
+  });
+
+  factory UpdateUserDto.fromJson(Map<String, dynamic> json) =>
+      _$UpdateUserDtoFromJson(json);
+
+  static const toJsonFactory = _$UpdateUserDtoToJson;
+  Map<String, dynamic> toJson() => _$UpdateUserDtoToJson(this);
+
+  @JsonKey(name: 'username')
+  final String? username;
+  @JsonKey(name: 'avatar')
+  final String? avatar;
+  static const fromJsonFactory = _$UpdateUserDtoFromJson;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is UpdateUserDto &&
+            (identical(other.username, username) ||
+                const DeepCollectionEquality()
+                    .equals(other.username, username)) &&
+            (identical(other.avatar, avatar) ||
+                const DeepCollectionEquality().equals(other.avatar, avatar)));
+  }
+
+  @override
+  String toString() => jsonEncode(this);
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(username) ^
+      const DeepCollectionEquality().hash(avatar) ^
+      runtimeType.hashCode;
+}
+
+extension $UpdateUserDtoExtension on UpdateUserDto {
+  UpdateUserDto copyWith({String? username, String? avatar}) {
+    return UpdateUserDto(
+        username: username ?? this.username, avatar: avatar ?? this.avatar);
+  }
+
+  UpdateUserDto copyWithWrapped(
+      {Wrapped<String?>? username, Wrapped<String?>? avatar}) {
+    return UpdateUserDto(
+        username: (username != null ? username.value : this.username),
+        avatar: (avatar != null ? avatar.value : this.avatar));
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class UserDto {
+  const UserDto({
+    required this.id,
+    required this.email,
+    this.username,
+    this.avatar,
+  });
+
+  factory UserDto.fromJson(Map<String, dynamic> json) =>
+      _$UserDtoFromJson(json);
+
+  static const toJsonFactory = _$UserDtoToJson;
+  Map<String, dynamic> toJson() => _$UserDtoToJson(this);
+
+  @JsonKey(name: 'id')
+  final String id;
+  @JsonKey(name: 'email')
+  final String email;
+  @JsonKey(name: 'username')
+  final String? username;
+  @JsonKey(name: 'avatar')
+  final String? avatar;
+  static const fromJsonFactory = _$UserDtoFromJson;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is UserDto &&
+            (identical(other.id, id) ||
+                const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.email, email) ||
+                const DeepCollectionEquality().equals(other.email, email)) &&
+            (identical(other.username, username) ||
+                const DeepCollectionEquality()
+                    .equals(other.username, username)) &&
+            (identical(other.avatar, avatar) ||
+                const DeepCollectionEquality().equals(other.avatar, avatar)));
+  }
+
+  @override
+  String toString() => jsonEncode(this);
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(id) ^
+      const DeepCollectionEquality().hash(email) ^
+      const DeepCollectionEquality().hash(username) ^
+      const DeepCollectionEquality().hash(avatar) ^
+      runtimeType.hashCode;
+}
+
+extension $UserDtoExtension on UserDto {
+  UserDto copyWith(
+      {String? id, String? email, String? username, String? avatar}) {
+    return UserDto(
+        id: id ?? this.id,
+        email: email ?? this.email,
+        username: username ?? this.username,
+        avatar: avatar ?? this.avatar);
+  }
+
+  UserDto copyWithWrapped(
+      {Wrapped<String>? id,
+      Wrapped<String>? email,
+      Wrapped<String?>? username,
+      Wrapped<String?>? avatar}) {
+    return UserDto(
+        id: (id != null ? id.value : this.id),
+        email: (email != null ? email.value : this.email),
+        username: (username != null ? username.value : this.username),
+        avatar: (avatar != null ? avatar.value : this.avatar));
+  }
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -699,71 +843,6 @@ extension $CreateUserDtoExtension on CreateUserDto {
     return CreateUserDto(
         email: (email != null ? email.value : this.email),
         password: (password != null ? password.value : this.password));
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
-class UserDto {
-  const UserDto({
-    required this.id,
-    required this.email,
-    this.username,
-  });
-
-  factory UserDto.fromJson(Map<String, dynamic> json) =>
-      _$UserDtoFromJson(json);
-
-  static const toJsonFactory = _$UserDtoToJson;
-  Map<String, dynamic> toJson() => _$UserDtoToJson(this);
-
-  @JsonKey(name: 'id')
-  final String id;
-  @JsonKey(name: 'email')
-  final String email;
-  @JsonKey(name: 'username')
-  final String? username;
-  static const fromJsonFactory = _$UserDtoFromJson;
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other is UserDto &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.email, email) ||
-                const DeepCollectionEquality().equals(other.email, email)) &&
-            (identical(other.username, username) ||
-                const DeepCollectionEquality()
-                    .equals(other.username, username)));
-  }
-
-  @override
-  String toString() => jsonEncode(this);
-
-  @override
-  int get hashCode =>
-      const DeepCollectionEquality().hash(id) ^
-      const DeepCollectionEquality().hash(email) ^
-      const DeepCollectionEquality().hash(username) ^
-      runtimeType.hashCode;
-}
-
-extension $UserDtoExtension on UserDto {
-  UserDto copyWith({String? id, String? email, String? username}) {
-    return UserDto(
-        id: id ?? this.id,
-        email: email ?? this.email,
-        username: username ?? this.username);
-  }
-
-  UserDto copyWithWrapped(
-      {Wrapped<String>? id,
-      Wrapped<String>? email,
-      Wrapped<String?>? username}) {
-    return UserDto(
-        id: (id != null ? id.value : this.id),
-        email: (email != null ? email.value : this.email),
-        username: (username != null ? username.value : this.username));
   }
 }
 

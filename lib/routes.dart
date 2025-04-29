@@ -12,8 +12,8 @@ class AppPages {
   static final pages = [
     GetPage(name: "/", page: () => Navigations()),
     GetPage(name: "/welcome", page: () => Welcome()),
-    GetPage(name: "/auth", page: () => Auth()),
-    GetPage(name: "/userInfo", page: () => Userinfo()),
+    GetPage(name: "/process/auth", page: () => Auth()),
+    GetPage(name: "/process/userInfo", page: () => Userinfo()),
 
     GetPage(name: "/cat", page: () => Cat()),
     GetPage(name: "/recipe/detail", page: () => Recipedetail()),

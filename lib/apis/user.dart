@@ -27,4 +27,14 @@ class UserApi {
       rethrow;
     }
   }
+
+  static Future<UserDto> updateUser(UpdateUserDto userDto) async {
+    try {
+      final response = await DioHelper.patch("/users", data: userDto.toJson());
+      return UserDto.fromJson(response.data);
+    } catch (e) {
+      print("Error in update user: $e");
+      rethrow;
+    }
+  }
 }
