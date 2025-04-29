@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:purr_time/dioHelper.dart';
+import 'package:purr_time/utils/dioHelper.dart';
 import 'package:purr_time/routes.dart';
 import 'package:purr_time/store/cat.dart';
 import 'package:purr_time/store/token.dart';

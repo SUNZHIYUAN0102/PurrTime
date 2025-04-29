@@ -52,6 +52,7 @@ dependencies:
   board_datetime_picker: ^2.5.0
   flutter_slidable: ^4.0.0
   video_player: ^2.9.5
+  cloudinary: ^1.2.0
   
 flutter_native_splash:
   background_image: "images/splash.png"

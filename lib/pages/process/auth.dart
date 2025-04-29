@@ -29,6 +29,7 @@ class _AuthState extends State<Auth> {
   final FocusNode _confirmPasswordFocusNode = FocusNode();
   final _confirmPasswordFieldKey = GlobalKey<FormFieldState>();
 
+  late bool _isRegistration;
   @override
   void initState() {
     super.initState();
@@ -50,6 +51,16 @@ class _AuthState extends State<Auth> {
         _confirmPasswordFieldKey.currentState?.validate();
       }
     });
+
+    if (Get.arguments["authMode"] == "register") {
+      setState(() {
+        _isRegistration = true;
+      });
+    } else {
+      setState(() {
+        _isRegistration = false;
+      });
+    }
   }
 
   @override
@@ -112,11 +123,43 @@ class _AuthState extends State<Auth> {
       );
 
       TokenController.to.setToken(response.token);
-      UserController.to.setUser(response.user);
+      // UserController.to.setUser(response.user);
 
       Get.offAllNamed("/");
     } catch (e) {
       print(e);
+    }
+  }
+
+  _loginUser() async {
+    try {
+      AuthDto response = await UserApi.login(
+        CreateUserDto(
+          email: _emailController.text,
+          password: _passwordController.text,
+        ),
+      );
+
+      TokenController.to.setToken(response.token);
+      // UserController.to.setUser(response.user);
+
+      Get.offAllNamed("/");
+    } catch (e) {
+      Get.snackbar(
+        "Login Error",
+        "Invalid email or password",
+        duration: const Duration(seconds: 2),
+      );
+    }
+  }
+
+  _handleButtonPress() {
+    if (_formKey.currentState?.validate() ?? false) {
+      if (_isRegistration) {
+        _registerUser();
+      } else {
+        _loginUser();
+      }
     }
   }
 
@@ -153,7 +196,7 @@ class _AuthState extends State<Auth> {
                       Container(
                         margin: EdgeInsets.only(top: 15.h),
                         child: Text(
-                          "Registration",
+                          _isRegistration ? "Registration" : "Sign in",
                           style: TextStyle(
                             fontSize: 24.sp,
                             fontWeight: FontWeight.bold,
@@ -186,18 +229,19 @@ class _AuthState extends State<Auth> {
                         ),
                       ),
 
-                      Container(
-                        margin: EdgeInsets.only(top: 20.h),
-                        child: CustomInputField(
-                          fieldKey: _confirmPasswordFieldKey,
-                          focusNode: _confirmPasswordFocusNode,
-                          controller: _confirmPasswordController,
-                          hintText: "Please confirm your password",
-                          obscureText: true,
-                          validator: _validateConfirmPassword,
-                          keyboardType: TextInputType.visiblePassword,
+                      if (_isRegistration)
+                        Container(
+                          margin: EdgeInsets.only(top: 20.h),
+                          child: CustomInputField(
+                            fieldKey: _confirmPasswordFieldKey,
+                            focusNode: _confirmPasswordFocusNode,
+                            controller: _confirmPasswordController,
+                            hintText: "Please confirm your password",
+                            obscureText: true,
+                            validator: _validateConfirmPassword,
+                            keyboardType: TextInputType.visiblePassword,
+                          ),
                         ),
-                      ),
                     ],
                   ),
                 ),
@@ -209,15 +253,11 @@ class _AuthState extends State<Auth> {
               child: SizedBox(
                 width: 375.w,
                 child: Center(
-                  child: Container(
+                  child: SizedBox(
                     width: 290.w,
                     height: 60.h,
                     child: ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState?.validate() ?? false) {
-                          _registerUser();
-                        }
-                      },
+                      onPressed: _handleButtonPress,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,
                         shape: RoundedRectangleBorder(
@@ -225,7 +265,7 @@ class _AuthState extends State<Auth> {
                         ),
                       ),
                       child: Text(
-                        'Register',
+                        _isRegistration ? "Register" : "Sign in",
                         style: TextStyle(fontSize: 14.sp, color: Colors.white),
                       ),
                     ),

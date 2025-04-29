@@ -37,8 +37,8 @@ class _WelcomeState extends State<Welcome> {
     _videoPlayerController.dispose();
   }
 
-  _toAuthPage() {
-    Get.toNamed("/auth");
+  _toAuthPage(String authMode) {
+    Get.toNamed("/auth", arguments: {"authMode": authMode});
   }
 
   @override
@@ -81,7 +81,7 @@ class _WelcomeState extends State<Welcome> {
             ),
           ),
           Positioned(
-            bottom: 45.h,
+            bottom: 15.h,
             child: SizedBox(
               width: 375.w,
               child: Column(
@@ -145,12 +145,13 @@ class _WelcomeState extends State<Welcome> {
                       ),
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(bottom: 15.h),
+                  SizedBox(
                     width: 290.w,
                     height: 60.h,
                     child: ElevatedButton(
-                      onPressed: _toAuthPage,
+                      onPressed: () {
+                        _toAuthPage("register");
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,
                         shape: RoundedRectangleBorder(
@@ -167,12 +168,24 @@ class _WelcomeState extends State<Welcome> {
                       ),
                     ),
                   ),
-                  Text(
-                    "Sign in",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.bold,
+
+                  InkWell(
+                    onTap: () {
+                      _toAuthPage("login");
+                    },
+                    child: SizedBox(
+                      width: 290.w,
+                      height: 60.h,
+                      child: Center(
+                        child: Text(
+                          "Sign in",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ],

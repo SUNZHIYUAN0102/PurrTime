@@ -1,4 +1,4 @@
-import 'package:purr_time/dioHelper.dart';
+import 'package:purr_time/utils/dioHelper.dart';
 import 'package:purr_time/swagger_generated_code/api_json.swagger.dart';
 
 class UserApi {

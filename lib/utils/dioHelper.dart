@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart' as dio;
-import 'package:get/get.dart';
 import 'package:purr_time/store/token.dart';
 
 typedef DioResponse<T> = dio.Response<T>;
