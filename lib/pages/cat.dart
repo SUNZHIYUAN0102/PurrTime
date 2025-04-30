@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloudinary/cloudinary.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:board_datetime_picker/board_datetime_picker.dart';
@@ -10,7 +11,9 @@ import 'package:purr_time/apis/cats.dart';
 import 'package:purr_time/components/notiferDatetimeInputField.dart';
 import 'package:purr_time/components/notifierInputField.dart';
 import 'package:purr_time/store/cat.dart';
+import 'package:purr_time/store/user.dart';
 import 'package:purr_time/swagger_generated_code/api_json.swagger.dart';
+import 'package:purr_time/utils/cloudinaryUploader.dart';
 
 class Cat extends StatefulWidget {
   const Cat({super.key});
@@ -25,8 +28,7 @@ class _CatState extends State<Cat> {
 
   String gender = "Male";
 
-  String catPhoto =
-      "https://fastly.picsum.photos/id/237/300/300.jpg?hmac=9iUR3VHqf0Y9abGyuPZTpEIxHJL0sSvyNtJtDIMSylM";
+  String catPhoto = "";
 
   String birth = "";
   ValueNotifier<String> birthNotifier = ValueNotifier<String>("");
@@ -49,25 +51,6 @@ class _CatState extends State<Cat> {
   bool isEdit = false;
   final ScrollController _scrollController = ScrollController();
   bool _showTitle = false;
-
-  final ImagePicker picker = new ImagePicker();
-  //用户本地图片
-  // File _userImage; //存放获取到的本地路径
-
-  // Future _getImage() async {
-  //   //选择相册
-  //   final pickerImages = await picker.pickImage(source: ImageSource.gallery);
-  //   if (mounted) {
-  //     setState(() {
-  //       if (pickerImages != null) {
-  //         _userImage = File(pickerImages.path);
-  //         print('你选择的本地路径是：${_userImage.toString()}');
-  //       } else {
-  //         print('没有照片可以选择');
-  //       }
-  //     });
-  //   }
-  // }
 
   @override
   void initState() {
@@ -180,6 +163,11 @@ class _CatState extends State<Cat> {
       return;
     }
 
+    if (catPhoto.isEmpty) {
+      Get.snackbar("Error", "Please select cat photo");
+      return;
+    }
+
     if (birth.isEmpty) {
       Get.snackbar("Error", "Please enter cat birth date");
       return;
@@ -209,6 +197,18 @@ class _CatState extends State<Cat> {
 
   _addCat() async {
     try {
+      String? photoUrl = await CloudinaryUploader.uploadImage(
+        file: File(catPhoto),
+        folder: "/users/${UserController.to.user.value!.id}/cats",
+      );
+
+      if (photoUrl != null) {
+        catPhoto = photoUrl;
+      } else {
+        Get.snackbar("Error", "Failed to upload cat photo. Please try again.");
+        return;
+      }
+
       CatDto cat = await CatsApi.createCat(
         CreateCatDto(
           name: name,
@@ -236,6 +236,20 @@ class _CatState extends State<Cat> {
   }
 
   _updateCat() async {
+    if (catPhoto.isNotEmpty && !catPhoto.startsWith("http")) {
+      String? photoUrl = await CloudinaryUploader.uploadImage(
+        file: File(catPhoto),
+        folder: "/users/${UserController.to.user.value!.id}/cats",
+      );
+
+      if (photoUrl != null) {
+        catPhoto = photoUrl;
+      } else {
+        Get.snackbar("Error", "Failed to upload cat photo. Please try again.");
+        return;
+      }
+    }
+
     try {
       CatDto cat = await CatsApi.updateCat(
         Get.arguments["catId"],
@@ -256,6 +270,38 @@ class _CatState extends State<Cat> {
       Get.back();
     } catch (e) {
       Get.snackbar("Error", "Failed to update cat. Please try again.");
+    }
+  }
+
+  _pickImage() async {
+    File file = await CloudinaryUploader.pickImageFromGallery() ?? File("");
+
+    if (file.path.isNotEmpty) {
+      setState(() {
+        catPhoto = file.path;
+      });
+    }
+  }
+
+  _renderPhoto() {
+    if (catPhoto.isNotEmpty) {
+      if (catPhoto.startsWith("http")) {
+        return Image.network(
+          catPhoto,
+          fit: BoxFit.cover,
+          width: 60.w,
+          height: 60.w,
+        );
+      } else {
+        return Image.file(
+          File(catPhoto),
+          fit: BoxFit.cover,
+          width: 60.w,
+          height: 60.w,
+        );
+      }
+    } else {
+      return const Icon(Icons.camera_alt_outlined);
     }
   }
 
@@ -296,16 +342,16 @@ class _CatState extends State<Cat> {
                           ),
                         ),
 
-                        Container(
-                          width: 60.w,
-                          height: 60.h,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.grey[300],
-                            image: DecorationImage(
-                              image: NetworkImage(catPhoto),
-                              fit: BoxFit.cover,
+                        GestureDetector(
+                          onTap: _pickImage,
+                          child: Container(
+                            width: 60.w,
+                            height: 60.w,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.grey[300],
                             ),
+                            child: ClipOval(child: _renderPhoto()),
                           ),
                         ),
                       ],

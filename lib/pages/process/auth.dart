@@ -141,10 +141,9 @@ class _AuthState extends State<Auth> {
 
       TokenController.to.setToken(response.token);
 
-      List<CatDto> catList = await CatsApi.getUserCats();
-
       if (response.user.avatar != null && response.user.username != null) {
         UserController.to.setUser(response.user);
+        List<CatDto> catList = await CatsApi.getUserCats();
         if (catList.isEmpty) {
           Get.offAllNamed(
             "/cat",
