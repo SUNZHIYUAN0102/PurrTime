@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:purr_time/apis/cats.dart';
 import 'package:purr_time/apis/user.dart';
 import 'package:purr_time/pages/process/components/customInputField.dart';
 import 'package:purr_time/store/token.dart';
@@ -123,8 +124,6 @@ class _AuthState extends State<Auth> {
       );
 
       TokenController.to.setToken(response.token);
-      // UserController.to.setUser(response.user);
-
       Get.offAllNamed("/process/userInfo");
     } catch (e) {
       print(e);
@@ -141,9 +140,22 @@ class _AuthState extends State<Auth> {
       );
 
       TokenController.to.setToken(response.token);
-      // UserController.to.setUser(response.user);
 
-      Get.offAllNamed("/process/userInfo");
+      List<CatDto> catList = await CatsApi.getUserCats();
+
+      if (response.user.avatar != null && response.user.username != null) {
+        UserController.to.setUser(response.user);
+        if (catList.isEmpty) {
+          Get.offAllNamed(
+            "/cat",
+            arguments: {"catId": null, "fromProcess": true},
+          );
+        } else {
+          Get.offAllNamed("/");
+        }
+      } else {
+        Get.offAllNamed("/process/userInfo");
+      }
     } catch (e) {
       Get.snackbar(
         "Login Error",

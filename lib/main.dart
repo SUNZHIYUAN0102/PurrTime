@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
         return GetMaterialApp(
           title: 'Flutter Demo',
           debugShowCheckedModeBanner: false,
-          initialRoute: "/process/userInfo",
+          initialRoute: configInitialRoute(),
           navigatorObservers: [routeObserver],
           getPages: AppPages.pages,
         );
@@ -52,7 +52,9 @@ String configInitialRoute() {
     return "/welcome";
   } else if (UserController.to.user.value?.username == "") {
     return "/process/userInfo";
+  } else if (CatController.to.catList.isEmpty) {
+    return "/cat";
   } else {
-    return "/home";
+    return "/";
   }
 }

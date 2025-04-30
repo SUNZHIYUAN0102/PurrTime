@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:board_datetime_picker/board_datetime_picker.dart';
 import 'package:flutter/material.dart';
@@ -72,6 +73,8 @@ class _CatState extends State<Cat> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    FlutterNativeSplash.remove(); // Remove the splash screen after initialization
 
     if (Get.arguments["catId"] != null) {
       final catId = Get.arguments["catId"];
@@ -202,8 +205,6 @@ class _CatState extends State<Cat> {
     } else {
       _addCat();
     }
-
-    Get.back();
   }
 
   _addCat() async {
@@ -223,6 +224,12 @@ class _CatState extends State<Cat> {
       );
 
       CatController.to.addCat(cat);
+
+      if (Get.arguments["fromProcess"] == true) {
+        Get.offAllNamed("/");
+      } else {
+        Get.back();
+      }
     } catch (e) {
       Get.snackbar("Error", "Failed to add cat. Please try again.");
     }
@@ -246,6 +253,7 @@ class _CatState extends State<Cat> {
       );
 
       CatController.to.updateCat(cat);
+      Get.back();
     } catch (e) {
       Get.snackbar("Error", "Failed to update cat. Please try again.");
     }

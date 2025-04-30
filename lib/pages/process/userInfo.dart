@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:purr_time/apis/user.dart';
 import 'package:purr_time/pages/process/components/customInputField.dart';
 import 'package:purr_time/store/user.dart';
@@ -81,6 +82,11 @@ class _UserinfoState extends State<Userinfo> {
         );
 
         UserController.to.setUser(response);
+
+        Get.offAllNamed(
+          "/cat",
+          arguments: {"catId": null, "fromProcess": true},
+        );
       } catch (e) {
         print("Error in button press: $e");
       }
@@ -166,15 +172,15 @@ class _UserinfoState extends State<Userinfo> {
                                         avatar == _selectedAvatar
                                             ? Colors.black
                                             : Colors.transparent,
-                                    width: 2.w,
+                                    width: 3.w,
                                   ),
                                 ),
                                 child: ClipOval(
                                   child: Image.network(
                                     avatar,
                                     fit: BoxFit.cover,
-                                    width: 53.w,
-                                    height: 53.w,
+                                    width: 52.w,
+                                    height: 52.w,
                                   ),
                                 ),
                               ),
