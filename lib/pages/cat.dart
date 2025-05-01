@@ -112,6 +112,22 @@ class _CatState extends State<Cat> {
     _scrollController.addListener(_handleScroll);
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+
+    nameNotifier.dispose();
+    birthNotifier.dispose();
+    weightNotifier.dispose();
+    breedNotifier.dispose();
+    lengthNotifier.dispose();
+    insuranceProviderNotifier.dispose();
+    insuranceNumberNotifier.dispose();
+    _scrollController.removeListener(_handleScroll);
+    _scrollController.dispose();
+  }
+
   void _handleScroll() {
     if (_scrollController.offset > 10 && !_showTitle) {
       setState(() {
@@ -526,10 +542,9 @@ class _CatState extends State<Cat> {
                       margin: EdgeInsets.only(bottom: 10.h),
                       child: ElevatedButton(
                         onPressed: _handleButtonPress,
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(
-                            Colors.black,
-                          ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          disabledBackgroundColor: Colors.black.withOpacity(.3),
                         ),
                         child: SizedBox(
                           width: double.infinity,

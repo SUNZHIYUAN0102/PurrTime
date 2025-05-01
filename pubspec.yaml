@@ -55,6 +55,7 @@ dependencies:
   cloudinary: ^1.2.0
   get_storage: ^2.1.1
   jwt_decoder: ^2.0.1
+  fluttertoast: ^8.2.12
   
 flutter_native_splash:
   background_image: "images/splash.png"

@@ -174,7 +174,7 @@ class _HomeState extends State<Home> with RouteAware {
                     margin: EdgeInsets.only(top: 10.h, bottom: 10.h),
                     padding: EdgeInsets.only(left: 16.w, right: 16.w),
                     width: double.infinity,
-                    height: 55.h,
+                    height: 55.w,
                     child:
                         CatController.to.catList.isNotEmpty &&
                                 CatController.to.homeSelectedCat.value != null
@@ -193,7 +193,7 @@ class _HomeState extends State<Home> with RouteAware {
                                       child: Container(
                                         margin: EdgeInsets.only(right: 10.w),
                                         width: 55.w,
-                                        height: 55.h,
+                                        height: 55.w,
                                         decoration: BoxDecoration(
                                           color: Colors.white,
                                           shape: BoxShape.circle,
@@ -220,10 +220,9 @@ class _HomeState extends State<Home> with RouteAware {
                                           image: DecorationImage(
                                             image: NetworkImage(
                                               CatController
-                                                      .to
-                                                      .catList[index]
-                                                      .image ??
-                                                  "",
+                                                  .to
+                                                  .catList[index]
+                                                  .image,
                                             ),
                                             fit: BoxFit.cover,
                                           ),

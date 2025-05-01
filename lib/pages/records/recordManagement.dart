@@ -133,6 +133,9 @@ class _RecordManagementState extends State<RecordManagement> {
     super.dispose();
 
     amountNotifier.dispose();
+    dateTimeNotifier.dispose();
+    _scrollController.removeListener(_handleScroll);
+    _scrollController.dispose();
   }
 
   @override
