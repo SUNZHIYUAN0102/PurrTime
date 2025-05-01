@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart' as dio;
+import 'package:get/get.dart';
 import 'package:purr_time/store/token.dart';
 
 typedef DioResponse<T> = dio.Response<T>;
@@ -28,7 +29,7 @@ class DioHelper {
       dio.InterceptorsWrapper(
         onRequest: (options, handler) {
           final token = TokenController.to.token.value;
-          if (token.isNotEmpty) {
+          if (token != null) {
             options.headers['Authorization'] = 'Bearer $token';
           }
           return handler.next(options);
@@ -39,8 +40,7 @@ class DioHelper {
 
             TokenController.to.clearToken();
 
-            // Optionally redirect to login page
-            // navigatorKey.currentState?.pushNamedAndRemoveUntil('/login', (route) => false);
+            Get.offAllNamed("/welcome");
 
             return handler.reject(
               DioException(

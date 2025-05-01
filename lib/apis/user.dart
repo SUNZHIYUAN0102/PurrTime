@@ -37,4 +37,14 @@ class UserApi {
       rethrow;
     }
   }
+
+  static Future<UserDto> getUser() async {
+    try {
+      final response = await DioHelper.get("/users");
+      return UserDto.fromJson(response.data);
+    } catch (e) {
+      print("Error in get user: $e");
+      rethrow;
+    }
+  }
 }

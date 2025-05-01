@@ -145,10 +145,7 @@ class _AuthState extends State<Auth> {
         UserController.to.setUser(response.user);
         List<CatDto> catList = await CatsApi.getUserCats();
         if (catList.isEmpty) {
-          Get.offAllNamed(
-            "/cat",
-            arguments: {"catId": null, "fromProcess": true},
-          );
+          Get.offAllNamed("/cat");
         } else {
           Get.offAllNamed("/");
         }

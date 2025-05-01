@@ -59,10 +59,12 @@ class _CatState extends State<Cat> {
 
     FlutterNativeSplash.remove(); // Remove the splash screen after initialization
 
-    if (Get.arguments["catId"] != null) {
-      final catId = Get.arguments["catId"];
-      isEdit = true;
-      _getCatById(catId);
+    if (Get.arguments != null) {
+      if (Get.arguments["catId"] != null) {
+        final catId = Get.arguments["catId"];
+        isEdit = true;
+        _getCatById(catId);
+      }
     }
 
     nameNotifier.addListener(() {
@@ -225,7 +227,7 @@ class _CatState extends State<Cat> {
 
       CatController.to.addCat(cat);
 
-      if (Get.arguments["fromProcess"] == true) {
+      if (Get.arguments == null) {
         Get.offAllNamed("/");
       } else {
         Get.back();

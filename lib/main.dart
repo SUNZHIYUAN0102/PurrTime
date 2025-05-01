@@ -3,6 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:purr_time/apis/cats.dart';
+import 'package:purr_time/apis/user.dart';
+import 'package:purr_time/swagger_generated_code/api_json.swagger.dart';
 import 'package:purr_time/utils/dioHelper.dart';
 import 'package:purr_time/routes.dart';
 import 'package:purr_time/store/cat.dart';
@@ -10,7 +15,9 @@ import 'package:purr_time/store/token.dart';
 import 'package:purr_time/store/user.dart';
 
 final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
+
 void main() async {
+  await GetStorage.init();
   Get.put(TokenController());
   Get.put(UserController());
   Get.put(CatController());
@@ -23,11 +30,14 @@ void main() async {
 
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  runApp(MyApp());
+
+  final initialRoute = await configInitialRoute();
+  runApp(MyApp(initialRoute: initialRoute));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final String initialRoute;
+  const MyApp({super.key, required this.initialRoute});
 
   // This widget is the root of your application.
   @override
@@ -38,7 +48,7 @@ class MyApp extends StatelessWidget {
         return GetMaterialApp(
           title: 'Flutter Demo',
           debugShowCheckedModeBanner: false,
-          initialRoute: configInitialRoute(),
+          initialRoute: initialRoute,
           navigatorObservers: [routeObserver],
           getPages: AppPages.pages,
         );
@@ -47,14 +57,26 @@ class MyApp extends StatelessWidget {
   }
 }
 
-String configInitialRoute() {
-  if (TokenController.to.token.value == "") {
+Future<String> configInitialRoute() async {
+  final box = GetStorage();
+  final token = box.read('token');
+
+  if (token == null || JwtDecoder.isExpired(token)) {
+    TokenController.to.clearToken();
     return "/welcome";
-  } else if (UserController.to.user.value?.username == "") {
-    return "/process/userInfo";
-  } else if (CatController.to.catList.isEmpty) {
-    return "/cat";
-  } else {
-    return "/";
   }
+
+  final user = await UserApi.getUser();
+  if (user.username == null || user.avatar == null) {
+    return "/process/userInfo";
+  }
+
+  UserController.to.setUser(user);
+
+  final catList = await CatsApi.getUserCats();
+  if (catList.isEmpty) {
+    return "/cat";
+  }
+
+  return "/";
 }
