@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:purr_time/pages/navigations/charts.dart';
 import 'package:purr_time/pages/navigations/home.dart';
 import 'package:purr_time/pages/navigations/myPets.dart';
 import 'package:purr_time/pages/navigations/recipes.dart';
+import 'package:purr_time/store/token.dart';
+import 'package:purr_time/store/user.dart';
+import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
 
 class Navigations extends StatefulWidget {
   const Navigations({super.key});
@@ -36,136 +40,120 @@ class _NavigationsState extends State<Navigations> {
     FlutterNativeSplash.remove(); // remove the splash screen
   }
 
+  _handleSignOut() {
+    TokenController.to.clearToken();
+    Get.offAllNamed("/welcome");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          IndexedStack(index: _selectedIndex, children: _pages),
-          Positioned(
-            left: 27.5.w,
-            right: 27.5.w,
-            bottom: 25.h,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.circular(40.r),
-              ),
-              width: 320.w,
-              height: 70.h,
-              padding: EdgeInsets.only(top: 10.h, bottom: 10.h),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      body: IndexedStack(index: _selectedIndex, children: _pages),
+      bottomNavigationBar: StylishBottomBar(
+        currentIndex: _selectedIndex,
+        elevation: 20.h,
+        items: [
+          BottomBarItem(
+            icon: const Icon(Icons.reorder),
+            title: const Text('Main'),
+            selectedColor: Colors.black,
+          ),
+          BottomBarItem(
+            icon: const Icon(Icons.pie_chart_outline_outlined),
+            title: const Text('Charts'),
+            selectedColor: Colors.black,
+          ),
+          BottomBarItem(
+            icon: const Icon(Icons.list_alt_outlined),
+            title: const Text('To Do'),
+            selectedColor: Colors.black,
+          ),
+          BottomBarItem(
+            icon: const Icon(Icons.pets_outlined),
+            title: const Text('My Pets'),
+            selectedColor: Colors.black,
+          ),
+        ],
+        option: DotBarOptions(
+          iconSize: 26.sp,
+          padding: EdgeInsets.symmetric(vertical: 12.h),
+        ),
+        onTap: (index) {
+          _onItemTapped(index);
+        },
+      ),
+      drawer: Drawer(
+        backgroundColor: Colors.white,
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            Container(
+              padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 70.h),
+              decoration: BoxDecoration(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 20.h,
                 children: [
-                  InkWell(
-                    onTap: () {
-                      _onItemTapped(0);
-                    },
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Icon(
-                          Icons.reorder,
-                          color:
-                              _selectedIndex == 0
-                                  ? Colors.white
-                                  : Colors.grey[600],
+                  Container(
+                    width: 80.w,
+                    height: 80.h,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.grey[200],
+                      image: DecorationImage(
+                        image: NetworkImage(
+                          UserController.to.user.value!.avatar!,
                         ),
-                        Text(
-                          "Main",
-                          style: TextStyle(
-                            color:
-                                _selectedIndex == 0
-                                    ? Colors.white
-                                    : Colors.grey[600],
-                          ),
-                        ),
-                      ],
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
-                  InkWell(
-                    onTap: () {
-                      _onItemTapped(1);
-                    },
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Icon(
-                          Icons.leaderboard,
-                          color:
-                              _selectedIndex == 1
-                                  ? Colors.white
-                                  : Colors.grey[600],
-                        ),
-                        Text(
-                          "Charts",
-                          style: TextStyle(
-                            color:
-                                _selectedIndex == 1
-                                    ? Colors.white
-                                    : Colors.grey[600],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      _onItemTapped(2);
-                    },
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Icon(
-                          Icons.restaurant_menu,
-                          color:
-                              _selectedIndex == 2
-                                  ? Colors.white
-                                  : Colors.grey[600],
-                        ),
-                        Text(
-                          "Recipes",
-                          style: TextStyle(
-                            color:
-                                _selectedIndex == 2
-                                    ? Colors.white
-                                    : Colors.grey[600],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      _onItemTapped(3);
-                    },
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Icon(
-                          Icons.pets_outlined,
-                          color:
-                              _selectedIndex == 3
-                                  ? Colors.white
-                                  : Colors.grey[600],
-                        ),
-                        Text(
-                          "My Pets",
-                          style: TextStyle(
-                            color:
-                                _selectedIndex == 3
-                                    ? Colors.white
-                                    : Colors.grey[600],
-                          ),
-                        ),
-                      ],
+                  Text(
+                    "Hi, ${UserController.to.user.value!.username}",
+                    style: TextStyle(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
               ),
             ),
-          ),
-        ],
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 20.h),
+              child: Divider(height: 1.h, color: Colors.grey[200]),
+            ),
+            ListTile(
+              leading: Icon(Icons.account_circle_outlined),
+              title: Text(
+                "Profile",
+                style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.settings_outlined),
+              title: Text(
+                "Settings",
+                style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.info_outline),
+              title: Text(
+                "About us",
+                style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
+              ),
+            ),
+
+            ListTile(
+              leading: Icon(Icons.logout),
+              title: Text(
+                "Sign out",
+                style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
+              ),
+              onTap: _handleSignOut,
+            ),
+          ],
+        ),
       ),
     );
   }
