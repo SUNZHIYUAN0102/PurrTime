@@ -10,6 +10,7 @@ import 'package:purr_time/apis/records.dart';
 import 'package:purr_time/main.dart';
 import 'package:purr_time/pages/records/record.dart';
 import 'package:purr_time/store/cat.dart';
+import 'package:purr_time/store/token.dart';
 import 'package:purr_time/store/user.dart';
 import 'package:purr_time/swagger_generated_code/api_json.swagger.dart';
 
@@ -117,6 +118,11 @@ class _HomeState extends State<Home> with RouteAware {
     Get.toNamed("/recordManagement", arguments: {"record": record});
   }
 
+  _handleSignOut() {
+    TokenController.to.clearToken();
+    Get.offAllNamed("/welcome");
+  }
+
   @override
   Widget build(BuildContext context) {
     return FloatingDraggableWidget(
@@ -138,23 +144,34 @@ class _HomeState extends State<Home> with RouteAware {
           elevation: 0,
           scrolledUnderElevation: 0,
           leadingWidth: double.infinity,
-          leading: Obx(() {
-            return Row(
-              spacing: 10.w,
-              children: [
-                Container(
-                  margin: EdgeInsets.only(left: 16.w),
-                  decoration: BoxDecoration(shape: BoxShape.circle),
-                  clipBehavior: Clip.hardEdge,
-                  child: Image.network(UserController.to.user.value!.avatar!),
-                ),
-                Text(
-                  "Welcome, ${UserController.to.user.value!.username}",
-                  style: TextStyle(fontSize: 14.sp, color: Colors.black),
-                ),
-              ],
-            );
-          }),
+          leading: Builder(
+            builder: (context) {
+              return Obx(() {
+                return Row(
+                  spacing: 10.w,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Scaffold.of(context).openDrawer();
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(left: 16.w),
+                        decoration: BoxDecoration(shape: BoxShape.circle),
+                        clipBehavior: Clip.hardEdge,
+                        child: Image.network(
+                          UserController.to.user.value!.avatar!,
+                        ),
+                      ),
+                    ),
+                    Text(
+                      "Welcome, ${UserController.to.user.value!.username}",
+                      style: TextStyle(fontSize: 14.sp, color: Colors.black),
+                    ),
+                  ],
+                );
+              });
+            },
+          ),
         ),
         body: Column(
           children: [
@@ -245,6 +262,91 @@ class _HomeState extends State<Home> with RouteAware {
                       : _renderEmptyWidget(),
             ),
           ],
+        ),
+        drawer: Drawer(
+          backgroundColor: Colors.white,
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              Container(
+                padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 70.h),
+                decoration: BoxDecoration(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 20.h,
+                  children: [
+                    Container(
+                      width: 80.w,
+                      height: 80.h,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.grey[200],
+                        image: DecorationImage(
+                          image: NetworkImage(
+                            UserController.to.user.value!.avatar!,
+                          ),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    Text(
+                      "Hi, ${UserController.to.user.value!.username}",
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 20.h),
+                child: Divider(height: 1.h, color: Colors.grey[200]),
+              ),
+              ListTile(
+                leading: Icon(Icons.account_circle_outlined),
+                title: Text(
+                  "Profile",
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              ListTile(
+                leading: Icon(Icons.settings_outlined),
+                title: Text(
+                  "Settings",
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              ListTile(
+                leading: Icon(Icons.info_outline),
+                title: Text(
+                  "About us",
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+
+              ListTile(
+                leading: Icon(Icons.logout),
+                title: Text(
+                  "Sign out",
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                onTap: _handleSignOut,
+              ),
+            ],
+          ),
         ),
       ),
     );
