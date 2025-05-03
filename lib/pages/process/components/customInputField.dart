@@ -10,6 +10,7 @@ class CustomInputField extends StatelessWidget {
   final TextInputType keyboardType;
   final bool? obscureText;
   final int errorMaxLines;
+  final int? maxlength;
 
   const CustomInputField({
     super.key,
@@ -21,6 +22,7 @@ class CustomInputField extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.obscureText = false,
     this.errorMaxLines = 3,
+    this.maxlength,
   });
 
   @override
@@ -38,6 +40,7 @@ class CustomInputField extends StatelessWidget {
       style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
       keyboardType: keyboardType,
       validator: validator,
+      maxLength: maxlength,
     );
   }
 }

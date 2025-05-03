@@ -15,6 +15,11 @@ class CatController extends GetxController {
   }
 
   addCat(CatDto newCat) {
+    // Check if the cat already exists in the list
+    if (catList.any((cat) => cat.id == newCat.id)) {
+      // If it exists, remove it from the list
+      catList.removeWhere((cat) => cat.id == newCat.id);
+    }
     catList.add(newCat);
   }
 

@@ -6,18 +6,6 @@ part of 'api_json.swagger.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-UpdateUserDto _$UpdateUserDtoFromJson(Map<String, dynamic> json) =>
-    UpdateUserDto(
-      username: json['username'] as String?,
-      avatar: json['avatar'] as String?,
-    );
-
-Map<String, dynamic> _$UpdateUserDtoToJson(UpdateUserDto instance) =>
-    <String, dynamic>{
-      'username': instance.username,
-      'avatar': instance.avatar,
-    };
-
 UserDto _$UserDtoFromJson(Map<String, dynamic> json) => UserDto(
       id: json['id'] as String,
       email: json['email'] as String,
@@ -28,6 +16,18 @@ UserDto _$UserDtoFromJson(Map<String, dynamic> json) => UserDto(
 Map<String, dynamic> _$UserDtoToJson(UserDto instance) => <String, dynamic>{
       'id': instance.id,
       'email': instance.email,
+      'username': instance.username,
+      'avatar': instance.avatar,
+    };
+
+UpdateUserDto _$UpdateUserDtoFromJson(Map<String, dynamic> json) =>
+    UpdateUserDto(
+      username: json['username'] as String?,
+      avatar: json['avatar'] as String?,
+    );
+
+Map<String, dynamic> _$UpdateUserDtoToJson(UpdateUserDto instance) =>
+    <String, dynamic>{
       'username': instance.username,
       'avatar': instance.avatar,
     };
@@ -68,6 +68,7 @@ CatDto _$CatDtoFromJson(Map<String, dynamic> json) => CatDto(
       length: (json['length'] as num?)?.toDouble(),
       insuranceProvider: json['insuranceProvider'] as String?,
       insuranceNumber: json['insuranceNumber'] as String?,
+      code: json['code'] as String,
     );
 
 Map<String, dynamic> _$CatDtoToJson(CatDto instance) => <String, dynamic>{
@@ -81,6 +82,7 @@ Map<String, dynamic> _$CatDtoToJson(CatDto instance) => <String, dynamic>{
       'length': instance.length,
       'insuranceProvider': instance.insuranceProvider,
       'insuranceNumber': instance.insuranceNumber,
+      'code': instance.code,
     };
 
 UpdateCatDto _$UpdateCatDtoFromJson(Map<String, dynamic> json) => UpdateCatDto(

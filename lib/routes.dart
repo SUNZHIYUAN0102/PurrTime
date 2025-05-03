@@ -1,5 +1,5 @@
 import 'package:purr_time/pages/cat.dart';
-import 'package:purr_time/pages/navigations.dart';
+import 'package:purr_time/pages/navigations/navigations.dart';
 import 'package:get/get.dart';
 import 'package:purr_time/pages/process/auth.dart';
 import 'package:purr_time/pages/process/userInfo.dart';

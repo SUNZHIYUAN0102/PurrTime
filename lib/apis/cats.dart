@@ -34,6 +34,16 @@ class CatsApi {
     }
   }
 
+  static Future<CatDto> addCatByCode(String code) async {
+    try {
+      final response = await DioHelper.post("/cats/code", data: {"code": code});
+      return CatDto.fromJson(response.data);
+    } catch (e) {
+      print("Error in createCat: $e");
+      rethrow;
+    }
+  }
+
   static Future<CatDto> updateCat(String catId, UpdateCatDto catDto) async {
     try {
       final response = await DioHelper.patch(

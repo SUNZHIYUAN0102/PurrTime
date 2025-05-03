@@ -58,6 +58,17 @@ abstract class ApiJson extends ChopperService {
   Future<chopper.Response> _get();
 
   ///
+  Future<chopper.Response<UserDto>> usersGet() {
+    generatedMapping.putIfAbsent(UserDto, () => UserDto.fromJsonFactory);
+
+    return _usersGet();
+  }
+
+  ///
+  @Get(path: '/users')
+  Future<chopper.Response<UserDto>> _usersGet();
+
+  ///
   Future<chopper.Response<UserDto>> usersPatch({required UpdateUserDto? body}) {
     generatedMapping.putIfAbsent(UserDto, () => UserDto.fromJsonFactory);
 
@@ -97,6 +108,20 @@ abstract class ApiJson extends ChopperService {
   ///
   @Get(path: '/cats')
   Future<chopper.Response<List<CatDto>>> _catsGet();
+
+  ///
+  Future<chopper.Response<CatDto>> catsCodePost() {
+    generatedMapping.putIfAbsent(CatDto, () => CatDto.fromJsonFactory);
+
+    return _catsCodePost();
+  }
+
+  ///
+  @Post(
+    path: '/cats/code',
+    optionalBody: true,
+  )
+  Future<chopper.Response<CatDto>> _catsCodePost();
 
   ///
   ///@param id
@@ -256,60 +281,6 @@ abstract class ApiJson extends ChopperService {
 }
 
 @JsonSerializable(explicitToJson: true)
-class UpdateUserDto {
-  const UpdateUserDto({
-    this.username,
-    this.avatar,
-  });
-
-  factory UpdateUserDto.fromJson(Map<String, dynamic> json) =>
-      _$UpdateUserDtoFromJson(json);
-
-  static const toJsonFactory = _$UpdateUserDtoToJson;
-  Map<String, dynamic> toJson() => _$UpdateUserDtoToJson(this);
-
-  @JsonKey(name: 'username')
-  final String? username;
-  @JsonKey(name: 'avatar')
-  final String? avatar;
-  static const fromJsonFactory = _$UpdateUserDtoFromJson;
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other is UpdateUserDto &&
-            (identical(other.username, username) ||
-                const DeepCollectionEquality()
-                    .equals(other.username, username)) &&
-            (identical(other.avatar, avatar) ||
-                const DeepCollectionEquality().equals(other.avatar, avatar)));
-  }
-
-  @override
-  String toString() => jsonEncode(this);
-
-  @override
-  int get hashCode =>
-      const DeepCollectionEquality().hash(username) ^
-      const DeepCollectionEquality().hash(avatar) ^
-      runtimeType.hashCode;
-}
-
-extension $UpdateUserDtoExtension on UpdateUserDto {
-  UpdateUserDto copyWith({String? username, String? avatar}) {
-    return UpdateUserDto(
-        username: username ?? this.username, avatar: avatar ?? this.avatar);
-  }
-
-  UpdateUserDto copyWithWrapped(
-      {Wrapped<String?>? username, Wrapped<String?>? avatar}) {
-    return UpdateUserDto(
-        username: (username != null ? username.value : this.username),
-        avatar: (avatar != null ? avatar.value : this.avatar));
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
 class UserDto {
   const UserDto({
     required this.id,
@@ -379,6 +350,60 @@ extension $UserDtoExtension on UserDto {
     return UserDto(
         id: (id != null ? id.value : this.id),
         email: (email != null ? email.value : this.email),
+        username: (username != null ? username.value : this.username),
+        avatar: (avatar != null ? avatar.value : this.avatar));
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class UpdateUserDto {
+  const UpdateUserDto({
+    this.username,
+    this.avatar,
+  });
+
+  factory UpdateUserDto.fromJson(Map<String, dynamic> json) =>
+      _$UpdateUserDtoFromJson(json);
+
+  static const toJsonFactory = _$UpdateUserDtoToJson;
+  Map<String, dynamic> toJson() => _$UpdateUserDtoToJson(this);
+
+  @JsonKey(name: 'username')
+  final String? username;
+  @JsonKey(name: 'avatar')
+  final String? avatar;
+  static const fromJsonFactory = _$UpdateUserDtoFromJson;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is UpdateUserDto &&
+            (identical(other.username, username) ||
+                const DeepCollectionEquality()
+                    .equals(other.username, username)) &&
+            (identical(other.avatar, avatar) ||
+                const DeepCollectionEquality().equals(other.avatar, avatar)));
+  }
+
+  @override
+  String toString() => jsonEncode(this);
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(username) ^
+      const DeepCollectionEquality().hash(avatar) ^
+      runtimeType.hashCode;
+}
+
+extension $UpdateUserDtoExtension on UpdateUserDto {
+  UpdateUserDto copyWith({String? username, String? avatar}) {
+    return UpdateUserDto(
+        username: username ?? this.username, avatar: avatar ?? this.avatar);
+  }
+
+  UpdateUserDto copyWithWrapped(
+      {Wrapped<String?>? username, Wrapped<String?>? avatar}) {
+    return UpdateUserDto(
         username: (username != null ? username.value : this.username),
         avatar: (avatar != null ? avatar.value : this.avatar));
   }
@@ -530,6 +555,7 @@ class CatDto {
     this.length,
     this.insuranceProvider,
     this.insuranceNumber,
+    required this.code,
   });
 
   factory CatDto.fromJson(Map<String, dynamic> json) => _$CatDtoFromJson(json);
@@ -557,6 +583,8 @@ class CatDto {
   final String? insuranceProvider;
   @JsonKey(name: 'insuranceNumber')
   final String? insuranceNumber;
+  @JsonKey(name: 'code')
+  final String code;
   static const fromJsonFactory = _$CatDtoFromJson;
 
   @override
@@ -584,7 +612,9 @@ class CatDto {
                     .equals(other.insuranceProvider, insuranceProvider)) &&
             (identical(other.insuranceNumber, insuranceNumber) ||
                 const DeepCollectionEquality()
-                    .equals(other.insuranceNumber, insuranceNumber)));
+                    .equals(other.insuranceNumber, insuranceNumber)) &&
+            (identical(other.code, code) ||
+                const DeepCollectionEquality().equals(other.code, code)));
   }
 
   @override
@@ -602,6 +632,7 @@ class CatDto {
       const DeepCollectionEquality().hash(length) ^
       const DeepCollectionEquality().hash(insuranceProvider) ^
       const DeepCollectionEquality().hash(insuranceNumber) ^
+      const DeepCollectionEquality().hash(code) ^
       runtimeType.hashCode;
 }
 
@@ -616,7 +647,8 @@ extension $CatDtoExtension on CatDto {
       double? weight,
       double? length,
       String? insuranceProvider,
-      String? insuranceNumber}) {
+      String? insuranceNumber,
+      String? code}) {
     return CatDto(
         id: id ?? this.id,
         name: name ?? this.name,
@@ -627,7 +659,8 @@ extension $CatDtoExtension on CatDto {
         weight: weight ?? this.weight,
         length: length ?? this.length,
         insuranceProvider: insuranceProvider ?? this.insuranceProvider,
-        insuranceNumber: insuranceNumber ?? this.insuranceNumber);
+        insuranceNumber: insuranceNumber ?? this.insuranceNumber,
+        code: code ?? this.code);
   }
 
   CatDto copyWithWrapped(
@@ -640,7 +673,8 @@ extension $CatDtoExtension on CatDto {
       Wrapped<double>? weight,
       Wrapped<double?>? length,
       Wrapped<String?>? insuranceProvider,
-      Wrapped<String?>? insuranceNumber}) {
+      Wrapped<String?>? insuranceNumber,
+      Wrapped<String>? code}) {
     return CatDto(
         id: (id != null ? id.value : this.id),
         name: (name != null ? name.value : this.name),
@@ -655,7 +689,8 @@ extension $CatDtoExtension on CatDto {
             : this.insuranceProvider),
         insuranceNumber: (insuranceNumber != null
             ? insuranceNumber.value
-            : this.insuranceNumber));
+            : this.insuranceNumber),
+        code: (code != null ? code.value : this.code));
   }
 }
 

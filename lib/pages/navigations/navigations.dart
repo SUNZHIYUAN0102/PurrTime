@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:purr_time/pages/charts.dart';
-import 'package:purr_time/pages/home.dart';
-import 'package:purr_time/pages/profile.dart';
-import 'package:purr_time/pages/recipes.dart';
+import 'package:purr_time/pages/navigations/charts.dart';
+import 'package:purr_time/pages/navigations/home.dart';
+import 'package:purr_time/pages/navigations/myPets.dart';
+import 'package:purr_time/pages/navigations/recipes.dart';
 
 class Navigations extends StatefulWidget {
   const Navigations({super.key});
@@ -19,7 +19,7 @@ class _NavigationsState extends State<Navigations> {
     const Home(),
     const Charts(),
     const Recipes(),
-    const Profile(),
+    const MyPets(),
   ];
 
   _onItemTapped(int index) {

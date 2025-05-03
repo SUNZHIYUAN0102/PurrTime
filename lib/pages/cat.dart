@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:purr_time/apis/cats.dart';
 import 'package:purr_time/components/notiferDatetimeInputField.dart';
 import 'package:purr_time/components/notifierInputField.dart';
+import 'package:purr_time/pages/process/components/customInputField.dart';
 import 'package:purr_time/store/cat.dart';
 import 'package:purr_time/store/user.dart';
 import 'package:purr_time/swagger_generated_code/api_json.swagger.dart';
@@ -51,6 +52,10 @@ class _CatState extends State<Cat> {
   bool isEdit = false;
   final ScrollController _scrollController = ScrollController();
   bool _showTitle = false;
+
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _codeController = TextEditingController();
+  final FocusNode _codeFocusNode = FocusNode();
 
   @override
   void initState() {
@@ -110,6 +115,12 @@ class _CatState extends State<Cat> {
     });
 
     _scrollController.addListener(_handleScroll);
+
+    _codeFocusNode.addListener(() {
+      if (!_codeFocusNode.hasFocus) {
+        _formKey.currentState?.validate();
+      }
+    });
   }
 
   @override
@@ -126,6 +137,10 @@ class _CatState extends State<Cat> {
     insuranceNumberNotifier.dispose();
     _scrollController.removeListener(_handleScroll);
     _scrollController.dispose();
+
+    _codeController.dispose();
+    _codeFocusNode.dispose();
+    _formKey.currentState?.dispose();
   }
 
   void _handleScroll() {
@@ -323,6 +338,34 @@ class _CatState extends State<Cat> {
     }
   }
 
+  String? _validateCode(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a code';
+    }
+    return null;
+  }
+
+  _addCatByCode(dynamic arguments) async {
+    try {
+      if (_formKey.currentState?.validate() != true) {
+        return;
+      }
+
+      Get.back();
+
+      CatDto cat = await CatsApi.addCatByCode(_codeController.text);
+
+      CatController.to.addCat(cat);
+      if (arguments == null) {
+        Get.offAllNamed("/");
+      } else {
+        Get.back();
+      }
+    } catch (e) {
+      Get.snackbar("Error", "Failed to add cat. Please try again.");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -336,6 +379,14 @@ class _CatState extends State<Cat> {
               _showTitle ? (isEdit ? "Edit cat" : "Add cat") : "",
               style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w500),
             ),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.qr_code_outlined),
+                onPressed: () {
+                  _dialogBuilder(context, Get.arguments);
+                },
+              ),
+            ],
             floating: false,
             pinned: true,
             backgroundColor: Colors.grey[100],
@@ -568,6 +619,67 @@ class _CatState extends State<Cat> {
           ),
         ],
       ),
+    );
+  }
+
+  Future<void> _dialogBuilder(BuildContext context, dynamic arguments) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Container(
+            padding: EdgeInsets.all(20.w),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10.r),
+            ),
+            height: 300.h,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Enter cat code",
+                  style: TextStyle(
+                    fontSize: 25.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(height: 20.h),
+                Form(
+                  key: _formKey,
+                  child: CustomInputField(
+                    controller: _codeController,
+                    focusNode: _codeFocusNode,
+                    hintText: "Enter cat code",
+                    keyboardType: TextInputType.number,
+                    validator: _validateCode,
+                    maxlength: 6,
+                  ),
+                ),
+                SizedBox(height: 20.h),
+                ElevatedButton(
+                  onPressed: () {
+                    _addCatByCode(arguments);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                  ),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: 50.h,
+                    child: Center(
+                      child: Text(
+                        "Add cat",
+                        style: TextStyle(fontSize: 18.sp, color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
