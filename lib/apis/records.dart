@@ -13,7 +13,18 @@ class RecordsApi {
       );
 
       final List<dynamic> data = response.data;
-      return data.map((json) => RecordDto.fromJson(json)).toList();
+
+      final converted =
+          data.map((record) {
+            if (record is Map<String, dynamic> && record["date"] is String) {
+              final utc = DateTime.parse(record["date"]);
+              final local = utc.toLocal();
+              record["date"] = local.toIso8601String();
+            }
+            return record;
+          }).toList();
+
+      return converted.map((record) => RecordDto.fromJson(record)).toList();
     } catch (e) {
       print("Error in findRecordsByCatIdAndDate: $e");
       rethrow;

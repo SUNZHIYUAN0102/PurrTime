@@ -35,7 +35,7 @@ class _RecordManagementState extends State<RecordManagement> {
                 ? CreateRecordDtoCatalogue.daily
                 : CreateRecordDtoCatalogue.expense,
         name: name,
-        date: DateFormat("yyyy-MM-dd HH:mm").parse(dateTime, true).toLocal(),
+        date: DateFormat("yyyy-MM-dd HH:mm").parse(dateTime, false).toUtc(),
         $value: double.parse(amount),
       ),
     );
@@ -52,7 +52,7 @@ class _RecordManagementState extends State<RecordManagement> {
                 ? UpdateRecordDtoCatalogue.daily
                 : UpdateRecordDtoCatalogue.expense,
         name: name,
-        date: DateFormat("yyyy-MM-dd HH:mm").parse(dateTime, true).toLocal(),
+        date: DateFormat("yyyy-MM-dd HH:mm").parse(dateTime, false).toUtc(),
         $value: double.parse(amount),
       ),
     );
