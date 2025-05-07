@@ -24,7 +24,7 @@ class CustomInputField extends StatelessWidget {
     this.obscureText = false,
     this.errorMaxLines = 3,
     this.maxlength,
-    this.autovalidateMode = AutovalidateMode.onUnfocus,
+    this.autovalidateMode = AutovalidateMode.onUserInteraction,
   });
 
   @override

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:purr_time/components/notiferInputFormField.dart';
+import 'package:purr_time/components/customInputFormField.dart';
 
 class Charts extends StatefulWidget {
   const Charts({super.key});
@@ -12,7 +12,7 @@ class Charts extends StatefulWidget {
 class _ChartsState extends State<Charts> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  TextEditingController controller = TextEditingController();
+  TextEditingController controller = TextEditingController(text: "miaomiao");
 
   @override
   void initState() {
@@ -30,7 +30,7 @@ class _ChartsState extends State<Charts> {
             key: _formKey,
             child: Container(
               margin: const EdgeInsets.all(50),
-              child: ControllerInputFormField(
+              child: Custominputformfield(
                 label: "Amount",
                 controller: controller,
                 hintText: "Enter your name",

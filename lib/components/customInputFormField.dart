@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class ControllerInputFormField extends FormField<String> {
-  ControllerInputFormField({
+class Custominputformfield extends FormField<String> {
+  Custominputformfield({
     super.key,
     required String label,
     required TextEditingController controller,
@@ -10,10 +10,12 @@ class ControllerInputFormField extends FormField<String> {
     String? hintText,
     FormFieldSetter<String>? onSaved,
     FormFieldValidator<String>? validator,
+    bool enabled = true,
   }) : super(
+         initialValue: controller.text,
          onSaved: onSaved,
          validator: validator,
-         autovalidateMode: AutovalidateMode.onUnfocus,
+         autovalidateMode: AutovalidateMode.onUserInteraction,
          builder: (state) {
            return Column(
              crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,6 +46,7 @@ class ControllerInputFormField extends FormField<String> {
                        ),
                      ),
                      TextField(
+                       enabled: enabled,
                        keyboardType: keyboardType,
                        decoration: InputDecoration(
                          hintText: hintText,
@@ -53,9 +56,6 @@ class ControllerInputFormField extends FormField<String> {
                        ),
                        controller: controller,
                        onChanged: (newValue) {
-                         if (state.hasError) {
-                           state.reset();
-                         }
                          state.didChange(newValue);
                        },
                      ),

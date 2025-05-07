@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
 import 'package:intl/intl.dart';
 import 'package:purr_time/apis/records.dart';
+import 'package:purr_time/components/customInputFormField.dart';
 import 'package:purr_time/components/notiferDateTimeInputField.dart';
 import 'package:purr_time/components/notifierInputField.dart';
 import 'package:purr_time/store/cat.dart';
@@ -23,8 +24,12 @@ class _RecordManagementState extends State<RecordManagement> {
   ValueNotifier<String> dateTimeNotifier = ValueNotifier<String>("");
 
   String amount = "";
-  ValueNotifier<String> amountNotifier = ValueNotifier<String>("");
   bool isEdit = false;
+
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  TextEditingController catalogueController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController amountController = TextEditingController();
 
   _submitRecord() async {
     RecordDto res = await RecordsApi.createRecord(
@@ -36,7 +41,7 @@ class _RecordManagementState extends State<RecordManagement> {
                 : CreateRecordDtoCatalogue.expense,
         name: name,
         date: DateFormat("yyyy-MM-dd HH:mm").parse(dateTime, false).toUtc(),
-        $value: double.parse(amount),
+        $value: double.parse(amountController.text),
       ),
     );
 
@@ -53,7 +58,7 @@ class _RecordManagementState extends State<RecordManagement> {
                 : UpdateRecordDtoCatalogue.expense,
         name: name,
         date: DateFormat("yyyy-MM-dd HH:mm").parse(dateTime, false).toUtc(),
-        $value: double.parse(amount),
+        $value: double.parse(amountController.text),
       ),
     );
 
@@ -65,8 +70,8 @@ class _RecordManagementState extends State<RecordManagement> {
       Get.snackbar("Error", "Please select a date and time");
       return;
     }
-    if (amount.isEmpty) {
-      Get.snackbar("Error", "Please enter an amount");
+
+    if (!_formKey.currentState!.validate()) {
       return;
     }
 
@@ -105,7 +110,6 @@ class _RecordManagementState extends State<RecordManagement> {
       dateTime = DateFormat("yyyy-MM-dd HH:mm").format(record.date);
       dateTimeNotifier.value = dateTime;
       amount = record.$value.toString();
-      amountNotifier.value = amount;
       isEdit = true;
     } else {
       catalogue = Get.arguments["catalogue"];
@@ -114,17 +118,15 @@ class _RecordManagementState extends State<RecordManagement> {
 
     _scrollController.addListener(_handleScroll);
 
-    amountNotifier.addListener(() {
-      setState(() {
-        amount = amountNotifier.value;
-      });
-    });
-
     dateTimeNotifier.addListener(() {
       setState(() {
         dateTime = dateTimeNotifier.value;
       });
     });
+
+    catalogueController.text = catalogue;
+    nameController.text = name;
+    amountController.text = amount;
   }
 
   @override
@@ -132,10 +134,23 @@ class _RecordManagementState extends State<RecordManagement> {
     // TODO: implement dispose
     super.dispose();
 
-    amountNotifier.dispose();
     dateTimeNotifier.dispose();
     _scrollController.removeListener(_handleScroll);
     _scrollController.dispose();
+
+    catalogueController.dispose();
+    nameController.dispose();
+    amountController.dispose();
+  }
+
+  String? validateAmount(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Please enter an amount";
+    }
+    if (double.tryParse(value) == null) {
+      return "Please enter a valid number";
+    }
+    return null;
   }
 
   @override
@@ -159,148 +174,115 @@ class _RecordManagementState extends State<RecordManagement> {
           ),
           SliverToBoxAdapter(
             child: SingleChildScrollView(
-              child: Container(
-                padding: EdgeInsets.only(left: 16.w, right: 16.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          isEdit ? "Edit record" : "Add record",
-                          style: TextStyle(
-                            fontSize: 35.sp,
-                            fontWeight: FontWeight.w600,
+              child: Form(
+                key: _formKey,
+                child: Container(
+                  padding: EdgeInsets.only(left: 16.w, right: 16.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            isEdit ? "Edit record" : "Add record",
+                            style: TextStyle(
+                              fontSize: 35.sp,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
-                        ),
 
-                        Container(
-                          width: 60.w,
-                          height: 60.h,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.grey[300],
-                            image: DecorationImage(
-                              image: NetworkImage(
-                                CatController.to.homeSelectedCat.value!.image!,
+                          Container(
+                            width: 60.w,
+                            height: 60.h,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.grey[300],
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                  CatController
+                                      .to
+                                      .homeSelectedCat
+                                      .value!
+                                      .image!,
+                                ),
+                                fit: BoxFit.cover,
                               ),
-                              fit: BoxFit.cover,
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-
-                    Container(
-                      margin: EdgeInsets.only(top: 20.h, bottom: 10.h),
-                      child: Text(
-                        "Record information",
-                        style: TextStyle(
-                          fontSize: 20.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(bottom: 10.h),
-                      padding: EdgeInsets.only(
-                        top: 10.h,
-                        bottom: 10.h,
-                        left: 20.w,
-                        right: 20.w,
-                      ),
-                      width: double.infinity,
-                      height: 65.h,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            "Catalogue",
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                          Text(catalogue, style: TextStyle(fontSize: 18.sp)),
                         ],
                       ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(bottom: 10.h),
-                      padding: EdgeInsets.only(
-                        top: 10.h,
-                        bottom: 10.h,
-                        left: 20.w,
-                        right: 20.w,
-                      ),
-                      width: double.infinity,
-                      height: 65.h,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            "Name",
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                          Text(name, style: TextStyle(fontSize: 18.sp)),
-                        ],
-                      ),
-                    ),
 
-                    Container(
-                      margin: EdgeInsets.only(bottom: 10.h),
-                      child: NotiferDateTimeInputField(
-                        label: "Date & Time",
-                        notifier: dateTimeNotifier,
-                      ),
-                    ),
-
-                    Container(
-                      margin: EdgeInsets.only(bottom: 25.h),
-                      child: NotifierInputField(
-                        label: "Amount",
-                        notifier: amountNotifier,
-                        keyboardType: TextInputType.number,
-                        hintText: "Enter amount",
-                      ),
-                    ),
-
-                    ElevatedButton(
-                      onPressed: _handleButtonPress,
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                          Colors.black,
-                        ),
-                      ),
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 50.h,
-                        child: Center(
-                          child: Text(
-                            isEdit ? "Update record" : "Add record",
-                            style: TextStyle(
-                              fontSize: 18.sp,
-                              color: Colors.white,
-                            ),
+                      Container(
+                        margin: EdgeInsets.only(top: 20.h, bottom: 10.h),
+                        child: Text(
+                          "Record information",
+                          style: TextStyle(
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ),
-                    ),
-                  ],
+
+                      Container(
+                        margin: EdgeInsets.only(bottom: 10.h),
+                        child: Custominputformfield(
+                          label: "Catalogue",
+                          controller: catalogueController,
+                          enabled: false,
+                        ),
+                      ),
+
+                      Container(
+                        margin: EdgeInsets.only(bottom: 10.h),
+                        child: Custominputformfield(
+                          label: "Name",
+                          controller: nameController,
+                          enabled: false,
+                        ),
+                      ),
+
+                      Container(
+                        margin: EdgeInsets.only(bottom: 10.h),
+                        child: NotiferDateTimeInputField(
+                          label: "Date & Time",
+                          notifier: dateTimeNotifier,
+                        ),
+                      ),
+
+                      Container(
+                        margin: EdgeInsets.only(bottom: 25.h),
+                        child: Custominputformfield(
+                          label: "Amount",
+                          controller: amountController,
+                          validator: validateAmount,
+                          keyboardType: TextInputType.number,
+                        ),
+                      ),
+
+                      ElevatedButton(
+                        onPressed: _handleButtonPress,
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                            Colors.black,
+                          ),
+                        ),
+                        child: SizedBox(
+                          width: double.infinity,
+                          height: 50.h,
+                          child: Center(
+                            child: Text(
+                              isEdit ? "Update record" : "Add record",
+                              style: TextStyle(
+                                fontSize: 18.sp,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
