@@ -29,7 +29,7 @@ IconData getRecordIcon(String name) {
     case "Medical":
       return Icons.medical_information_outlined;
     case "Grooming":
-      return Icons.health_and_safety_outlined;
+      return Icons.spa_outlined;
     default:
       return Icons.question_mark_rounded;
   }
@@ -58,7 +58,7 @@ class _RecordState extends State<Record> with TickerProviderStateMixin {
     RecordItem(icon: Icons.vaccines_outlined, name: "Vaccinations"),
     RecordItem(icon: Icons.toys_outlined, name: "Supplies"),
     RecordItem(icon: Icons.medical_information_outlined, name: "Medical"),
-    RecordItem(icon: Icons.health_and_safety_outlined, name: "Grooming"),
+    RecordItem(icon: Icons.spa_outlined, name: "Grooming"),
   ];
 
   int _currentTabIndex = 0;

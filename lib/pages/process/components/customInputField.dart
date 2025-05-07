@@ -11,6 +11,7 @@ class CustomInputField extends StatelessWidget {
   final bool? obscureText;
   final int errorMaxLines;
   final int? maxlength;
+  final AutovalidateMode? autovalidateMode;
 
   const CustomInputField({
     super.key,
@@ -23,6 +24,7 @@ class CustomInputField extends StatelessWidget {
     this.obscureText = false,
     this.errorMaxLines = 3,
     this.maxlength,
+    this.autovalidateMode = AutovalidateMode.onUnfocus,
   });
 
   @override
@@ -41,6 +43,7 @@ class CustomInputField extends StatelessWidget {
       keyboardType: keyboardType,
       validator: validator,
       maxLength: maxlength,
+      autovalidateMode: autovalidateMode,
     );
   }
 }

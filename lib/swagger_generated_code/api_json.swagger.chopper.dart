@@ -78,12 +78,14 @@ final class _$ApiJson extends ApiJson {
   }
 
   @override
-  Future<Response<CatDto>> _catsCodePost() {
+  Future<Response<CatDto>> _catsCodePost({required String? body}) {
     final Uri $url = Uri.parse('/cats/code');
+    final $body = body;
     final Request $request = Request(
       'POST',
       $url,
       client.baseUrl,
+      body: $body,
     );
     return client.send<CatDto, CatDto>($request);
   }
@@ -203,6 +205,71 @@ final class _$ApiJson extends ApiJson {
   @override
   Future<Response<dynamic>> _recordsIdDelete({required String? id}) {
     final Uri $url = Uri.parse('/records/${id}');
+    final Request $request = Request(
+      'DELETE',
+      $url,
+      client.baseUrl,
+    );
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
+  Future<Response<TodoDto>> _todoCatIdPost({
+    required String? catId,
+    required CreateTodoDto? body,
+  }) {
+    final Uri $url = Uri.parse('/todo/${catId}');
+    final $body = body;
+    final Request $request = Request(
+      'POST',
+      $url,
+      client.baseUrl,
+      body: $body,
+    );
+    return client.send<TodoDto, TodoDto>($request);
+  }
+
+  @override
+  Future<Response<List<TodoDto>>> _todoCatIdGet({required String? catId}) {
+    final Uri $url = Uri.parse('/todo/${catId}');
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+    );
+    return client.send<List<TodoDto>, TodoDto>($request);
+  }
+
+  @override
+  Future<Response<TodoDto>> _todoDetailIdGet({required String? id}) {
+    final Uri $url = Uri.parse('/todo/detail/${id}');
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+    );
+    return client.send<TodoDto, TodoDto>($request);
+  }
+
+  @override
+  Future<Response<TodoDto>> _todoIdPatch({
+    required String? id,
+    required UpdateTodoDto? body,
+  }) {
+    final Uri $url = Uri.parse('/todo/${id}');
+    final $body = body;
+    final Request $request = Request(
+      'PATCH',
+      $url,
+      client.baseUrl,
+      body: $body,
+    );
+    return client.send<TodoDto, TodoDto>($request);
+  }
+
+  @override
+  Future<Response<dynamic>> _todoIdDelete({required String? id}) {
+    final Uri $url = Uri.parse('/todo/${id}');
     final Request $request = Request(
       'DELETE',
       $url,

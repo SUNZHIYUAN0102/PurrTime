@@ -34,14 +34,8 @@ class _CatState extends State<Cat> {
   String birth = "";
   ValueNotifier<String> birthNotifier = ValueNotifier<String>("");
 
-  String weight = "";
-  ValueNotifier<String> weightNotifier = ValueNotifier<String>("");
-
   String breed = "";
   ValueNotifier<String> breedNotifier = ValueNotifier<String>("");
-
-  String length = "";
-  ValueNotifier<String> lengthNotifier = ValueNotifier<String>("");
 
   String insuranceProvider = "";
   ValueNotifier<String> insuranceProviderNotifier = ValueNotifier<String>("");
@@ -55,7 +49,6 @@ class _CatState extends State<Cat> {
 
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _codeController = TextEditingController();
-  final FocusNode _codeFocusNode = FocusNode();
 
   @override
   void initState() {
@@ -84,21 +77,9 @@ class _CatState extends State<Cat> {
       });
     });
 
-    weightNotifier.addListener(() {
-      setState(() {
-        weight = weightNotifier.value;
-      });
-    });
-
     breedNotifier.addListener(() {
       setState(() {
         breed = breedNotifier.value;
-      });
-    });
-
-    lengthNotifier.addListener(() {
-      setState(() {
-        length = lengthNotifier.value;
       });
     });
 
@@ -115,12 +96,6 @@ class _CatState extends State<Cat> {
     });
 
     _scrollController.addListener(_handleScroll);
-
-    _codeFocusNode.addListener(() {
-      if (!_codeFocusNode.hasFocus) {
-        _formKey.currentState?.validate();
-      }
-    });
   }
 
   @override
@@ -130,16 +105,13 @@ class _CatState extends State<Cat> {
 
     nameNotifier.dispose();
     birthNotifier.dispose();
-    weightNotifier.dispose();
     breedNotifier.dispose();
-    lengthNotifier.dispose();
     insuranceProviderNotifier.dispose();
     insuranceNumberNotifier.dispose();
     _scrollController.removeListener(_handleScroll);
     _scrollController.dispose();
 
     _codeController.dispose();
-    _codeFocusNode.dispose();
     _formKey.currentState?.dispose();
   }
 
@@ -163,24 +135,13 @@ class _CatState extends State<Cat> {
       nameNotifier.value = name;
 
       gender = res.gender;
-
       catPhoto = res.image;
 
       birth = res.birth.toString();
       birthNotifier.value = birth;
 
-      weight = res.weight.toString();
-      weightNotifier.value = weight;
-
       breed = res.breed;
       breedNotifier.value = breed;
-
-      if (res.length != null) {
-        length = res.length.toString();
-      } else {
-        length = "";
-      }
-      lengthNotifier.value = length;
 
       insuranceProvider = res.insuranceNumber ?? "";
       insuranceProviderNotifier.value = insuranceProvider;
@@ -203,11 +164,6 @@ class _CatState extends State<Cat> {
 
     if (birth.isEmpty) {
       Get.snackbar("Error", "Please enter cat birth date");
-      return;
-    }
-
-    if (weight.isEmpty) {
-      Get.snackbar("Error", "Please enter cat weight");
       return;
     }
 
@@ -249,8 +205,6 @@ class _CatState extends State<Cat> {
           gender: gender,
           breed: breed,
           birth: DateFormat("yyyy-MM-dd HH:mm").parse(birth, false).toUtc(),
-          length: length.isEmpty ? null : double.parse(length),
-          weight: double.parse(weight),
           insuranceProvider: insuranceProvider,
           insuranceNumber: insuranceNumber,
         ),
@@ -292,8 +246,6 @@ class _CatState extends State<Cat> {
           gender: gender,
           breed: breed,
           birth: DateFormat("yyyy-MM-dd HH:mm").parse(birth, false).toUtc(),
-          length: length.isEmpty ? null : double.parse(length),
-          weight: double.parse(weight),
           insuranceProvider: insuranceProvider,
           insuranceNumber: insuranceNumber,
         ),
@@ -341,6 +293,10 @@ class _CatState extends State<Cat> {
   String? _validateCode(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter a code';
+    }
+
+    if (value.length < 6) {
+      return 'Code must be at least 6 characters long';
     }
     return null;
   }
@@ -460,17 +416,6 @@ class _CatState extends State<Cat> {
                       ),
                     ),
 
-                    // Cat weight
-                    Container(
-                      margin: EdgeInsets.only(bottom: 10.h),
-                      child: NotifierInputField(
-                        label: "Weight*",
-                        notifier: weightNotifier,
-                        keyboardType: TextInputType.text,
-                        hintText: "Enter cat weight",
-                      ),
-                    ),
-
                     // Cat breed
                     Container(
                       margin: EdgeInsets.only(bottom: 10.h),
@@ -545,17 +490,6 @@ class _CatState extends State<Cat> {
                             ],
                           ),
                         ],
-                      ),
-                    ),
-
-                    //Cat length
-                    Container(
-                      margin: EdgeInsets.only(bottom: 10.h),
-                      child: NotifierInputField(
-                        label: "Length (centimeters)",
-                        notifier: lengthNotifier,
-                        keyboardType: TextInputType.number,
-                        hintText: "Enter cat length",
                       ),
                     ),
 
@@ -649,7 +583,6 @@ class _CatState extends State<Cat> {
                   key: _formKey,
                   child: CustomInputField(
                     controller: _codeController,
-                    focusNode: _codeFocusNode,
                     hintText: "Enter cat code",
                     keyboardType: TextInputType.number,
                     validator: _validateCode,

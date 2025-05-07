@@ -38,8 +38,6 @@ CreateCatDto _$CreateCatDtoFromJson(Map<String, dynamic> json) => CreateCatDto(
       breed: json['breed'] as String,
       birth: DateTime.parse(json['birth'] as String),
       image: json['image'] as String,
-      weight: (json['weight'] as num).toDouble(),
-      length: (json['length'] as num?)?.toDouble(),
       insuranceProvider: json['insuranceProvider'] as String?,
       insuranceNumber: json['insuranceNumber'] as String?,
     );
@@ -51,8 +49,6 @@ Map<String, dynamic> _$CreateCatDtoToJson(CreateCatDto instance) =>
       'breed': instance.breed,
       'birth': instance.birth.toIso8601String(),
       'image': instance.image,
-      'weight': instance.weight,
-      'length': instance.length,
       'insuranceProvider': instance.insuranceProvider,
       'insuranceNumber': instance.insuranceNumber,
     };
@@ -64,8 +60,6 @@ CatDto _$CatDtoFromJson(Map<String, dynamic> json) => CatDto(
       breed: json['breed'] as String,
       birth: DateTime.parse(json['birth'] as String),
       image: json['image'] as String,
-      weight: (json['weight'] as num).toDouble(),
-      length: (json['length'] as num?)?.toDouble(),
       insuranceProvider: json['insuranceProvider'] as String?,
       insuranceNumber: json['insuranceNumber'] as String?,
       code: json['code'] as String,
@@ -78,8 +72,6 @@ Map<String, dynamic> _$CatDtoToJson(CatDto instance) => <String, dynamic>{
       'breed': instance.breed,
       'birth': instance.birth.toIso8601String(),
       'image': instance.image,
-      'weight': instance.weight,
-      'length': instance.length,
       'insuranceProvider': instance.insuranceProvider,
       'insuranceNumber': instance.insuranceNumber,
       'code': instance.code,
@@ -91,8 +83,6 @@ UpdateCatDto _$UpdateCatDtoFromJson(Map<String, dynamic> json) => UpdateCatDto(
       breed: json['breed'] as String,
       birth: DateTime.parse(json['birth'] as String),
       image: json['image'] as String,
-      weight: (json['weight'] as num).toDouble(),
-      length: (json['length'] as num?)?.toDouble(),
       insuranceProvider: json['insuranceProvider'] as String?,
       insuranceNumber: json['insuranceNumber'] as String?,
     );
@@ -104,8 +94,6 @@ Map<String, dynamic> _$UpdateCatDtoToJson(UpdateCatDto instance) =>
       'breed': instance.breed,
       'birth': instance.birth.toIso8601String(),
       'image': instance.image,
-      'weight': instance.weight,
-      'length': instance.length,
       'insuranceProvider': instance.insuranceProvider,
       'insuranceNumber': instance.insuranceNumber,
     };
@@ -181,4 +169,53 @@ Map<String, dynamic> _$UpdateRecordDtoToJson(UpdateRecordDto instance) =>
       'name': instance.name,
       'date': instance.date?.toIso8601String(),
       'value': instance.$value,
+    };
+
+CreateTodoDto _$CreateTodoDtoFromJson(Map<String, dynamic> json) =>
+    CreateTodoDto(
+      title: json['title'] as String,
+      description: json['description'] as String,
+      date: DateTime.parse(json['date'] as String),
+      isCompleted: json['isCompleted'] as bool,
+    );
+
+Map<String, dynamic> _$CreateTodoDtoToJson(CreateTodoDto instance) =>
+    <String, dynamic>{
+      'title': instance.title,
+      'description': instance.description,
+      'date': instance.date.toIso8601String(),
+      'isCompleted': instance.isCompleted,
+    };
+
+TodoDto _$TodoDtoFromJson(Map<String, dynamic> json) => TodoDto(
+      id: json['id'] as String,
+      title: json['title'] as String,
+      description: json['description'] as String,
+      date: DateTime.parse(json['date'] as String),
+      isCompleted: json['isCompleted'] as bool,
+    );
+
+Map<String, dynamic> _$TodoDtoToJson(TodoDto instance) => <String, dynamic>{
+      'id': instance.id,
+      'title': instance.title,
+      'description': instance.description,
+      'date': instance.date.toIso8601String(),
+      'isCompleted': instance.isCompleted,
+    };
+
+UpdateTodoDto _$UpdateTodoDtoFromJson(Map<String, dynamic> json) =>
+    UpdateTodoDto(
+      title: json['title'] as String?,
+      description: json['description'] as String?,
+      date:
+          json['date'] == null ? null : DateTime.parse(json['date'] as String),
+      isCompleted: json['isCompleted'] as bool?,
+    );
+
+Map<String, dynamic> _$UpdateTodoDtoToJson(UpdateTodoDto instance) =>
+    <String, dynamic>{
+      'title': instance.title,
+      'description': instance.description,
+      'date': instance.date?.toIso8601String(),
+      'isCompleted': instance.isCompleted,
     };

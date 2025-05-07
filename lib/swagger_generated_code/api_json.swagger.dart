@@ -38,14 +38,13 @@ abstract class ApiJson extends ChopperService {
     }
 
     final newClient = ChopperClient(
-      services: [_$ApiJson()],
-      converter: converter ?? $JsonSerializableConverter(),
-      interceptors: interceptors ?? [],
-      client: httpClient,
-      authenticator: authenticator,
-      errorConverter: errorConverter,
-      baseUrl: baseUrl ?? Uri.parse('http://'),
-    );
+        services: [_$ApiJson()],
+        converter: converter ?? $JsonSerializableConverter(),
+        interceptors: interceptors ?? [],
+        client: httpClient,
+        authenticator: authenticator,
+        errorConverter: errorConverter,
+        baseUrl: baseUrl ?? Uri.parse('http://'));
     return _$ApiJson(newClient);
   }
 
@@ -77,10 +76,12 @@ abstract class ApiJson extends ChopperService {
   }
 
   ///
-  @Patch(path: '/users', optionalBody: true)
-  Future<chopper.Response<UserDto>> _usersPatch({
-    @Body() required UpdateUserDto? body,
-  });
+  @Patch(
+    path: '/users',
+    optionalBody: true,
+  )
+  Future<chopper.Response<UserDto>> _usersPatch(
+      {@Body() required UpdateUserDto? body});
 
   ///
   Future<chopper.Response<CatDto>> catsPost({required CreateCatDto? body}) {
@@ -90,10 +91,12 @@ abstract class ApiJson extends ChopperService {
   }
 
   ///
-  @Post(path: '/cats', optionalBody: true)
-  Future<chopper.Response<CatDto>> _catsPost({
-    @Body() required CreateCatDto? body,
-  });
+  @Post(
+    path: '/cats',
+    optionalBody: true,
+  )
+  Future<chopper.Response<CatDto>> _catsPost(
+      {@Body() required CreateCatDto? body});
 
   ///
   Future<chopper.Response<List<CatDto>>> catsGet() {
@@ -107,15 +110,19 @@ abstract class ApiJson extends ChopperService {
   Future<chopper.Response<List<CatDto>>> _catsGet();
 
   ///
-  Future<chopper.Response<CatDto>> catsCodePost() {
+  Future<chopper.Response<CatDto>> catsCodePost({required String? body}) {
     generatedMapping.putIfAbsent(CatDto, () => CatDto.fromJsonFactory);
 
-    return _catsCodePost();
+    return _catsCodePost(body: body);
   }
 
   ///
-  @Post(path: '/cats/code', optionalBody: true)
-  Future<chopper.Response<CatDto>> _catsCodePost();
+  @Post(
+    path: '/cats/code',
+    optionalBody: true,
+  )
+  Future<chopper.Response<CatDto>> _catsCodePost(
+      {@Body() required String? body});
 
   ///
   ///@param id
@@ -128,9 +135,8 @@ abstract class ApiJson extends ChopperService {
   ///
   ///@param id
   @Get(path: '/cats/{id}')
-  Future<chopper.Response<CatDto>> _catsIdGet({
-    @Path('id') required String? id,
-  });
+  Future<chopper.Response<CatDto>> _catsIdGet(
+      {@Path('id') required String? id});
 
   ///
   ///@param id
@@ -145,7 +151,10 @@ abstract class ApiJson extends ChopperService {
 
   ///
   ///@param id
-  @Patch(path: '/cats/{id}', optionalBody: true)
+  @Patch(
+    path: '/cats/{id}',
+    optionalBody: true,
+  )
   Future<chopper.Response<CatDto>> _catsIdPatch({
     @Path('id') required String? id,
     @Body() required UpdateCatDto? body,
@@ -160,39 +169,40 @@ abstract class ApiJson extends ChopperService {
   ///
   ///@param id
   @Delete(path: '/cats/{id}')
-  Future<chopper.Response<Object>> _catsIdDelete({
-    @Path('id') required String? id,
-  });
+  Future<chopper.Response<Object>> _catsIdDelete(
+      {@Path('id') required String? id});
 
   ///
-  Future<chopper.Response<AuthDto>> authLoginPost({
-    required CreateUserDto? body,
-  }) {
+  Future<chopper.Response<AuthDto>> authLoginPost(
+      {required CreateUserDto? body}) {
     generatedMapping.putIfAbsent(AuthDto, () => AuthDto.fromJsonFactory);
 
     return _authLoginPost(body: body);
   }
 
   ///
-  @Post(path: '/auth/login', optionalBody: true)
-  Future<chopper.Response<AuthDto>> _authLoginPost({
-    @Body() required CreateUserDto? body,
-  });
+  @Post(
+    path: '/auth/login',
+    optionalBody: true,
+  )
+  Future<chopper.Response<AuthDto>> _authLoginPost(
+      {@Body() required CreateUserDto? body});
 
   ///
-  Future<chopper.Response<AuthDto>> authRegisterPost({
-    required CreateUserDto? body,
-  }) {
+  Future<chopper.Response<AuthDto>> authRegisterPost(
+      {required CreateUserDto? body}) {
     generatedMapping.putIfAbsent(AuthDto, () => AuthDto.fromJsonFactory);
 
     return _authRegisterPost(body: body);
   }
 
   ///
-  @Post(path: '/auth/register', optionalBody: true)
-  Future<chopper.Response<AuthDto>> _authRegisterPost({
-    @Body() required CreateUserDto? body,
-  });
+  @Post(
+    path: '/auth/register',
+    optionalBody: true,
+  )
+  Future<chopper.Response<AuthDto>> _authRegisterPost(
+      {@Body() required CreateUserDto? body});
 
   ///
   ///@param catId
@@ -207,7 +217,10 @@ abstract class ApiJson extends ChopperService {
 
   ///
   ///@param catId
-  @Post(path: '/records/{catId}', optionalBody: true)
+  @Post(
+    path: '/records/{catId}',
+    optionalBody: true,
+  )
   Future<chopper.Response<RecordDto>> _recordsCatIdPost({
     @Path('catId') required String? catId,
     @Body() required CreateRecordDto? body,
@@ -247,7 +260,10 @@ abstract class ApiJson extends ChopperService {
 
   ///
   ///@param id
-  @Patch(path: '/records/{id}', optionalBody: true)
+  @Patch(
+    path: '/records/{id}',
+    optionalBody: true,
+  )
   Future<chopper.Response<RecordDto>> _recordsIdPatch({
     @Path('id') required String? id,
     @Body() required UpdateRecordDto? body,
@@ -263,6 +279,90 @@ abstract class ApiJson extends ChopperService {
   ///@param id
   @Delete(path: '/records/{id}')
   Future<chopper.Response> _recordsIdDelete({@Path('id') required String? id});
+
+  ///
+  ///@param catId
+  Future<chopper.Response<TodoDto>> todoCatIdPost({
+    required String? catId,
+    required CreateTodoDto? body,
+  }) {
+    generatedMapping.putIfAbsent(TodoDto, () => TodoDto.fromJsonFactory);
+
+    return _todoCatIdPost(catId: catId, body: body);
+  }
+
+  ///
+  ///@param catId
+  @Post(
+    path: '/todo/{catId}',
+    optionalBody: true,
+  )
+  Future<chopper.Response<TodoDto>> _todoCatIdPost({
+    @Path('catId') required String? catId,
+    @Body() required CreateTodoDto? body,
+  });
+
+  ///
+  ///@param catId
+  Future<chopper.Response<List<TodoDto>>> todoCatIdGet(
+      {required String? catId}) {
+    generatedMapping.putIfAbsent(TodoDto, () => TodoDto.fromJsonFactory);
+
+    return _todoCatIdGet(catId: catId);
+  }
+
+  ///
+  ///@param catId
+  @Get(path: '/todo/{catId}')
+  Future<chopper.Response<List<TodoDto>>> _todoCatIdGet(
+      {@Path('catId') required String? catId});
+
+  ///
+  ///@param id
+  Future<chopper.Response<TodoDto>> todoDetailIdGet({required String? id}) {
+    generatedMapping.putIfAbsent(TodoDto, () => TodoDto.fromJsonFactory);
+
+    return _todoDetailIdGet(id: id);
+  }
+
+  ///
+  ///@param id
+  @Get(path: '/todo/detail/{id}')
+  Future<chopper.Response<TodoDto>> _todoDetailIdGet(
+      {@Path('id') required String? id});
+
+  ///
+  ///@param id
+  Future<chopper.Response<TodoDto>> todoIdPatch({
+    required String? id,
+    required UpdateTodoDto? body,
+  }) {
+    generatedMapping.putIfAbsent(TodoDto, () => TodoDto.fromJsonFactory);
+
+    return _todoIdPatch(id: id, body: body);
+  }
+
+  ///
+  ///@param id
+  @Patch(
+    path: '/todo/{id}',
+    optionalBody: true,
+  )
+  Future<chopper.Response<TodoDto>> _todoIdPatch({
+    @Path('id') required String? id,
+    @Body() required UpdateTodoDto? body,
+  });
+
+  ///
+  ///@param id
+  Future<chopper.Response> todoIdDelete({required String? id}) {
+    return _todoIdDelete(id: id);
+  }
+
+  ///
+  ///@param id
+  @Delete(path: '/todo/{id}')
+  Future<chopper.Response> _todoIdDelete({@Path('id') required String? id});
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -299,10 +399,8 @@ class UserDto {
             (identical(other.email, email) ||
                 const DeepCollectionEquality().equals(other.email, email)) &&
             (identical(other.username, username) ||
-                const DeepCollectionEquality().equals(
-                  other.username,
-                  username,
-                )) &&
+                const DeepCollectionEquality()
+                    .equals(other.username, username)) &&
             (identical(other.avatar, avatar) ||
                 const DeepCollectionEquality().equals(other.avatar, avatar)));
   }
@@ -320,38 +418,34 @@ class UserDto {
 }
 
 extension $UserDtoExtension on UserDto {
-  UserDto copyWith({
-    String? id,
-    String? email,
-    String? username,
-    String? avatar,
-  }) {
+  UserDto copyWith(
+      {String? id, String? email, String? username, String? avatar}) {
     return UserDto(
-      id: id ?? this.id,
-      email: email ?? this.email,
-      username: username ?? this.username,
-      avatar: avatar ?? this.avatar,
-    );
+        id: id ?? this.id,
+        email: email ?? this.email,
+        username: username ?? this.username,
+        avatar: avatar ?? this.avatar);
   }
 
-  UserDto copyWithWrapped({
-    Wrapped<String>? id,
-    Wrapped<String>? email,
-    Wrapped<String?>? username,
-    Wrapped<String?>? avatar,
-  }) {
+  UserDto copyWithWrapped(
+      {Wrapped<String>? id,
+      Wrapped<String>? email,
+      Wrapped<String?>? username,
+      Wrapped<String?>? avatar}) {
     return UserDto(
-      id: (id != null ? id.value : this.id),
-      email: (email != null ? email.value : this.email),
-      username: (username != null ? username.value : this.username),
-      avatar: (avatar != null ? avatar.value : this.avatar),
-    );
+        id: (id != null ? id.value : this.id),
+        email: (email != null ? email.value : this.email),
+        username: (username != null ? username.value : this.username),
+        avatar: (avatar != null ? avatar.value : this.avatar));
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class UpdateUserDto {
-  const UpdateUserDto({this.username, this.avatar});
+  const UpdateUserDto({
+    this.username,
+    this.avatar,
+  });
 
   factory UpdateUserDto.fromJson(Map<String, dynamic> json) =>
       _$UpdateUserDtoFromJson(json);
@@ -370,10 +464,8 @@ class UpdateUserDto {
     return identical(this, other) ||
         (other is UpdateUserDto &&
             (identical(other.username, username) ||
-                const DeepCollectionEquality().equals(
-                  other.username,
-                  username,
-                )) &&
+                const DeepCollectionEquality()
+                    .equals(other.username, username)) &&
             (identical(other.avatar, avatar) ||
                 const DeepCollectionEquality().equals(other.avatar, avatar)));
   }
@@ -391,19 +483,14 @@ class UpdateUserDto {
 extension $UpdateUserDtoExtension on UpdateUserDto {
   UpdateUserDto copyWith({String? username, String? avatar}) {
     return UpdateUserDto(
-      username: username ?? this.username,
-      avatar: avatar ?? this.avatar,
-    );
+        username: username ?? this.username, avatar: avatar ?? this.avatar);
   }
 
-  UpdateUserDto copyWithWrapped({
-    Wrapped<String?>? username,
-    Wrapped<String?>? avatar,
-  }) {
+  UpdateUserDto copyWithWrapped(
+      {Wrapped<String?>? username, Wrapped<String?>? avatar}) {
     return UpdateUserDto(
-      username: (username != null ? username.value : this.username),
-      avatar: (avatar != null ? avatar.value : this.avatar),
-    );
+        username: (username != null ? username.value : this.username),
+        avatar: (avatar != null ? avatar.value : this.avatar));
   }
 }
 
@@ -415,8 +502,6 @@ class CreateCatDto {
     required this.breed,
     required this.birth,
     required this.image,
-    required this.weight,
-    this.length,
     this.insuranceProvider,
     this.insuranceNumber,
   });
@@ -437,10 +522,6 @@ class CreateCatDto {
   final DateTime birth;
   @JsonKey(name: 'image')
   final String image;
-  @JsonKey(name: 'weight')
-  final double weight;
-  @JsonKey(name: 'length')
-  final double? length;
   @JsonKey(name: 'insuranceProvider')
   final String? insuranceProvider;
   @JsonKey(name: 'insuranceNumber')
@@ -461,20 +542,12 @@ class CreateCatDto {
                 const DeepCollectionEquality().equals(other.birth, birth)) &&
             (identical(other.image, image) ||
                 const DeepCollectionEquality().equals(other.image, image)) &&
-            (identical(other.weight, weight) ||
-                const DeepCollectionEquality().equals(other.weight, weight)) &&
-            (identical(other.length, length) ||
-                const DeepCollectionEquality().equals(other.length, length)) &&
             (identical(other.insuranceProvider, insuranceProvider) ||
-                const DeepCollectionEquality().equals(
-                  other.insuranceProvider,
-                  insuranceProvider,
-                )) &&
+                const DeepCollectionEquality()
+                    .equals(other.insuranceProvider, insuranceProvider)) &&
             (identical(other.insuranceNumber, insuranceNumber) ||
-                const DeepCollectionEquality().equals(
-                  other.insuranceNumber,
-                  insuranceNumber,
-                )));
+                const DeepCollectionEquality()
+                    .equals(other.insuranceNumber, insuranceNumber)));
   }
 
   @override
@@ -487,66 +560,50 @@ class CreateCatDto {
       const DeepCollectionEquality().hash(breed) ^
       const DeepCollectionEquality().hash(birth) ^
       const DeepCollectionEquality().hash(image) ^
-      const DeepCollectionEquality().hash(weight) ^
-      const DeepCollectionEquality().hash(length) ^
       const DeepCollectionEquality().hash(insuranceProvider) ^
       const DeepCollectionEquality().hash(insuranceNumber) ^
       runtimeType.hashCode;
 }
 
 extension $CreateCatDtoExtension on CreateCatDto {
-  CreateCatDto copyWith({
-    String? name,
-    String? gender,
-    String? breed,
-    DateTime? birth,
-    String? image,
-    double? weight,
-    double? length,
-    String? insuranceProvider,
-    String? insuranceNumber,
-  }) {
+  CreateCatDto copyWith(
+      {String? name,
+      String? gender,
+      String? breed,
+      DateTime? birth,
+      String? image,
+      String? insuranceProvider,
+      String? insuranceNumber}) {
     return CreateCatDto(
-      name: name ?? this.name,
-      gender: gender ?? this.gender,
-      breed: breed ?? this.breed,
-      birth: birth ?? this.birth,
-      image: image ?? this.image,
-      weight: weight ?? this.weight,
-      length: length ?? this.length,
-      insuranceProvider: insuranceProvider ?? this.insuranceProvider,
-      insuranceNumber: insuranceNumber ?? this.insuranceNumber,
-    );
+        name: name ?? this.name,
+        gender: gender ?? this.gender,
+        breed: breed ?? this.breed,
+        birth: birth ?? this.birth,
+        image: image ?? this.image,
+        insuranceProvider: insuranceProvider ?? this.insuranceProvider,
+        insuranceNumber: insuranceNumber ?? this.insuranceNumber);
   }
 
-  CreateCatDto copyWithWrapped({
-    Wrapped<String>? name,
-    Wrapped<String>? gender,
-    Wrapped<String>? breed,
-    Wrapped<DateTime>? birth,
-    Wrapped<String>? image,
-    Wrapped<double>? weight,
-    Wrapped<double?>? length,
-    Wrapped<String?>? insuranceProvider,
-    Wrapped<String?>? insuranceNumber,
-  }) {
+  CreateCatDto copyWithWrapped(
+      {Wrapped<String>? name,
+      Wrapped<String>? gender,
+      Wrapped<String>? breed,
+      Wrapped<DateTime>? birth,
+      Wrapped<String>? image,
+      Wrapped<String?>? insuranceProvider,
+      Wrapped<String?>? insuranceNumber}) {
     return CreateCatDto(
-      name: (name != null ? name.value : this.name),
-      gender: (gender != null ? gender.value : this.gender),
-      breed: (breed != null ? breed.value : this.breed),
-      birth: (birth != null ? birth.value : this.birth),
-      image: (image != null ? image.value : this.image),
-      weight: (weight != null ? weight.value : this.weight),
-      length: (length != null ? length.value : this.length),
-      insuranceProvider:
-          (insuranceProvider != null
-              ? insuranceProvider.value
-              : this.insuranceProvider),
-      insuranceNumber:
-          (insuranceNumber != null
-              ? insuranceNumber.value
-              : this.insuranceNumber),
-    );
+        name: (name != null ? name.value : this.name),
+        gender: (gender != null ? gender.value : this.gender),
+        breed: (breed != null ? breed.value : this.breed),
+        birth: (birth != null ? birth.value : this.birth),
+        image: (image != null ? image.value : this.image),
+        insuranceProvider: (insuranceProvider != null
+            ? insuranceProvider.value
+            : this.insuranceProvider),
+        insuranceNumber: (insuranceNumber != null
+            ? insuranceNumber.value
+            : this.insuranceNumber));
   }
 }
 
@@ -559,8 +616,6 @@ class CatDto {
     required this.breed,
     required this.birth,
     required this.image,
-    required this.weight,
-    this.length,
     this.insuranceProvider,
     this.insuranceNumber,
     required this.code,
@@ -583,10 +638,6 @@ class CatDto {
   final DateTime birth;
   @JsonKey(name: 'image')
   final String image;
-  @JsonKey(name: 'weight')
-  final double weight;
-  @JsonKey(name: 'length')
-  final double? length;
   @JsonKey(name: 'insuranceProvider')
   final String? insuranceProvider;
   @JsonKey(name: 'insuranceNumber')
@@ -611,20 +662,12 @@ class CatDto {
                 const DeepCollectionEquality().equals(other.birth, birth)) &&
             (identical(other.image, image) ||
                 const DeepCollectionEquality().equals(other.image, image)) &&
-            (identical(other.weight, weight) ||
-                const DeepCollectionEquality().equals(other.weight, weight)) &&
-            (identical(other.length, length) ||
-                const DeepCollectionEquality().equals(other.length, length)) &&
             (identical(other.insuranceProvider, insuranceProvider) ||
-                const DeepCollectionEquality().equals(
-                  other.insuranceProvider,
-                  insuranceProvider,
-                )) &&
+                const DeepCollectionEquality()
+                    .equals(other.insuranceProvider, insuranceProvider)) &&
             (identical(other.insuranceNumber, insuranceNumber) ||
-                const DeepCollectionEquality().equals(
-                  other.insuranceNumber,
-                  insuranceNumber,
-                )) &&
+                const DeepCollectionEquality()
+                    .equals(other.insuranceNumber, insuranceNumber)) &&
             (identical(other.code, code) ||
                 const DeepCollectionEquality().equals(other.code, code)));
   }
@@ -640,8 +683,6 @@ class CatDto {
       const DeepCollectionEquality().hash(breed) ^
       const DeepCollectionEquality().hash(birth) ^
       const DeepCollectionEquality().hash(image) ^
-      const DeepCollectionEquality().hash(weight) ^
-      const DeepCollectionEquality().hash(length) ^
       const DeepCollectionEquality().hash(insuranceProvider) ^
       const DeepCollectionEquality().hash(insuranceNumber) ^
       const DeepCollectionEquality().hash(code) ^
@@ -649,66 +690,52 @@ class CatDto {
 }
 
 extension $CatDtoExtension on CatDto {
-  CatDto copyWith({
-    String? id,
-    String? name,
-    String? gender,
-    String? breed,
-    DateTime? birth,
-    String? image,
-    double? weight,
-    double? length,
-    String? insuranceProvider,
-    String? insuranceNumber,
-    String? code,
-  }) {
+  CatDto copyWith(
+      {String? id,
+      String? name,
+      String? gender,
+      String? breed,
+      DateTime? birth,
+      String? image,
+      String? insuranceProvider,
+      String? insuranceNumber,
+      String? code}) {
     return CatDto(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      gender: gender ?? this.gender,
-      breed: breed ?? this.breed,
-      birth: birth ?? this.birth,
-      image: image ?? this.image,
-      weight: weight ?? this.weight,
-      length: length ?? this.length,
-      insuranceProvider: insuranceProvider ?? this.insuranceProvider,
-      insuranceNumber: insuranceNumber ?? this.insuranceNumber,
-      code: code ?? this.code,
-    );
+        id: id ?? this.id,
+        name: name ?? this.name,
+        gender: gender ?? this.gender,
+        breed: breed ?? this.breed,
+        birth: birth ?? this.birth,
+        image: image ?? this.image,
+        insuranceProvider: insuranceProvider ?? this.insuranceProvider,
+        insuranceNumber: insuranceNumber ?? this.insuranceNumber,
+        code: code ?? this.code);
   }
 
-  CatDto copyWithWrapped({
-    Wrapped<String>? id,
-    Wrapped<String>? name,
-    Wrapped<String>? gender,
-    Wrapped<String>? breed,
-    Wrapped<DateTime>? birth,
-    Wrapped<String>? image,
-    Wrapped<double>? weight,
-    Wrapped<double?>? length,
-    Wrapped<String?>? insuranceProvider,
-    Wrapped<String?>? insuranceNumber,
-    Wrapped<String>? code,
-  }) {
+  CatDto copyWithWrapped(
+      {Wrapped<String>? id,
+      Wrapped<String>? name,
+      Wrapped<String>? gender,
+      Wrapped<String>? breed,
+      Wrapped<DateTime>? birth,
+      Wrapped<String>? image,
+      Wrapped<String?>? insuranceProvider,
+      Wrapped<String?>? insuranceNumber,
+      Wrapped<String>? code}) {
     return CatDto(
-      id: (id != null ? id.value : this.id),
-      name: (name != null ? name.value : this.name),
-      gender: (gender != null ? gender.value : this.gender),
-      breed: (breed != null ? breed.value : this.breed),
-      birth: (birth != null ? birth.value : this.birth),
-      image: (image != null ? image.value : this.image),
-      weight: (weight != null ? weight.value : this.weight),
-      length: (length != null ? length.value : this.length),
-      insuranceProvider:
-          (insuranceProvider != null
-              ? insuranceProvider.value
-              : this.insuranceProvider),
-      insuranceNumber:
-          (insuranceNumber != null
-              ? insuranceNumber.value
-              : this.insuranceNumber),
-      code: (code != null ? code.value : this.code),
-    );
+        id: (id != null ? id.value : this.id),
+        name: (name != null ? name.value : this.name),
+        gender: (gender != null ? gender.value : this.gender),
+        breed: (breed != null ? breed.value : this.breed),
+        birth: (birth != null ? birth.value : this.birth),
+        image: (image != null ? image.value : this.image),
+        insuranceProvider: (insuranceProvider != null
+            ? insuranceProvider.value
+            : this.insuranceProvider),
+        insuranceNumber: (insuranceNumber != null
+            ? insuranceNumber.value
+            : this.insuranceNumber),
+        code: (code != null ? code.value : this.code));
   }
 }
 
@@ -720,8 +747,6 @@ class UpdateCatDto {
     required this.breed,
     required this.birth,
     required this.image,
-    required this.weight,
-    this.length,
     this.insuranceProvider,
     this.insuranceNumber,
   });
@@ -742,10 +767,6 @@ class UpdateCatDto {
   final DateTime birth;
   @JsonKey(name: 'image')
   final String image;
-  @JsonKey(name: 'weight')
-  final double weight;
-  @JsonKey(name: 'length')
-  final double? length;
   @JsonKey(name: 'insuranceProvider')
   final String? insuranceProvider;
   @JsonKey(name: 'insuranceNumber')
@@ -766,20 +787,12 @@ class UpdateCatDto {
                 const DeepCollectionEquality().equals(other.birth, birth)) &&
             (identical(other.image, image) ||
                 const DeepCollectionEquality().equals(other.image, image)) &&
-            (identical(other.weight, weight) ||
-                const DeepCollectionEquality().equals(other.weight, weight)) &&
-            (identical(other.length, length) ||
-                const DeepCollectionEquality().equals(other.length, length)) &&
             (identical(other.insuranceProvider, insuranceProvider) ||
-                const DeepCollectionEquality().equals(
-                  other.insuranceProvider,
-                  insuranceProvider,
-                )) &&
+                const DeepCollectionEquality()
+                    .equals(other.insuranceProvider, insuranceProvider)) &&
             (identical(other.insuranceNumber, insuranceNumber) ||
-                const DeepCollectionEquality().equals(
-                  other.insuranceNumber,
-                  insuranceNumber,
-                )));
+                const DeepCollectionEquality()
+                    .equals(other.insuranceNumber, insuranceNumber)));
   }
 
   @override
@@ -792,72 +805,59 @@ class UpdateCatDto {
       const DeepCollectionEquality().hash(breed) ^
       const DeepCollectionEquality().hash(birth) ^
       const DeepCollectionEquality().hash(image) ^
-      const DeepCollectionEquality().hash(weight) ^
-      const DeepCollectionEquality().hash(length) ^
       const DeepCollectionEquality().hash(insuranceProvider) ^
       const DeepCollectionEquality().hash(insuranceNumber) ^
       runtimeType.hashCode;
 }
 
 extension $UpdateCatDtoExtension on UpdateCatDto {
-  UpdateCatDto copyWith({
-    String? name,
-    String? gender,
-    String? breed,
-    DateTime? birth,
-    String? image,
-    double? weight,
-    double? length,
-    String? insuranceProvider,
-    String? insuranceNumber,
-  }) {
+  UpdateCatDto copyWith(
+      {String? name,
+      String? gender,
+      String? breed,
+      DateTime? birth,
+      String? image,
+      String? insuranceProvider,
+      String? insuranceNumber}) {
     return UpdateCatDto(
-      name: name ?? this.name,
-      gender: gender ?? this.gender,
-      breed: breed ?? this.breed,
-      birth: birth ?? this.birth,
-      image: image ?? this.image,
-      weight: weight ?? this.weight,
-      length: length ?? this.length,
-      insuranceProvider: insuranceProvider ?? this.insuranceProvider,
-      insuranceNumber: insuranceNumber ?? this.insuranceNumber,
-    );
+        name: name ?? this.name,
+        gender: gender ?? this.gender,
+        breed: breed ?? this.breed,
+        birth: birth ?? this.birth,
+        image: image ?? this.image,
+        insuranceProvider: insuranceProvider ?? this.insuranceProvider,
+        insuranceNumber: insuranceNumber ?? this.insuranceNumber);
   }
 
-  UpdateCatDto copyWithWrapped({
-    Wrapped<String>? name,
-    Wrapped<String>? gender,
-    Wrapped<String>? breed,
-    Wrapped<DateTime>? birth,
-    Wrapped<String>? image,
-    Wrapped<double>? weight,
-    Wrapped<double?>? length,
-    Wrapped<String?>? insuranceProvider,
-    Wrapped<String?>? insuranceNumber,
-  }) {
+  UpdateCatDto copyWithWrapped(
+      {Wrapped<String>? name,
+      Wrapped<String>? gender,
+      Wrapped<String>? breed,
+      Wrapped<DateTime>? birth,
+      Wrapped<String>? image,
+      Wrapped<String?>? insuranceProvider,
+      Wrapped<String?>? insuranceNumber}) {
     return UpdateCatDto(
-      name: (name != null ? name.value : this.name),
-      gender: (gender != null ? gender.value : this.gender),
-      breed: (breed != null ? breed.value : this.breed),
-      birth: (birth != null ? birth.value : this.birth),
-      image: (image != null ? image.value : this.image),
-      weight: (weight != null ? weight.value : this.weight),
-      length: (length != null ? length.value : this.length),
-      insuranceProvider:
-          (insuranceProvider != null
-              ? insuranceProvider.value
-              : this.insuranceProvider),
-      insuranceNumber:
-          (insuranceNumber != null
-              ? insuranceNumber.value
-              : this.insuranceNumber),
-    );
+        name: (name != null ? name.value : this.name),
+        gender: (gender != null ? gender.value : this.gender),
+        breed: (breed != null ? breed.value : this.breed),
+        birth: (birth != null ? birth.value : this.birth),
+        image: (image != null ? image.value : this.image),
+        insuranceProvider: (insuranceProvider != null
+            ? insuranceProvider.value
+            : this.insuranceProvider),
+        insuranceNumber: (insuranceNumber != null
+            ? insuranceNumber.value
+            : this.insuranceNumber));
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class CreateUserDto {
-  const CreateUserDto({required this.email, required this.password});
+  const CreateUserDto({
+    required this.email,
+    required this.password,
+  });
 
   factory CreateUserDto.fromJson(Map<String, dynamic> json) =>
       _$CreateUserDtoFromJson(json);
@@ -878,10 +878,8 @@ class CreateUserDto {
             (identical(other.email, email) ||
                 const DeepCollectionEquality().equals(other.email, email)) &&
             (identical(other.password, password) ||
-                const DeepCollectionEquality().equals(
-                  other.password,
-                  password,
-                )));
+                const DeepCollectionEquality()
+                    .equals(other.password, password)));
   }
 
   @override
@@ -897,25 +895,23 @@ class CreateUserDto {
 extension $CreateUserDtoExtension on CreateUserDto {
   CreateUserDto copyWith({String? email, String? password}) {
     return CreateUserDto(
-      email: email ?? this.email,
-      password: password ?? this.password,
-    );
+        email: email ?? this.email, password: password ?? this.password);
   }
 
-  CreateUserDto copyWithWrapped({
-    Wrapped<String>? email,
-    Wrapped<String>? password,
-  }) {
+  CreateUserDto copyWithWrapped(
+      {Wrapped<String>? email, Wrapped<String>? password}) {
     return CreateUserDto(
-      email: (email != null ? email.value : this.email),
-      password: (password != null ? password.value : this.password),
-    );
+        email: (email != null ? email.value : this.email),
+        password: (password != null ? password.value : this.password));
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class AuthDto {
-  const AuthDto({required this.token, required this.user});
+  const AuthDto({
+    required this.token,
+    required this.user,
+  });
 
   factory AuthDto.fromJson(Map<String, dynamic> json) =>
       _$AuthDtoFromJson(json);
@@ -956,9 +952,8 @@ extension $AuthDtoExtension on AuthDto {
 
   AuthDto copyWithWrapped({Wrapped<String>? token, Wrapped<UserDto>? user}) {
     return AuthDto(
-      token: (token != null ? token.value : this.token),
-      user: (user != null ? user.value : this.user),
-    );
+        token: (token != null ? token.value : this.token),
+        user: (user != null ? user.value : this.user));
   }
 }
 
@@ -996,10 +991,8 @@ class CreateRecordDto {
     return identical(this, other) ||
         (other is CreateRecordDto &&
             (identical(other.catalogue, catalogue) ||
-                const DeepCollectionEquality().equals(
-                  other.catalogue,
-                  catalogue,
-                )) &&
+                const DeepCollectionEquality()
+                    .equals(other.catalogue, catalogue)) &&
             (identical(other.name, name) ||
                 const DeepCollectionEquality().equals(other.name, name)) &&
             (identical(other.date, date) ||
@@ -1021,32 +1014,28 @@ class CreateRecordDto {
 }
 
 extension $CreateRecordDtoExtension on CreateRecordDto {
-  CreateRecordDto copyWith({
-    enums.CreateRecordDtoCatalogue? catalogue,
-    String? name,
-    DateTime? date,
-    double? $value,
-  }) {
+  CreateRecordDto copyWith(
+      {enums.CreateRecordDtoCatalogue? catalogue,
+      String? name,
+      DateTime? date,
+      double? $value}) {
     return CreateRecordDto(
-      catalogue: catalogue ?? this.catalogue,
-      name: name ?? this.name,
-      date: date ?? this.date,
-      $value: $value ?? this.$value,
-    );
+        catalogue: catalogue ?? this.catalogue,
+        name: name ?? this.name,
+        date: date ?? this.date,
+        $value: $value ?? this.$value);
   }
 
-  CreateRecordDto copyWithWrapped({
-    Wrapped<enums.CreateRecordDtoCatalogue>? catalogue,
-    Wrapped<String>? name,
-    Wrapped<DateTime>? date,
-    Wrapped<double>? $value,
-  }) {
+  CreateRecordDto copyWithWrapped(
+      {Wrapped<enums.CreateRecordDtoCatalogue>? catalogue,
+      Wrapped<String>? name,
+      Wrapped<DateTime>? date,
+      Wrapped<double>? $value}) {
     return CreateRecordDto(
-      catalogue: (catalogue != null ? catalogue.value : this.catalogue),
-      name: (name != null ? name.value : this.name),
-      date: (date != null ? date.value : this.date),
-      $value: ($value != null ? $value.value : this.$value),
-    );
+        catalogue: (catalogue != null ? catalogue.value : this.catalogue),
+        name: (name != null ? name.value : this.name),
+        date: (date != null ? date.value : this.date),
+        $value: ($value != null ? $value.value : this.$value));
   }
 }
 
@@ -1092,10 +1081,8 @@ class RecordDto {
             (identical(other.id, id) ||
                 const DeepCollectionEquality().equals(other.id, id)) &&
             (identical(other.catalogue, catalogue) ||
-                const DeepCollectionEquality().equals(
-                  other.catalogue,
-                  catalogue,
-                )) &&
+                const DeepCollectionEquality()
+                    .equals(other.catalogue, catalogue)) &&
             (identical(other.name, name) ||
                 const DeepCollectionEquality().equals(other.name, name)) &&
             (identical(other.date, date) ||
@@ -1121,46 +1108,47 @@ class RecordDto {
 }
 
 extension $RecordDtoExtension on RecordDto {
-  RecordDto copyWith({
-    String? id,
-    enums.RecordDtoCatalogue? catalogue,
-    String? name,
-    DateTime? date,
-    double? $value,
-    CatDto? cat,
-  }) {
+  RecordDto copyWith(
+      {String? id,
+      enums.RecordDtoCatalogue? catalogue,
+      String? name,
+      DateTime? date,
+      double? $value,
+      CatDto? cat}) {
     return RecordDto(
-      id: id ?? this.id,
-      catalogue: catalogue ?? this.catalogue,
-      name: name ?? this.name,
-      date: date ?? this.date,
-      $value: $value ?? this.$value,
-      cat: cat ?? this.cat,
-    );
+        id: id ?? this.id,
+        catalogue: catalogue ?? this.catalogue,
+        name: name ?? this.name,
+        date: date ?? this.date,
+        $value: $value ?? this.$value,
+        cat: cat ?? this.cat);
   }
 
-  RecordDto copyWithWrapped({
-    Wrapped<String>? id,
-    Wrapped<enums.RecordDtoCatalogue>? catalogue,
-    Wrapped<String>? name,
-    Wrapped<DateTime>? date,
-    Wrapped<double>? $value,
-    Wrapped<CatDto>? cat,
-  }) {
+  RecordDto copyWithWrapped(
+      {Wrapped<String>? id,
+      Wrapped<enums.RecordDtoCatalogue>? catalogue,
+      Wrapped<String>? name,
+      Wrapped<DateTime>? date,
+      Wrapped<double>? $value,
+      Wrapped<CatDto>? cat}) {
     return RecordDto(
-      id: (id != null ? id.value : this.id),
-      catalogue: (catalogue != null ? catalogue.value : this.catalogue),
-      name: (name != null ? name.value : this.name),
-      date: (date != null ? date.value : this.date),
-      $value: ($value != null ? $value.value : this.$value),
-      cat: (cat != null ? cat.value : this.cat),
-    );
+        id: (id != null ? id.value : this.id),
+        catalogue: (catalogue != null ? catalogue.value : this.catalogue),
+        name: (name != null ? name.value : this.name),
+        date: (date != null ? date.value : this.date),
+        $value: ($value != null ? $value.value : this.$value),
+        cat: (cat != null ? cat.value : this.cat));
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class UpdateRecordDto {
-  const UpdateRecordDto({this.catalogue, this.name, this.date, this.$value});
+  const UpdateRecordDto({
+    this.catalogue,
+    this.name,
+    this.date,
+    this.$value,
+  });
 
   factory UpdateRecordDto.fromJson(Map<String, dynamic> json) =>
       _$UpdateRecordDtoFromJson(json);
@@ -1187,10 +1175,8 @@ class UpdateRecordDto {
     return identical(this, other) ||
         (other is UpdateRecordDto &&
             (identical(other.catalogue, catalogue) ||
-                const DeepCollectionEquality().equals(
-                  other.catalogue,
-                  catalogue,
-                )) &&
+                const DeepCollectionEquality()
+                    .equals(other.catalogue, catalogue)) &&
             (identical(other.name, name) ||
                 const DeepCollectionEquality().equals(other.name, name)) &&
             (identical(other.date, date) ||
@@ -1212,44 +1198,285 @@ class UpdateRecordDto {
 }
 
 extension $UpdateRecordDtoExtension on UpdateRecordDto {
-  UpdateRecordDto copyWith({
-    enums.UpdateRecordDtoCatalogue? catalogue,
-    String? name,
-    DateTime? date,
-    double? $value,
-  }) {
+  UpdateRecordDto copyWith(
+      {enums.UpdateRecordDtoCatalogue? catalogue,
+      String? name,
+      DateTime? date,
+      double? $value}) {
     return UpdateRecordDto(
-      catalogue: catalogue ?? this.catalogue,
-      name: name ?? this.name,
-      date: date ?? this.date,
-      $value: $value ?? this.$value,
-    );
+        catalogue: catalogue ?? this.catalogue,
+        name: name ?? this.name,
+        date: date ?? this.date,
+        $value: $value ?? this.$value);
   }
 
-  UpdateRecordDto copyWithWrapped({
-    Wrapped<enums.UpdateRecordDtoCatalogue?>? catalogue,
-    Wrapped<String?>? name,
-    Wrapped<DateTime?>? date,
-    Wrapped<double?>? $value,
-  }) {
+  UpdateRecordDto copyWithWrapped(
+      {Wrapped<enums.UpdateRecordDtoCatalogue?>? catalogue,
+      Wrapped<String?>? name,
+      Wrapped<DateTime?>? date,
+      Wrapped<double?>? $value}) {
     return UpdateRecordDto(
-      catalogue: (catalogue != null ? catalogue.value : this.catalogue),
-      name: (name != null ? name.value : this.name),
-      date: (date != null ? date.value : this.date),
-      $value: ($value != null ? $value.value : this.$value),
-    );
+        catalogue: (catalogue != null ? catalogue.value : this.catalogue),
+        name: (name != null ? name.value : this.name),
+        date: (date != null ? date.value : this.date),
+        $value: ($value != null ? $value.value : this.$value));
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class CreateTodoDto {
+  const CreateTodoDto({
+    required this.title,
+    required this.description,
+    required this.date,
+    required this.isCompleted,
+  });
+
+  factory CreateTodoDto.fromJson(Map<String, dynamic> json) =>
+      _$CreateTodoDtoFromJson(json);
+
+  static const toJsonFactory = _$CreateTodoDtoToJson;
+  Map<String, dynamic> toJson() => _$CreateTodoDtoToJson(this);
+
+  @JsonKey(name: 'title')
+  final String title;
+  @JsonKey(name: 'description')
+  final String description;
+  @JsonKey(name: 'date')
+  final DateTime date;
+  @JsonKey(name: 'isCompleted')
+  final bool isCompleted;
+  static const fromJsonFactory = _$CreateTodoDtoFromJson;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is CreateTodoDto &&
+            (identical(other.title, title) ||
+                const DeepCollectionEquality().equals(other.title, title)) &&
+            (identical(other.description, description) ||
+                const DeepCollectionEquality()
+                    .equals(other.description, description)) &&
+            (identical(other.date, date) ||
+                const DeepCollectionEquality().equals(other.date, date)) &&
+            (identical(other.isCompleted, isCompleted) ||
+                const DeepCollectionEquality()
+                    .equals(other.isCompleted, isCompleted)));
+  }
+
+  @override
+  String toString() => jsonEncode(this);
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(title) ^
+      const DeepCollectionEquality().hash(description) ^
+      const DeepCollectionEquality().hash(date) ^
+      const DeepCollectionEquality().hash(isCompleted) ^
+      runtimeType.hashCode;
+}
+
+extension $CreateTodoDtoExtension on CreateTodoDto {
+  CreateTodoDto copyWith(
+      {String? title, String? description, DateTime? date, bool? isCompleted}) {
+    return CreateTodoDto(
+        title: title ?? this.title,
+        description: description ?? this.description,
+        date: date ?? this.date,
+        isCompleted: isCompleted ?? this.isCompleted);
+  }
+
+  CreateTodoDto copyWithWrapped(
+      {Wrapped<String>? title,
+      Wrapped<String>? description,
+      Wrapped<DateTime>? date,
+      Wrapped<bool>? isCompleted}) {
+    return CreateTodoDto(
+        title: (title != null ? title.value : this.title),
+        description:
+            (description != null ? description.value : this.description),
+        date: (date != null ? date.value : this.date),
+        isCompleted:
+            (isCompleted != null ? isCompleted.value : this.isCompleted));
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class TodoDto {
+  const TodoDto({
+    required this.id,
+    required this.title,
+    required this.description,
+    required this.date,
+    required this.isCompleted,
+  });
+
+  factory TodoDto.fromJson(Map<String, dynamic> json) =>
+      _$TodoDtoFromJson(json);
+
+  static const toJsonFactory = _$TodoDtoToJson;
+  Map<String, dynamic> toJson() => _$TodoDtoToJson(this);
+
+  @JsonKey(name: 'id')
+  final String id;
+  @JsonKey(name: 'title')
+  final String title;
+  @JsonKey(name: 'description')
+  final String description;
+  @JsonKey(name: 'date')
+  final DateTime date;
+  @JsonKey(name: 'isCompleted')
+  final bool isCompleted;
+  static const fromJsonFactory = _$TodoDtoFromJson;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is TodoDto &&
+            (identical(other.id, id) ||
+                const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.title, title) ||
+                const DeepCollectionEquality().equals(other.title, title)) &&
+            (identical(other.description, description) ||
+                const DeepCollectionEquality()
+                    .equals(other.description, description)) &&
+            (identical(other.date, date) ||
+                const DeepCollectionEquality().equals(other.date, date)) &&
+            (identical(other.isCompleted, isCompleted) ||
+                const DeepCollectionEquality()
+                    .equals(other.isCompleted, isCompleted)));
+  }
+
+  @override
+  String toString() => jsonEncode(this);
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(id) ^
+      const DeepCollectionEquality().hash(title) ^
+      const DeepCollectionEquality().hash(description) ^
+      const DeepCollectionEquality().hash(date) ^
+      const DeepCollectionEquality().hash(isCompleted) ^
+      runtimeType.hashCode;
+}
+
+extension $TodoDtoExtension on TodoDto {
+  TodoDto copyWith(
+      {String? id,
+      String? title,
+      String? description,
+      DateTime? date,
+      bool? isCompleted}) {
+    return TodoDto(
+        id: id ?? this.id,
+        title: title ?? this.title,
+        description: description ?? this.description,
+        date: date ?? this.date,
+        isCompleted: isCompleted ?? this.isCompleted);
+  }
+
+  TodoDto copyWithWrapped(
+      {Wrapped<String>? id,
+      Wrapped<String>? title,
+      Wrapped<String>? description,
+      Wrapped<DateTime>? date,
+      Wrapped<bool>? isCompleted}) {
+    return TodoDto(
+        id: (id != null ? id.value : this.id),
+        title: (title != null ? title.value : this.title),
+        description:
+            (description != null ? description.value : this.description),
+        date: (date != null ? date.value : this.date),
+        isCompleted:
+            (isCompleted != null ? isCompleted.value : this.isCompleted));
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class UpdateTodoDto {
+  const UpdateTodoDto({
+    this.title,
+    this.description,
+    this.date,
+    this.isCompleted,
+  });
+
+  factory UpdateTodoDto.fromJson(Map<String, dynamic> json) =>
+      _$UpdateTodoDtoFromJson(json);
+
+  static const toJsonFactory = _$UpdateTodoDtoToJson;
+  Map<String, dynamic> toJson() => _$UpdateTodoDtoToJson(this);
+
+  @JsonKey(name: 'title')
+  final String? title;
+  @JsonKey(name: 'description')
+  final String? description;
+  @JsonKey(name: 'date')
+  final DateTime? date;
+  @JsonKey(name: 'isCompleted')
+  final bool? isCompleted;
+  static const fromJsonFactory = _$UpdateTodoDtoFromJson;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is UpdateTodoDto &&
+            (identical(other.title, title) ||
+                const DeepCollectionEquality().equals(other.title, title)) &&
+            (identical(other.description, description) ||
+                const DeepCollectionEquality()
+                    .equals(other.description, description)) &&
+            (identical(other.date, date) ||
+                const DeepCollectionEquality().equals(other.date, date)) &&
+            (identical(other.isCompleted, isCompleted) ||
+                const DeepCollectionEquality()
+                    .equals(other.isCompleted, isCompleted)));
+  }
+
+  @override
+  String toString() => jsonEncode(this);
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(title) ^
+      const DeepCollectionEquality().hash(description) ^
+      const DeepCollectionEquality().hash(date) ^
+      const DeepCollectionEquality().hash(isCompleted) ^
+      runtimeType.hashCode;
+}
+
+extension $UpdateTodoDtoExtension on UpdateTodoDto {
+  UpdateTodoDto copyWith(
+      {String? title, String? description, DateTime? date, bool? isCompleted}) {
+    return UpdateTodoDto(
+        title: title ?? this.title,
+        description: description ?? this.description,
+        date: date ?? this.date,
+        isCompleted: isCompleted ?? this.isCompleted);
+  }
+
+  UpdateTodoDto copyWithWrapped(
+      {Wrapped<String?>? title,
+      Wrapped<String?>? description,
+      Wrapped<DateTime?>? date,
+      Wrapped<bool?>? isCompleted}) {
+    return UpdateTodoDto(
+        title: (title != null ? title.value : this.title),
+        description:
+            (description != null ? description.value : this.description),
+        date: (date != null ? date.value : this.date),
+        isCompleted:
+            (isCompleted != null ? isCompleted.value : this.isCompleted));
   }
 }
 
 String? createRecordDtoCatalogueNullableToJson(
-  enums.CreateRecordDtoCatalogue? createRecordDtoCatalogue,
-) {
+    enums.CreateRecordDtoCatalogue? createRecordDtoCatalogue) {
   return createRecordDtoCatalogue?.value;
 }
 
 String? createRecordDtoCatalogueToJson(
-  enums.CreateRecordDtoCatalogue createRecordDtoCatalogue,
-) {
+    enums.CreateRecordDtoCatalogue createRecordDtoCatalogue) {
   return createRecordDtoCatalogue.value;
 }
 
@@ -1257,9 +1484,8 @@ enums.CreateRecordDtoCatalogue createRecordDtoCatalogueFromJson(
   Object? createRecordDtoCatalogue, [
   enums.CreateRecordDtoCatalogue? defaultValue,
 ]) {
-  return enums.CreateRecordDtoCatalogue.values.firstWhereOrNull(
-        (e) => e.value == createRecordDtoCatalogue,
-      ) ??
+  return enums.CreateRecordDtoCatalogue.values
+          .firstWhereOrNull((e) => e.value == createRecordDtoCatalogue) ??
       defaultValue ??
       enums.CreateRecordDtoCatalogue.swaggerGeneratedUnknown;
 }
@@ -1271,21 +1497,18 @@ enums.CreateRecordDtoCatalogue? createRecordDtoCatalogueNullableFromJson(
   if (createRecordDtoCatalogue == null) {
     return null;
   }
-  return enums.CreateRecordDtoCatalogue.values.firstWhereOrNull(
-        (e) => e.value == createRecordDtoCatalogue,
-      ) ??
+  return enums.CreateRecordDtoCatalogue.values
+          .firstWhereOrNull((e) => e.value == createRecordDtoCatalogue) ??
       defaultValue;
 }
 
 String createRecordDtoCatalogueExplodedListToJson(
-  List<enums.CreateRecordDtoCatalogue>? createRecordDtoCatalogue,
-) {
+    List<enums.CreateRecordDtoCatalogue>? createRecordDtoCatalogue) {
   return createRecordDtoCatalogue?.map((e) => e.value!).join(',') ?? '';
 }
 
 List<String> createRecordDtoCatalogueListToJson(
-  List<enums.CreateRecordDtoCatalogue>? createRecordDtoCatalogue,
-) {
+    List<enums.CreateRecordDtoCatalogue>? createRecordDtoCatalogue) {
   if (createRecordDtoCatalogue == null) {
     return [];
   }
@@ -1307,7 +1530,7 @@ List<enums.CreateRecordDtoCatalogue> createRecordDtoCatalogueListFromJson(
 }
 
 List<enums.CreateRecordDtoCatalogue>?
-createRecordDtoCatalogueNullableListFromJson(
+    createRecordDtoCatalogueNullableListFromJson(
   List? createRecordDtoCatalogue, [
   List<enums.CreateRecordDtoCatalogue>? defaultValue,
 ]) {
@@ -1321,8 +1544,7 @@ createRecordDtoCatalogueNullableListFromJson(
 }
 
 String? recordDtoCatalogueNullableToJson(
-  enums.RecordDtoCatalogue? recordDtoCatalogue,
-) {
+    enums.RecordDtoCatalogue? recordDtoCatalogue) {
   return recordDtoCatalogue?.value;
 }
 
@@ -1334,9 +1556,8 @@ enums.RecordDtoCatalogue recordDtoCatalogueFromJson(
   Object? recordDtoCatalogue, [
   enums.RecordDtoCatalogue? defaultValue,
 ]) {
-  return enums.RecordDtoCatalogue.values.firstWhereOrNull(
-        (e) => e.value == recordDtoCatalogue,
-      ) ??
+  return enums.RecordDtoCatalogue.values
+          .firstWhereOrNull((e) => e.value == recordDtoCatalogue) ??
       defaultValue ??
       enums.RecordDtoCatalogue.swaggerGeneratedUnknown;
 }
@@ -1348,21 +1569,18 @@ enums.RecordDtoCatalogue? recordDtoCatalogueNullableFromJson(
   if (recordDtoCatalogue == null) {
     return null;
   }
-  return enums.RecordDtoCatalogue.values.firstWhereOrNull(
-        (e) => e.value == recordDtoCatalogue,
-      ) ??
+  return enums.RecordDtoCatalogue.values
+          .firstWhereOrNull((e) => e.value == recordDtoCatalogue) ??
       defaultValue;
 }
 
 String recordDtoCatalogueExplodedListToJson(
-  List<enums.RecordDtoCatalogue>? recordDtoCatalogue,
-) {
+    List<enums.RecordDtoCatalogue>? recordDtoCatalogue) {
   return recordDtoCatalogue?.map((e) => e.value!).join(',') ?? '';
 }
 
 List<String> recordDtoCatalogueListToJson(
-  List<enums.RecordDtoCatalogue>? recordDtoCatalogue,
-) {
+    List<enums.RecordDtoCatalogue>? recordDtoCatalogue) {
   if (recordDtoCatalogue == null) {
     return [];
   }
@@ -1397,14 +1615,12 @@ List<enums.RecordDtoCatalogue>? recordDtoCatalogueNullableListFromJson(
 }
 
 String? updateRecordDtoCatalogueNullableToJson(
-  enums.UpdateRecordDtoCatalogue? updateRecordDtoCatalogue,
-) {
+    enums.UpdateRecordDtoCatalogue? updateRecordDtoCatalogue) {
   return updateRecordDtoCatalogue?.value;
 }
 
 String? updateRecordDtoCatalogueToJson(
-  enums.UpdateRecordDtoCatalogue updateRecordDtoCatalogue,
-) {
+    enums.UpdateRecordDtoCatalogue updateRecordDtoCatalogue) {
   return updateRecordDtoCatalogue.value;
 }
 
@@ -1412,9 +1628,8 @@ enums.UpdateRecordDtoCatalogue updateRecordDtoCatalogueFromJson(
   Object? updateRecordDtoCatalogue, [
   enums.UpdateRecordDtoCatalogue? defaultValue,
 ]) {
-  return enums.UpdateRecordDtoCatalogue.values.firstWhereOrNull(
-        (e) => e.value == updateRecordDtoCatalogue,
-      ) ??
+  return enums.UpdateRecordDtoCatalogue.values
+          .firstWhereOrNull((e) => e.value == updateRecordDtoCatalogue) ??
       defaultValue ??
       enums.UpdateRecordDtoCatalogue.swaggerGeneratedUnknown;
 }
@@ -1426,21 +1641,18 @@ enums.UpdateRecordDtoCatalogue? updateRecordDtoCatalogueNullableFromJson(
   if (updateRecordDtoCatalogue == null) {
     return null;
   }
-  return enums.UpdateRecordDtoCatalogue.values.firstWhereOrNull(
-        (e) => e.value == updateRecordDtoCatalogue,
-      ) ??
+  return enums.UpdateRecordDtoCatalogue.values
+          .firstWhereOrNull((e) => e.value == updateRecordDtoCatalogue) ??
       defaultValue;
 }
 
 String updateRecordDtoCatalogueExplodedListToJson(
-  List<enums.UpdateRecordDtoCatalogue>? updateRecordDtoCatalogue,
-) {
+    List<enums.UpdateRecordDtoCatalogue>? updateRecordDtoCatalogue) {
   return updateRecordDtoCatalogue?.map((e) => e.value!).join(',') ?? '';
 }
 
 List<String> updateRecordDtoCatalogueListToJson(
-  List<enums.UpdateRecordDtoCatalogue>? updateRecordDtoCatalogue,
-) {
+    List<enums.UpdateRecordDtoCatalogue>? updateRecordDtoCatalogue) {
   if (updateRecordDtoCatalogue == null) {
     return [];
   }
@@ -1462,7 +1674,7 @@ List<enums.UpdateRecordDtoCatalogue> updateRecordDtoCatalogueListFromJson(
 }
 
 List<enums.UpdateRecordDtoCatalogue>?
-updateRecordDtoCatalogueNullableListFromJson(
+    updateRecordDtoCatalogueNullableListFromJson(
   List? updateRecordDtoCatalogue, [
   List<enums.UpdateRecordDtoCatalogue>? defaultValue,
 ]) {
@@ -1522,8 +1734,7 @@ class $CustomJsonDecoder {
 class $JsonSerializableConverter extends chopper.JsonConverter {
   @override
   FutureOr<chopper.Response<ResultType>> convertResponse<ResultType, Item>(
-    chopper.Response response,
-  ) async {
+      chopper.Response response) async {
     if (response.bodyString.isEmpty) {
       // In rare cases, when let's say 204 (no content) is returned -
       // we cannot decode the missing json with the result type specified
@@ -1536,16 +1747,13 @@ class $JsonSerializableConverter extends chopper.JsonConverter {
 
     if (ResultType == DateTime) {
       return response.copyWith(
-        body:
-            DateTime.parse((response.body as String).replaceAll('"', ''))
-                as ResultType,
-      );
+          body: DateTime.parse((response.body as String).replaceAll('"', ''))
+              as ResultType);
     }
 
     final jsonRes = await super.convertResponse(response);
     return jsonRes.copyWith<ResultType>(
-      body: $jsonDecoder.decode<Item>(jsonRes.body) as ResultType,
-    );
+        body: $jsonDecoder.decode<Item>(jsonRes.body) as ResultType);
   }
 }
 

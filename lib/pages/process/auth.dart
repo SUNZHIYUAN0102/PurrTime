@@ -18,40 +18,16 @@ class Auth extends StatefulWidget {
 class _AuthState extends State<Auth> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
-  final FocusNode _emailFocusNode = FocusNode();
-  final _emailFieldKey = GlobalKey<FormFieldState>();
 
   final TextEditingController _passwordController = TextEditingController();
-  final FocusNode _passwordFocusNode = FocusNode();
-  final _passwordFieldKey = GlobalKey<FormFieldState>();
 
   final TextEditingController _confirmPasswordController =
       TextEditingController();
-  final FocusNode _confirmPasswordFocusNode = FocusNode();
-  final _confirmPasswordFieldKey = GlobalKey<FormFieldState>();
 
   late bool _isRegistration;
   @override
   void initState() {
     super.initState();
-
-    _emailFocusNode.addListener(() {
-      if (!_emailFocusNode.hasFocus) {
-        _emailFieldKey.currentState?.validate();
-      }
-    });
-
-    _passwordFocusNode.addListener(() {
-      if (!_passwordFocusNode.hasFocus) {
-        _passwordFieldKey.currentState?.validate();
-      }
-    });
-
-    _confirmPasswordFocusNode.addListener(() {
-      if (!_confirmPasswordFocusNode.hasFocus) {
-        _confirmPasswordFieldKey.currentState?.validate();
-      }
-    });
 
     if (Get.arguments["authMode"] == "register") {
       setState(() {
@@ -67,14 +43,8 @@ class _AuthState extends State<Auth> {
   @override
   void dispose() {
     _emailController.dispose();
-    _emailFocusNode.dispose();
     _passwordController.dispose();
-    _passwordFocusNode.dispose();
     _confirmPasswordController.dispose();
-    _confirmPasswordFocusNode.dispose();
-    _emailFieldKey.currentState?.dispose();
-    _passwordFieldKey.currentState?.dispose();
-    _confirmPasswordFieldKey.currentState?.dispose();
 
     super.dispose();
   }
@@ -215,8 +185,6 @@ class _AuthState extends State<Auth> {
                       Container(
                         margin: EdgeInsets.only(top: 20.h),
                         child: CustomInputField(
-                          fieldKey: _emailFieldKey,
-                          focusNode: _emailFocusNode,
                           controller: _emailController,
                           hintText: "Please enter your email",
                           validator: _validateEmail,
@@ -227,8 +195,6 @@ class _AuthState extends State<Auth> {
                       Container(
                         margin: EdgeInsets.only(top: 20.h),
                         child: CustomInputField(
-                          fieldKey: _passwordFieldKey,
-                          focusNode: _passwordFocusNode,
                           controller: _passwordController,
                           hintText: "Please enter your password",
                           obscureText: true,
@@ -241,8 +207,6 @@ class _AuthState extends State<Auth> {
                         Container(
                           margin: EdgeInsets.only(top: 20.h),
                           child: CustomInputField(
-                            fieldKey: _confirmPasswordFieldKey,
-                            focusNode: _confirmPasswordFocusNode,
                             controller: _confirmPasswordController,
                             hintText: "Please confirm your password",
                             obscureText: true,

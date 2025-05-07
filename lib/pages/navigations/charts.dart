@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:purr_time/components/notiferInputFormField.dart';
 
 class Charts extends StatefulWidget {
   const Charts({super.key});
@@ -11,7 +12,13 @@ class Charts extends StatefulWidget {
 class _ChartsState extends State<Charts> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  String errorText = "Please enter a value";
+  TextEditingController controller = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,48 +30,20 @@ class _ChartsState extends State<Charts> {
             key: _formKey,
             child: Container(
               margin: const EdgeInsets.all(50),
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-                width: double.infinity,
-                height: 65.h,
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 255, 226, 224),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      "Cat",
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        isDense: true,
-                        contentPadding: EdgeInsets.symmetric(vertical: 0),
-                        border: InputBorder.none,
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          setState(() {
-                            errorText = "Please enter a value";
-                          });
-                        }
-                        return null;
-                      },
-                      controller: TextEditingController.fromValue(
-                        TextEditingValue(
-                          text: "",
-                          selection: TextSelection.collapsed(offset: "".length),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              child: ControllerInputFormField(
+                label: "Amount",
+                controller: controller,
+                hintText: "Enter your name",
+                keyboardType: TextInputType.text,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Please enter your name";
+                  }
+                  if (value.length < 3) {
+                    return "Name must be at least 3 characters long";
+                  }
+                  return null;
+                },
               ),
             ),
           ),

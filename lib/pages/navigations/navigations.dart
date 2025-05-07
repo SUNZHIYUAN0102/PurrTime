@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:purr_time/pages/navigations/charts.dart';
 import 'package:purr_time/pages/navigations/home.dart';
 import 'package:purr_time/pages/navigations/myPets.dart';
-import 'package:purr_time/pages/navigations/recipes.dart';
+import 'package:purr_time/pages/navigations/todo.dart';
 import 'package:purr_time/store/token.dart';
 import 'package:purr_time/store/user.dart';
 import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
@@ -22,7 +22,7 @@ class _NavigationsState extends State<Navigations> {
   final List<Widget> _pages = [
     const Home(),
     const Charts(),
-    const Recipes(),
+    const ToDo(),
     const MyPets(),
   ];
 
