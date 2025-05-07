@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:purr_time/apis/cats.dart';
+import 'package:purr_time/components/customInputFormField.dart';
 import 'package:purr_time/components/notiferDatetimeInputField.dart';
 import 'package:purr_time/components/notifierInputField.dart';
 import 'package:purr_time/pages/process/components/customInputField.dart';
@@ -24,8 +25,9 @@ class Cat extends StatefulWidget {
 }
 
 class _CatState extends State<Cat> {
+  GlobalKey<FormState> _inputFormKey = GlobalKey<FormState>();
   String name = "";
-  ValueNotifier<String> nameNotifier = ValueNotifier<String>("");
+  TextEditingController nameController = TextEditingController();
 
   String gender = "Male";
 
@@ -35,19 +37,19 @@ class _CatState extends State<Cat> {
   ValueNotifier<String> birthNotifier = ValueNotifier<String>("");
 
   String breed = "";
-  ValueNotifier<String> breedNotifier = ValueNotifier<String>("");
+  TextEditingController breedController = TextEditingController();
 
   String insuranceProvider = "";
-  ValueNotifier<String> insuranceProviderNotifier = ValueNotifier<String>("");
+  TextEditingController insuranceProviderController = TextEditingController();
 
   String insuranceNumber = "";
-  ValueNotifier<String> insuranceNumberNotifier = ValueNotifier<String>("");
+  TextEditingController insuranceNumberController = TextEditingController();
 
   bool isEdit = false;
   final ScrollController _scrollController = ScrollController();
   bool _showTitle = false;
 
-  final _formKey = GlobalKey<FormState>();
+  final _codeFormKey = GlobalKey<FormState>();
   final TextEditingController _codeController = TextEditingController();
 
   @override
@@ -65,33 +67,9 @@ class _CatState extends State<Cat> {
       }
     }
 
-    nameNotifier.addListener(() {
-      setState(() {
-        name = nameNotifier.value;
-      });
-    });
-
     birthNotifier.addListener(() {
       setState(() {
         birth = birthNotifier.value;
-      });
-    });
-
-    breedNotifier.addListener(() {
-      setState(() {
-        breed = breedNotifier.value;
-      });
-    });
-
-    insuranceProviderNotifier.addListener(() {
-      setState(() {
-        insuranceProvider = insuranceProviderNotifier.value;
-      });
-    });
-
-    insuranceNumberNotifier.addListener(() {
-      setState(() {
-        insuranceNumber = insuranceNumberNotifier.value;
       });
     });
 
@@ -103,16 +81,15 @@ class _CatState extends State<Cat> {
     // TODO: implement dispose
     super.dispose();
 
-    nameNotifier.dispose();
     birthNotifier.dispose();
-    breedNotifier.dispose();
-    insuranceProviderNotifier.dispose();
-    insuranceNumberNotifier.dispose();
     _scrollController.removeListener(_handleScroll);
     _scrollController.dispose();
 
     _codeController.dispose();
-    _formKey.currentState?.dispose();
+    nameController.dispose();
+    breedController.dispose();
+    insuranceProviderController.dispose();
+    insuranceNumberController.dispose();
   }
 
   void _handleScroll() {
@@ -132,7 +109,7 @@ class _CatState extends State<Cat> {
 
     setState(() {
       name = res.name;
-      nameNotifier.value = name;
+      nameController.text = name;
 
       gender = res.gender;
       catPhoto = res.image;
@@ -141,19 +118,18 @@ class _CatState extends State<Cat> {
       birthNotifier.value = birth;
 
       breed = res.breed;
-      breedNotifier.value = breed;
+      breedController.text = breed;
 
       insuranceProvider = res.insuranceNumber ?? "";
-      insuranceProviderNotifier.value = insuranceProvider;
+      insuranceProviderController.text = insuranceProvider;
 
       insuranceNumber = res.insuranceNumber ?? "";
-      insuranceNumberNotifier.value = insuranceNumber;
+      insuranceNumberController.text = insuranceNumber;
     });
   }
 
   _handleButtonPress() {
-    if (name.isEmpty) {
-      Get.snackbar("Error", "Please enter cat name");
+    if (!_inputFormKey.currentState!.validate()) {
       return;
     }
 
@@ -164,16 +140,6 @@ class _CatState extends State<Cat> {
 
     if (birth.isEmpty) {
       Get.snackbar("Error", "Please enter cat birth date");
-      return;
-    }
-
-    if (breed.isEmpty) {
-      Get.snackbar("Error", "Please enter cat breed");
-      return;
-    }
-
-    if (gender.isEmpty) {
-      Get.snackbar("Error", "Please enter cat gender");
       return;
     }
 
@@ -200,13 +166,13 @@ class _CatState extends State<Cat> {
 
       CatDto cat = await CatsApi.createCat(
         CreateCatDto(
-          name: name,
+          name: nameController.text,
           image: catPhoto,
           gender: gender,
-          breed: breed,
+          breed: breedController.text,
           birth: DateFormat("yyyy-MM-dd HH:mm").parse(birth, false).toUtc(),
-          insuranceProvider: insuranceProvider,
-          insuranceNumber: insuranceNumber,
+          insuranceProvider: insuranceProviderController.text,
+          insuranceNumber: insuranceNumberController.text,
         ),
       );
 
@@ -241,13 +207,13 @@ class _CatState extends State<Cat> {
       CatDto cat = await CatsApi.updateCat(
         Get.arguments["catId"],
         UpdateCatDto(
-          name: name,
+          name: nameController.text,
           image: catPhoto,
           gender: gender,
-          breed: breed,
+          breed: breedController.text,
           birth: DateFormat("yyyy-MM-dd HH:mm").parse(birth, false).toUtc(),
-          insuranceProvider: insuranceProvider,
-          insuranceNumber: insuranceNumber,
+          insuranceProvider: insuranceProviderController.text,
+          insuranceNumber: insuranceNumberController.text,
         ),
       );
 
@@ -303,7 +269,7 @@ class _CatState extends State<Cat> {
 
   _addCatByCode(dynamic arguments) async {
     try {
-      if (_formKey.currentState?.validate() != true) {
+      if (_codeFormKey.currentState?.validate() != true) {
         return;
       }
 
@@ -320,6 +286,20 @@ class _CatState extends State<Cat> {
     } catch (e) {
       Get.snackbar("Error", "Failed to add cat. Please try again.");
     }
+  }
+
+  String? _validateName(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a name';
+    }
+    return null;
+  }
+
+  String? _validateBreed(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a breed';
+    }
+    return null;
   }
 
   @override
@@ -350,203 +330,202 @@ class _CatState extends State<Cat> {
             scrolledUnderElevation: 0,
           ),
           SliverToBoxAdapter(
-            child: SingleChildScrollView(
-              child: Container(
-                padding: EdgeInsets.only(left: 16.w, right: 16.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          isEdit ? "Edit cat" : "Add cat",
-                          style: TextStyle(
-                            fontSize: 35.sp,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-
-                        GestureDetector(
-                          onTap: _pickImage,
-                          child: Container(
-                            width: 60.w,
-                            height: 60.w,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.grey[300],
-                            ),
-                            child: ClipOval(child: _renderPhoto()),
-                          ),
-                        ),
-                      ],
-                    ),
-                    // Cat information
-                    Container(
-                      margin: EdgeInsets.only(top: 20.h, bottom: 10.h),
-                      child: Text(
-                        "Cat information",
-                        style: TextStyle(
-                          fontSize: 20.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-
-                    // Cat name
-                    Container(
-                      margin: EdgeInsets.only(bottom: 10.h),
-                      child: NotifierInputField(
-                        label: "Name*",
-                        notifier: nameNotifier,
-                        keyboardType: TextInputType.text,
-                        hintText: "Enter cat name",
-                      ),
-                    ),
-
-                    // Cat birth date
-                    Container(
-                      margin: EdgeInsets.only(bottom: 10.h),
-                      child: NotiferDateTimeInputField(
-                        label: "Date of birth*",
-                        notifier: birthNotifier,
-                        formatRule: "MMM d, y",
-                        pickerType: DateTimePickerType.date,
-                        maximumDate: DateTime.now(),
-                      ),
-                    ),
-
-                    // Cat breed
-                    Container(
-                      margin: EdgeInsets.only(bottom: 10.h),
-                      child: NotifierInputField(
-                        label: "Breed*",
-                        notifier: breedNotifier,
-                        keyboardType: TextInputType.text,
-                        hintText: "Enter cat breed",
-                      ),
-                    ),
-
-                    // Cat gender
-                    Container(
-                      margin: EdgeInsets.only(bottom: 10.h),
-                      padding: EdgeInsets.only(
-                        top: 10.h,
-                        // bottom: 10.h,
-                        left: 20.w,
-                        right: 20.w,
-                      ),
-                      width: double.infinity,
-                      // height: 65.h,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+            child: Form(
+              key: _inputFormKey,
+              child: SingleChildScrollView(
+                child: Container(
+                  padding: EdgeInsets.only(left: 16.w, right: 16.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Gender*",
+                            isEdit ? "Edit cat" : "Add cat",
                             style: TextStyle(
-                              fontSize: 14.sp,
-                              color: Colors.grey[600],
+                              fontSize: 35.sp,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Row(
-                                  children: [
-                                    Radio<String>(
-                                      value: "Male",
-                                      groupValue: gender,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          gender = value!;
-                                        });
-                                      },
-                                    ),
-                                    const Text("Male"),
-                                  ],
-                                ),
+
+                          GestureDetector(
+                            onTap: _pickImage,
+                            child: Container(
+                              width: 60.w,
+                              height: 60.w,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.grey[300],
                               ),
-                              Expanded(
-                                child: Row(
-                                  children: [
-                                    Radio<String>(
-                                      value: "Female",
-                                      groupValue: gender,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          gender = value!;
-                                        });
-                                      },
-                                    ),
-                                    const Text("Female"),
-                                  ],
-                                ),
-                              ),
-                            ],
+                              child: ClipOval(child: _renderPhoto()),
+                            ),
                           ),
                         ],
                       ),
-                    ),
-
-                    // Insurance information
-                    Container(
-                      margin: EdgeInsets.only(top: 10.h, bottom: 10.h),
-                      child: Text(
-                        "Insurance information",
-                        style: TextStyle(
-                          fontSize: 20.sp,
-                          fontWeight: FontWeight.w500,
+                      // Cat information
+                      Container(
+                        margin: EdgeInsets.only(top: 20.h, bottom: 10.h),
+                        child: Text(
+                          "Cat information",
+                          style: TextStyle(
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(bottom: 10.h),
-                      child: NotifierInputField(
-                        label: "Insurance provider",
-                        notifier: insuranceProviderNotifier,
-                        keyboardType: TextInputType.text,
-                        hintText: "Enter insurance provider",
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(bottom: 10.h),
-                      child: NotifierInputField(
-                        label: "Insurance number",
-                        notifier: insuranceNumberNotifier,
-                        keyboardType: TextInputType.text,
-                        hintText: "Enter insurance number",
-                      ),
-                    ),
 
-                    Container(
-                      margin: EdgeInsets.only(bottom: 10.h),
-                      child: ElevatedButton(
-                        onPressed: _handleButtonPress,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black,
-                          disabledBackgroundColor: Colors.black.withOpacity(.3),
+                      // Cat name
+                      Container(
+                        margin: EdgeInsets.only(bottom: 10.h),
+                        child: Custominputformfield(
+                          label: "Name*",
+                          controller: nameController,
+                          validator: _validateName,
                         ),
-                        child: SizedBox(
-                          width: double.infinity,
-                          height: 50.h,
-                          child: Center(
-                            child: Text(
-                              isEdit ? "Update cat" : "Add cat",
+                      ),
+
+                      // Cat birth date
+                      Container(
+                        margin: EdgeInsets.only(bottom: 10.h),
+                        child: NotiferDateTimeInputField(
+                          label: "Date of birth*",
+                          notifier: birthNotifier,
+                          formatRule: "MMM d, y",
+                          pickerType: DateTimePickerType.date,
+                          maximumDate: DateTime.now(),
+                        ),
+                      ),
+
+                      // Cat breed
+                      Container(
+                        margin: EdgeInsets.only(bottom: 10.h),
+                        child: Custominputformfield(
+                          label: "Breed*",
+                          controller: breedController,
+                          validator: _validateBreed,
+                        ),
+                      ),
+
+                      // Cat gender
+                      Container(
+                        margin: EdgeInsets.only(bottom: 10.h),
+                        padding: EdgeInsets.only(
+                          top: 10.h,
+                          // bottom: 10.h,
+                          left: 20.w,
+                          right: 20.w,
+                        ),
+                        width: double.infinity,
+                        // height: 65.h,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text(
+                              "Gender*",
                               style: TextStyle(
-                                fontSize: 18.sp,
-                                color: Colors.white,
+                                fontSize: 14.sp,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Row(
+                                    children: [
+                                      Radio<String>(
+                                        value: "Male",
+                                        groupValue: gender,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            gender = value!;
+                                          });
+                                        },
+                                      ),
+                                      const Text("Male"),
+                                    ],
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Row(
+                                    children: [
+                                      Radio<String>(
+                                        value: "Female",
+                                        groupValue: gender,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            gender = value!;
+                                          });
+                                        },
+                                      ),
+                                      const Text("Female"),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      // Insurance information
+                      Container(
+                        margin: EdgeInsets.only(top: 10.h, bottom: 10.h),
+                        child: Text(
+                          "Insurance information",
+                          style: TextStyle(
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(bottom: 10.h),
+                        child: Custominputformfield(
+                          label: "Insurance provider",
+                          controller: insuranceProviderController,
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(bottom: 10.h),
+                        child: Custominputformfield(
+                          label: "Insurance number",
+                          controller: insuranceNumberController,
+                        ),
+                      ),
+
+                      Container(
+                        margin: EdgeInsets.only(bottom: 10.h),
+                        child: ElevatedButton(
+                          onPressed: _handleButtonPress,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.black,
+                            disabledBackgroundColor: Colors.black.withOpacity(
+                              .3,
+                            ),
+                          ),
+                          child: SizedBox(
+                            width: double.infinity,
+                            height: 50.h,
+                            child: Center(
+                              child: Text(
+                                isEdit ? "Update cat" : "Add cat",
+                                style: TextStyle(
+                                  fontSize: 18.sp,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -580,7 +559,7 @@ class _CatState extends State<Cat> {
                 ),
                 SizedBox(height: 20.h),
                 Form(
-                  key: _formKey,
+                  key: _codeFormKey,
                   child: CustomInputField(
                     controller: _codeController,
                     hintText: "Enter cat code",
