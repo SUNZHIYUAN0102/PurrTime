@@ -10,7 +10,6 @@ import 'package:purr_time/apis/records.dart';
 import 'package:purr_time/main.dart';
 import 'package:purr_time/pages/records/record.dart';
 import 'package:purr_time/store/cat.dart';
-import 'package:purr_time/store/token.dart';
 import 'package:purr_time/store/user.dart';
 import 'package:purr_time/swagger_generated_code/api_json.swagger.dart';
 
@@ -342,9 +341,43 @@ class _HomeState extends State<Home> with RouteAware {
                               ),
                             ],
                           ),
-                          Text(
-                            _records[index].$value.toString(),
-                            style: TextStyle(fontSize: 14.sp),
+                          RichText(
+                            text: TextSpan(
+                              text: "",
+                              style: TextStyle(
+                                fontSize: 12.sp,
+                                color: Colors.black,
+                              ),
+                              children: [
+                                if (_records[index].catalogue ==
+                                    RecordDtoCatalogue.expense)
+                                  TextSpan(
+                                    text: "€",
+                                    style: TextStyle(
+                                      fontSize: 12.sp,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                TextSpan(
+                                  text: _records[index].$value.toStringAsFixed(
+                                    0,
+                                  ),
+                                  style: TextStyle(
+                                    fontSize: 12.sp,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                if (_records[index].catalogue ==
+                                    RecordDtoCatalogue.daily)
+                                  TextSpan(
+                                    text: _records[index].unit,
+                                    style: TextStyle(
+                                      fontSize: 12.sp,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                              ],
+                            ),
                           ),
                         ],
                       ),

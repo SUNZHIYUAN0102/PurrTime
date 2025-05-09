@@ -79,7 +79,7 @@ class NotiferDateTimeInputField extends StatelessWidget {
                       : DateFormat(
                         formatRule,
                       ).format(DateTime.parse(notifier.value)),
-                  style: TextStyle(fontSize: 18.sp),
+                  style: TextStyle(fontSize: 15.sp),
                 ),
               ],
             ),

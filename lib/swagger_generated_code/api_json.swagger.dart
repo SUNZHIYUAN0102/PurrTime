@@ -964,6 +964,7 @@ class CreateRecordDto {
     required this.name,
     required this.date,
     required this.$value,
+    required this.unit,
   });
 
   factory CreateRecordDto.fromJson(Map<String, dynamic> json) =>
@@ -984,6 +985,8 @@ class CreateRecordDto {
   final DateTime date;
   @JsonKey(name: 'value')
   final double $value;
+  @JsonKey(name: 'unit')
+  final String unit;
   static const fromJsonFactory = _$CreateRecordDtoFromJson;
 
   @override
@@ -998,7 +1001,9 @@ class CreateRecordDto {
             (identical(other.date, date) ||
                 const DeepCollectionEquality().equals(other.date, date)) &&
             (identical(other.$value, $value) ||
-                const DeepCollectionEquality().equals(other.$value, $value)));
+                const DeepCollectionEquality().equals(other.$value, $value)) &&
+            (identical(other.unit, unit) ||
+                const DeepCollectionEquality().equals(other.unit, unit)));
   }
 
   @override
@@ -1010,6 +1015,7 @@ class CreateRecordDto {
       const DeepCollectionEquality().hash(name) ^
       const DeepCollectionEquality().hash(date) ^
       const DeepCollectionEquality().hash($value) ^
+      const DeepCollectionEquality().hash(unit) ^
       runtimeType.hashCode;
 }
 
@@ -1018,24 +1024,28 @@ extension $CreateRecordDtoExtension on CreateRecordDto {
       {enums.CreateRecordDtoCatalogue? catalogue,
       String? name,
       DateTime? date,
-      double? $value}) {
+      double? $value,
+      String? unit}) {
     return CreateRecordDto(
         catalogue: catalogue ?? this.catalogue,
         name: name ?? this.name,
         date: date ?? this.date,
-        $value: $value ?? this.$value);
+        $value: $value ?? this.$value,
+        unit: unit ?? this.unit);
   }
 
   CreateRecordDto copyWithWrapped(
       {Wrapped<enums.CreateRecordDtoCatalogue>? catalogue,
       Wrapped<String>? name,
       Wrapped<DateTime>? date,
-      Wrapped<double>? $value}) {
+      Wrapped<double>? $value,
+      Wrapped<String>? unit}) {
     return CreateRecordDto(
         catalogue: (catalogue != null ? catalogue.value : this.catalogue),
         name: (name != null ? name.value : this.name),
         date: (date != null ? date.value : this.date),
-        $value: ($value != null ? $value.value : this.$value));
+        $value: ($value != null ? $value.value : this.$value),
+        unit: (unit != null ? unit.value : this.unit));
   }
 }
 
@@ -1047,6 +1057,7 @@ class RecordDto {
     required this.name,
     required this.date,
     required this.$value,
+    required this.unit,
     required this.cat,
   });
 
@@ -1070,6 +1081,8 @@ class RecordDto {
   final DateTime date;
   @JsonKey(name: 'value')
   final double $value;
+  @JsonKey(name: 'unit')
+  final String unit;
   @JsonKey(name: 'cat')
   final CatDto cat;
   static const fromJsonFactory = _$RecordDtoFromJson;
@@ -1089,6 +1102,8 @@ class RecordDto {
                 const DeepCollectionEquality().equals(other.date, date)) &&
             (identical(other.$value, $value) ||
                 const DeepCollectionEquality().equals(other.$value, $value)) &&
+            (identical(other.unit, unit) ||
+                const DeepCollectionEquality().equals(other.unit, unit)) &&
             (identical(other.cat, cat) ||
                 const DeepCollectionEquality().equals(other.cat, cat)));
   }
@@ -1103,6 +1118,7 @@ class RecordDto {
       const DeepCollectionEquality().hash(name) ^
       const DeepCollectionEquality().hash(date) ^
       const DeepCollectionEquality().hash($value) ^
+      const DeepCollectionEquality().hash(unit) ^
       const DeepCollectionEquality().hash(cat) ^
       runtimeType.hashCode;
 }
@@ -1114,6 +1130,7 @@ extension $RecordDtoExtension on RecordDto {
       String? name,
       DateTime? date,
       double? $value,
+      String? unit,
       CatDto? cat}) {
     return RecordDto(
         id: id ?? this.id,
@@ -1121,6 +1138,7 @@ extension $RecordDtoExtension on RecordDto {
         name: name ?? this.name,
         date: date ?? this.date,
         $value: $value ?? this.$value,
+        unit: unit ?? this.unit,
         cat: cat ?? this.cat);
   }
 
@@ -1130,6 +1148,7 @@ extension $RecordDtoExtension on RecordDto {
       Wrapped<String>? name,
       Wrapped<DateTime>? date,
       Wrapped<double>? $value,
+      Wrapped<String>? unit,
       Wrapped<CatDto>? cat}) {
     return RecordDto(
         id: (id != null ? id.value : this.id),
@@ -1137,6 +1156,7 @@ extension $RecordDtoExtension on RecordDto {
         name: (name != null ? name.value : this.name),
         date: (date != null ? date.value : this.date),
         $value: ($value != null ? $value.value : this.$value),
+        unit: (unit != null ? unit.value : this.unit),
         cat: (cat != null ? cat.value : this.cat));
   }
 }
@@ -1148,6 +1168,7 @@ class UpdateRecordDto {
     this.name,
     this.date,
     this.$value,
+    this.unit,
   });
 
   factory UpdateRecordDto.fromJson(Map<String, dynamic> json) =>
@@ -1168,6 +1189,8 @@ class UpdateRecordDto {
   final DateTime? date;
   @JsonKey(name: 'value')
   final double? $value;
+  @JsonKey(name: 'unit')
+  final String? unit;
   static const fromJsonFactory = _$UpdateRecordDtoFromJson;
 
   @override
@@ -1182,7 +1205,9 @@ class UpdateRecordDto {
             (identical(other.date, date) ||
                 const DeepCollectionEquality().equals(other.date, date)) &&
             (identical(other.$value, $value) ||
-                const DeepCollectionEquality().equals(other.$value, $value)));
+                const DeepCollectionEquality().equals(other.$value, $value)) &&
+            (identical(other.unit, unit) ||
+                const DeepCollectionEquality().equals(other.unit, unit)));
   }
 
   @override
@@ -1194,6 +1219,7 @@ class UpdateRecordDto {
       const DeepCollectionEquality().hash(name) ^
       const DeepCollectionEquality().hash(date) ^
       const DeepCollectionEquality().hash($value) ^
+      const DeepCollectionEquality().hash(unit) ^
       runtimeType.hashCode;
 }
 
@@ -1202,24 +1228,28 @@ extension $UpdateRecordDtoExtension on UpdateRecordDto {
       {enums.UpdateRecordDtoCatalogue? catalogue,
       String? name,
       DateTime? date,
-      double? $value}) {
+      double? $value,
+      String? unit}) {
     return UpdateRecordDto(
         catalogue: catalogue ?? this.catalogue,
         name: name ?? this.name,
         date: date ?? this.date,
-        $value: $value ?? this.$value);
+        $value: $value ?? this.$value,
+        unit: unit ?? this.unit);
   }
 
   UpdateRecordDto copyWithWrapped(
       {Wrapped<enums.UpdateRecordDtoCatalogue?>? catalogue,
       Wrapped<String?>? name,
       Wrapped<DateTime?>? date,
-      Wrapped<double?>? $value}) {
+      Wrapped<double?>? $value,
+      Wrapped<String?>? unit}) {
     return UpdateRecordDto(
         catalogue: (catalogue != null ? catalogue.value : this.catalogue),
         name: (name != null ? name.value : this.name),
         date: (date != null ? date.value : this.date),
-        $value: ($value != null ? $value.value : this.$value));
+        $value: ($value != null ? $value.value : this.$value),
+        unit: (unit != null ? unit.value : this.unit));
   }
 }
 

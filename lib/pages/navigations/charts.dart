@@ -30,7 +30,7 @@ class _ChartsState extends State<Charts> {
             key: _formKey,
             child: Container(
               margin: const EdgeInsets.all(50),
-              child: Custominputformfield(
+              child: CustomInputFormField(
                 label: "Amount",
                 controller: controller,
                 hintText: "Enter your name",

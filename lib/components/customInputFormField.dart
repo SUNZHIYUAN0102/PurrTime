@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class Custominputformfield extends FormField<String> {
-  Custominputformfield({
+class CustomInputFormField extends FormField<String> {
+  CustomInputFormField({
     super.key,
     required String label,
     required TextEditingController controller,
@@ -54,6 +54,7 @@ class Custominputformfield extends FormField<String> {
                          contentPadding: EdgeInsets.symmetric(vertical: 0),
                          border: InputBorder.none,
                        ),
+                       style: TextStyle(fontSize: 15.sp),
                        controller: controller,
                        onChanged: (newValue) {
                          state.didChange(newValue);

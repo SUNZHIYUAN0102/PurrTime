@@ -10,7 +10,6 @@ import 'package:intl/intl.dart';
 import 'package:purr_time/apis/cats.dart';
 import 'package:purr_time/components/customInputFormField.dart';
 import 'package:purr_time/components/notiferDatetimeInputField.dart';
-import 'package:purr_time/components/notifierInputField.dart';
 import 'package:purr_time/pages/process/components/customInputField.dart';
 import 'package:purr_time/store/cat.dart';
 import 'package:purr_time/store/user.dart';
@@ -378,7 +377,7 @@ class _CatState extends State<Cat> {
                       // Cat name
                       Container(
                         margin: EdgeInsets.only(bottom: 10.h),
-                        child: Custominputformfield(
+                        child: CustomInputFormField(
                           label: "Name*",
                           controller: nameController,
                           validator: _validateName,
@@ -400,7 +399,7 @@ class _CatState extends State<Cat> {
                       // Cat breed
                       Container(
                         margin: EdgeInsets.only(bottom: 10.h),
-                        child: Custominputformfield(
+                        child: CustomInputFormField(
                           label: "Breed*",
                           controller: breedController,
                           validator: _validateBreed,
@@ -486,14 +485,14 @@ class _CatState extends State<Cat> {
                       ),
                       Container(
                         margin: EdgeInsets.only(bottom: 10.h),
-                        child: Custominputformfield(
+                        child: CustomInputFormField(
                           label: "Insurance provider",
                           controller: insuranceProviderController,
                         ),
                       ),
                       Container(
                         margin: EdgeInsets.only(bottom: 10.h),
-                        child: Custominputformfield(
+                        child: CustomInputFormField(
                           label: "Insurance number",
                           controller: insuranceNumberController,
                         ),

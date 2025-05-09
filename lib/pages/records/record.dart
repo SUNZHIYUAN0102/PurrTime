@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:purr_time/swagger_generated_code/api_json.swagger.dart';
@@ -6,8 +7,9 @@ import 'package:purr_time/swagger_generated_code/api_json.swagger.dart';
 class RecordItem {
   final IconData icon;
   final String name;
+  final String unit;
 
-  RecordItem({required this.icon, required this.name});
+  RecordItem({required this.icon, required this.name, required this.unit});
 }
 
 IconData getRecordIcon(String name) {
@@ -46,19 +48,43 @@ class _RecordState extends State<Record> with TickerProviderStateMixin {
   late final TabController _tabController;
 
   final List<RecordItem> _dailyRecordItems = [
-    RecordItem(icon: Icons.pest_control_rodent_outlined, name: "Food"),
-    RecordItem(icon: Icons.water_drop_outlined, name: "Water"),
-    RecordItem(icon: Icons.cleaning_services_outlined, name: "Clean"),
-    RecordItem(icon: Icons.monitor_weight_outlined, name: "Weight"),
+    RecordItem(
+      icon: Icons.pest_control_rodent_outlined,
+      name: "Food",
+      unit: "g",
+    ),
+    RecordItem(icon: Icons.water_drop_outlined, name: "Water", unit: "ml"),
+    RecordItem(
+      icon: Icons.cleaning_services_outlined,
+      name: "Clean",
+      unit: "times",
+    ),
+    RecordItem(icon: Icons.monitor_weight_outlined, name: "Weight", unit: "kg"),
   ];
 
   final List<RecordItem> _expenseRecordItems = [
-    RecordItem(icon: Icons.pest_control_rodent_outlined, name: "Food"),
-    RecordItem(icon: Icons.emoji_nature_outlined, name: "Litter"),
-    RecordItem(icon: Icons.vaccines_outlined, name: "Vaccinations"),
-    RecordItem(icon: Icons.toys_outlined, name: "Supplies"),
-    RecordItem(icon: Icons.medical_information_outlined, name: "Medical"),
-    RecordItem(icon: Icons.spa_outlined, name: "Grooming"),
+    RecordItem(
+      icon: Icons.pest_control_rodent_outlined,
+      name: "Food",
+      unit: "euros",
+    ),
+    RecordItem(
+      icon: Icons.emoji_nature_outlined,
+      name: "Litter",
+      unit: "euros",
+    ),
+    RecordItem(
+      icon: Icons.vaccines_outlined,
+      name: "Vaccinations",
+      unit: "euros",
+    ),
+    RecordItem(icon: Icons.toys_outlined, name: "Supplies", unit: "euros"),
+    RecordItem(
+      icon: Icons.medical_information_outlined,
+      name: "Medical",
+      unit: "euros",
+    ),
+    RecordItem(icon: Icons.spa_outlined, name: "Grooming", unit: "euros"),
   ];
 
   int _currentTabIndex = 0;
@@ -83,12 +109,13 @@ class _RecordState extends State<Record> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  void toRecordManagement(String selectedItemName) {
+  void toRecordManagement(RecordItem item) {
     Get.toNamed(
       "/recordManagement",
       arguments: {
         "catalogue": _currentTabIndex == 0 ? "Daily" : "Expense",
-        "name": selectedItemName,
+        "name": item.name,
+        "unit": item.unit,
       },
     );
   }
@@ -175,7 +202,7 @@ _renderRecordItems(List<RecordItem> items, Function toRecordManagement) {
       children: [
         InkWell(
           onTap: () {
-            toRecordManagement(item.name);
+            toRecordManagement(item);
           },
           child: Container(
             width: 60.w,

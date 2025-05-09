@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 import 'package:purr_time/apis/records.dart';
 import 'package:purr_time/components/customInputFormField.dart';
 import 'package:purr_time/components/notiferDateTimeInputField.dart';
-import 'package:purr_time/components/notifierInputField.dart';
 import 'package:purr_time/store/cat.dart';
 import 'package:purr_time/swagger_generated_code/api_json.swagger.dart';
 
@@ -24,12 +23,14 @@ class _RecordManagementState extends State<RecordManagement> {
   ValueNotifier<String> dateTimeNotifier = ValueNotifier<String>("");
 
   String amount = "";
+  String unit = "";
   bool isEdit = false;
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController catalogueController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController amountController = TextEditingController();
+  TextEditingController unitController = TextEditingController();
 
   _submitRecord() async {
     RecordDto res = await RecordsApi.createRecord(
@@ -42,6 +43,7 @@ class _RecordManagementState extends State<RecordManagement> {
         name: name,
         date: DateFormat("yyyy-MM-dd HH:mm").parse(dateTime, false).toUtc(),
         $value: double.parse(amountController.text),
+        unit: unitController.text,
       ),
     );
 
@@ -59,6 +61,7 @@ class _RecordManagementState extends State<RecordManagement> {
         name: name,
         date: DateFormat("yyyy-MM-dd HH:mm").parse(dateTime, false).toUtc(),
         $value: double.parse(amountController.text),
+        unit: unitController.text,
       ),
     );
 
@@ -110,10 +113,12 @@ class _RecordManagementState extends State<RecordManagement> {
       dateTime = DateFormat("yyyy-MM-dd HH:mm").format(record.date);
       dateTimeNotifier.value = dateTime;
       amount = record.$value.toString();
+      unit = record.unit;
       isEdit = true;
     } else {
       catalogue = Get.arguments["catalogue"];
       name = Get.arguments["name"];
+      unit = Get.arguments["unit"];
     }
 
     _scrollController.addListener(_handleScroll);
@@ -127,6 +132,7 @@ class _RecordManagementState extends State<RecordManagement> {
     catalogueController.text = catalogue;
     nameController.text = name;
     amountController.text = amount;
+    unitController.text = unit;
   }
 
   @override
@@ -226,7 +232,7 @@ class _RecordManagementState extends State<RecordManagement> {
 
                       Container(
                         margin: EdgeInsets.only(bottom: 10.h),
-                        child: Custominputformfield(
+                        child: CustomInputFormField(
                           label: "Catalogue",
                           controller: catalogueController,
                           enabled: false,
@@ -235,7 +241,7 @@ class _RecordManagementState extends State<RecordManagement> {
 
                       Container(
                         margin: EdgeInsets.only(bottom: 10.h),
-                        child: Custominputformfield(
+                        child: CustomInputFormField(
                           label: "Name",
                           controller: nameController,
                           enabled: false,
@@ -251,12 +257,21 @@ class _RecordManagementState extends State<RecordManagement> {
                       ),
 
                       Container(
-                        margin: EdgeInsets.only(bottom: 25.h),
-                        child: Custominputformfield(
+                        margin: EdgeInsets.only(bottom: 10.h),
+                        child: CustomInputFormField(
                           label: "Amount",
                           controller: amountController,
                           validator: validateAmount,
                           keyboardType: TextInputType.number,
+                        ),
+                      ),
+
+                      Container(
+                        margin: EdgeInsets.only(bottom: 25.h),
+                        child: CustomInputFormField(
+                          enabled: false,
+                          label: "Unit",
+                          controller: unitController,
                         ),
                       ),
 
