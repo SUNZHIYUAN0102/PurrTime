@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:purr_time/apis/cats.dart';
+import 'package:purr_time/components/customDateTimeFormField.dart';
 import 'package:purr_time/components/customInputFormField.dart';
 import 'package:purr_time/components/notiferDatetimeInputField.dart';
 import 'package:purr_time/pages/process/components/customInputField.dart';
@@ -33,7 +34,7 @@ class _CatState extends State<Cat> {
   String catPhoto = "";
 
   String birth = "";
-  ValueNotifier<String> birthNotifier = ValueNotifier<String>("");
+  TextEditingController birthController = TextEditingController();
 
   String breed = "";
   TextEditingController breedController = TextEditingController();
@@ -65,13 +66,6 @@ class _CatState extends State<Cat> {
         _getCatById(catId);
       }
     }
-
-    birthNotifier.addListener(() {
-      setState(() {
-        birth = birthNotifier.value;
-      });
-    });
-
     _scrollController.addListener(_handleScroll);
   }
 
@@ -80,7 +74,6 @@ class _CatState extends State<Cat> {
     // TODO: implement dispose
     super.dispose();
 
-    birthNotifier.dispose();
     _scrollController.removeListener(_handleScroll);
     _scrollController.dispose();
 
@@ -89,6 +82,7 @@ class _CatState extends State<Cat> {
     breedController.dispose();
     insuranceProviderController.dispose();
     insuranceNumberController.dispose();
+    birthController.dispose();
   }
 
   void _handleScroll() {
@@ -113,8 +107,8 @@ class _CatState extends State<Cat> {
       gender = res.gender;
       catPhoto = res.image;
 
-      birth = res.birth.toString();
-      birthNotifier.value = birth;
+      birth = DateFormat("MMM d, y").format(res.birth);
+      birthController.text = birth;
 
       breed = res.breed;
       breedController.text = breed;
@@ -134,11 +128,6 @@ class _CatState extends State<Cat> {
 
     if (catPhoto.isEmpty) {
       Get.snackbar("Error", "Please select cat photo");
-      return;
-    }
-
-    if (birth.isEmpty) {
-      Get.snackbar("Error", "Please enter cat birth date");
       return;
     }
 
@@ -169,7 +158,8 @@ class _CatState extends State<Cat> {
           image: catPhoto,
           gender: gender,
           breed: breedController.text,
-          birth: DateFormat("yyyy-MM-dd HH:mm").parse(birth, false).toUtc(),
+          birth:
+              DateFormat("MMM d, y").parse(birthController.text, false).toUtc(),
           insuranceProvider: insuranceProviderController.text,
           insuranceNumber: insuranceNumberController.text,
         ),
@@ -183,6 +173,7 @@ class _CatState extends State<Cat> {
         Get.back();
       }
     } catch (e) {
+      print(e);
       Get.snackbar("Error", "Failed to add cat. Please try again.");
     }
   }
@@ -210,7 +201,8 @@ class _CatState extends State<Cat> {
           image: catPhoto,
           gender: gender,
           breed: breedController.text,
-          birth: DateFormat("yyyy-MM-dd HH:mm").parse(birth, false).toUtc(),
+          birth:
+              DateFormat("MMM d, y").parse(birthController.text, false).toUtc(),
           insuranceProvider: insuranceProviderController.text,
           insuranceNumber: insuranceNumberController.text,
         ),
@@ -219,6 +211,7 @@ class _CatState extends State<Cat> {
       CatController.to.updateCat(cat);
       Get.back();
     } catch (e) {
+      print(e);
       Get.snackbar("Error", "Failed to update cat. Please try again.");
     }
   }
@@ -297,6 +290,13 @@ class _CatState extends State<Cat> {
   String? _validateBreed(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter a breed';
+    }
+    return null;
+  }
+
+  String? _validateBirth(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please select a birth date';
     }
     return null;
   }
@@ -387,12 +387,13 @@ class _CatState extends State<Cat> {
                       // Cat birth date
                       Container(
                         margin: EdgeInsets.only(bottom: 10.h),
-                        child: NotiferDateTimeInputField(
+                        child: CustomDateTimeInputFormField(
                           label: "Date of birth*",
-                          notifier: birthNotifier,
+                          controller: birthController,
                           formatRule: "MMM d, y",
                           pickerType: DateTimePickerType.date,
                           maximumDate: DateTime.now(),
+                          validator: _validateBirth,
                         ),
                       ),
 

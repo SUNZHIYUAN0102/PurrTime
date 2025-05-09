@@ -3,8 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
 import 'package:intl/intl.dart';
 import 'package:purr_time/apis/records.dart';
+import 'package:purr_time/components/customDateTimeFormField.dart';
 import 'package:purr_time/components/customInputFormField.dart';
-import 'package:purr_time/components/notiferDateTimeInputField.dart';
 import 'package:purr_time/store/cat.dart';
 import 'package:purr_time/swagger_generated_code/api_json.swagger.dart';
 
@@ -20,7 +20,6 @@ class _RecordManagementState extends State<RecordManagement> {
   String catalogue = "";
   String name = "";
   String dateTime = "";
-  ValueNotifier<String> dateTimeNotifier = ValueNotifier<String>("");
 
   String amount = "";
   String unit = "";
@@ -32,6 +31,8 @@ class _RecordManagementState extends State<RecordManagement> {
   TextEditingController amountController = TextEditingController();
   TextEditingController unitController = TextEditingController();
 
+  TextEditingController dateTimeController = TextEditingController();
+
   _submitRecord() async {
     RecordDto res = await RecordsApi.createRecord(
       CatController.to.homeSelectedCat.value!.id,
@@ -41,7 +42,10 @@ class _RecordManagementState extends State<RecordManagement> {
                 ? CreateRecordDtoCatalogue.daily
                 : CreateRecordDtoCatalogue.expense,
         name: name,
-        date: DateFormat("yyyy-MM-dd HH:mm").parse(dateTime, false).toUtc(),
+        date:
+            DateFormat(
+              "yyyy-MM-dd HH:mm",
+            ).parse(dateTimeController.text, false).toUtc(),
         $value: double.parse(amountController.text),
         unit: unitController.text,
       ),
@@ -59,7 +63,10 @@ class _RecordManagementState extends State<RecordManagement> {
                 ? UpdateRecordDtoCatalogue.daily
                 : UpdateRecordDtoCatalogue.expense,
         name: name,
-        date: DateFormat("yyyy-MM-dd HH:mm").parse(dateTime, false).toUtc(),
+        date:
+            DateFormat(
+              "yyyy-MM-dd HH:mm",
+            ).parse(dateTimeController.text, false).toUtc(),
         $value: double.parse(amountController.text),
         unit: unitController.text,
       ),
@@ -69,11 +76,6 @@ class _RecordManagementState extends State<RecordManagement> {
   }
 
   _handleButtonPress() {
-    if (dateTime.isEmpty) {
-      Get.snackbar("Error", "Please select a date and time");
-      return;
-    }
-
     if (!_formKey.currentState!.validate()) {
       return;
     }
@@ -111,7 +113,6 @@ class _RecordManagementState extends State<RecordManagement> {
           record.catalogue.value.toString().substring(1);
       name = record.name.toString();
       dateTime = DateFormat("yyyy-MM-dd HH:mm").format(record.date);
-      dateTimeNotifier.value = dateTime;
       amount = record.$value.toString();
       unit = record.unit;
       isEdit = true;
@@ -123,16 +124,11 @@ class _RecordManagementState extends State<RecordManagement> {
 
     _scrollController.addListener(_handleScroll);
 
-    dateTimeNotifier.addListener(() {
-      setState(() {
-        dateTime = dateTimeNotifier.value;
-      });
-    });
-
     catalogueController.text = catalogue;
     nameController.text = name;
     amountController.text = amount;
     unitController.text = unit;
+    dateTimeController.text = dateTime;
   }
 
   @override
@@ -140,13 +136,14 @@ class _RecordManagementState extends State<RecordManagement> {
     // TODO: implement dispose
     super.dispose();
 
-    dateTimeNotifier.dispose();
     _scrollController.removeListener(_handleScroll);
     _scrollController.dispose();
 
     catalogueController.dispose();
     nameController.dispose();
     amountController.dispose();
+    unitController.dispose();
+    dateTimeController.dispose();
   }
 
   String? validateAmount(String? value) {
@@ -155,6 +152,13 @@ class _RecordManagementState extends State<RecordManagement> {
     }
     if (double.tryParse(value) == null) {
       return "Please enter a valid number";
+    }
+    return null;
+  }
+
+  String? validateDateTime(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Please select a date and time";
     }
     return null;
   }
@@ -250,9 +254,10 @@ class _RecordManagementState extends State<RecordManagement> {
 
                       Container(
                         margin: EdgeInsets.only(bottom: 10.h),
-                        child: NotiferDateTimeInputField(
+                        child: CustomDateTimeInputFormField(
                           label: "Date & Time",
-                          notifier: dateTimeNotifier,
+                          controller: dateTimeController,
+                          validator: validateDateTime,
                         ),
                       ),
 
