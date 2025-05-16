@@ -128,6 +128,8 @@ class _AuthState extends State<Auth> {
         "Invalid email or password",
         duration: const Duration(seconds: 2),
       );
+
+      print(e);
     }
   }
 

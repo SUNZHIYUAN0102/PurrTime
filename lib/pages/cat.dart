@@ -1,7 +1,5 @@
 import 'dart:io';
-import 'package:cloudinary/cloudinary.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:board_datetime_picker/board_datetime_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,8 +7,8 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:purr_time/apis/cats.dart';
 import 'package:purr_time/components/customDateTimeFormField.dart';
+import 'package:purr_time/components/customDropdown.dart';
 import 'package:purr_time/components/customInputFormField.dart';
-import 'package:purr_time/components/notiferDatetimeInputField.dart';
 import 'package:purr_time/pages/process/components/customInputField.dart';
 import 'package:purr_time/store/cat.dart';
 import 'package:purr_time/store/user.dart';
@@ -410,66 +408,15 @@ class _CatState extends State<Cat> {
                       // Cat gender
                       Container(
                         margin: EdgeInsets.only(bottom: 10.h),
-                        padding: EdgeInsets.only(
-                          top: 10.h,
-                          // bottom: 10.h,
-                          left: 20.w,
-                          right: 20.w,
-                        ),
-                        width: double.infinity,
-                        // height: 65.h,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[300],
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Text(
-                              "Gender*",
-                              style: TextStyle(
-                                fontSize: 14.sp,
-                                color: Colors.grey[600],
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Row(
-                                    children: [
-                                      Radio<String>(
-                                        value: "Male",
-                                        groupValue: gender,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            gender = value!;
-                                          });
-                                        },
-                                      ),
-                                      const Text("Male"),
-                                    ],
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Row(
-                                    children: [
-                                      Radio<String>(
-                                        value: "Female",
-                                        groupValue: gender,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            gender = value!;
-                                          });
-                                        },
-                                      ),
-                                      const Text("Female"),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
+                        child: CustomDropdown(
+                          label: "Gender*",
+                          options: ["Male", "Female"],
+                          initialValue: gender,
+                          onChanged: (value) {
+                            setState(() {
+                              gender = value;
+                            });
+                          },
                         ),
                       ),
 
