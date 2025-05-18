@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:purr_time/apis/cats.dart';
 import 'package:purr_time/apis/user.dart';
 import 'package:purr_time/pages/process/components/customInputField.dart';
+import 'package:purr_time/store/cat.dart';
 import 'package:purr_time/store/token.dart';
 import 'package:purr_time/store/user.dart';
 import 'package:purr_time/swagger_generated_code/api_json.swagger.dart';
@@ -117,6 +118,10 @@ class _AuthState extends State<Auth> {
         if (catList.isEmpty) {
           Get.offAllNamed("/cat");
         } else {
+          CatController.to.setCatList(catList);
+          CatController.to.setHomeSelectedCat(catList[0]);
+          CatController.to.setChartSelectedCat(catList[0]);
+          CatController.to.setProfileSelectedCat(catList[0]);
           Get.offAllNamed("/");
         }
       } else {

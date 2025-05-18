@@ -25,10 +25,9 @@ void main() async {
   // DioHelper.init(baseUrl: 'http://10.0.2.2:3000/');
   DioHelper.init(baseUrl: 'http://100.65.24.237:3000/');
 
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   final initialRoute = await configInitialRoute();
@@ -77,6 +76,11 @@ Future<String> configInitialRoute() async {
   if (catList.isEmpty) {
     return "/cat";
   }
+
+  CatController.to.setCatList(catList);
+  CatController.to.setHomeSelectedCat(catList[0]);
+  CatController.to.setChartSelectedCat(catList[0]);
+  CatController.to.setProfileSelectedCat(catList[0]);
 
   return "/";
 }

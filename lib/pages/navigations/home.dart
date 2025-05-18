@@ -38,8 +38,6 @@ class _HomeState extends State<Home> with RouteAware {
       _switchSelectedDate(_calendarController.value);
     });
 
-    _getUserCats();
-
     CatController.to.homeSelectedCat.listen((cat) {
       if (cat != null) {
         _findRecordsByCatIdAndDate();
@@ -67,18 +65,6 @@ class _HomeState extends State<Home> with RouteAware {
 
   _toRecordPage() {
     Get.toNamed("/record");
-  }
-
-  _getUserCats() async {
-    List<CatDto> res = await CatsApi.getUserCats();
-
-    if (res.isNotEmpty) {
-      CatController.to.setCatList(res);
-
-      CatController.to.setHomeSelectedCat(res[0]);
-
-      CatController.to.setProfileSelectedCat(res[0]);
-    }
   }
 
   _switchSelectedCat(CatDto cat) {
@@ -175,65 +161,48 @@ class _HomeState extends State<Home> with RouteAware {
                     padding: EdgeInsets.only(left: 16.w, right: 16.w),
                     width: double.infinity,
                     height: 55.w,
-                    child:
-                        CatController.to.catList.isNotEmpty &&
-                                CatController.to.homeSelectedCat.value != null
-                            ? Center(
-                              child: Obx(() {
-                                return ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: CatController.to.catList.length,
-                                  itemBuilder: (context, index) {
-                                    return InkWell(
-                                      onTap: () {
-                                        _switchSelectedCat(
-                                          CatController.to.catList[index],
-                                        );
-                                      },
-                                      child: Container(
-                                        margin: EdgeInsets.only(right: 10.w),
-                                        width: 55.w,
-                                        height: 55.w,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          shape: BoxShape.circle,
-                                          border: Border.all(
-                                            color:
-                                                CatController
-                                                            .to
-                                                            .homeSelectedCat
-                                                            .value!
-                                                            .id ==
-                                                        CatController
-                                                            .to
-                                                            .catList[index]
-                                                            .id
-                                                    ? Color.fromRGBO(
-                                                      249,
-                                                      229,
-                                                      172,
-                                                      1,
-                                                    )
-                                                    : Colors.grey,
-                                            width: 2.w,
-                                          ),
-                                          image: DecorationImage(
-                                            image: NetworkImage(
-                                              CatController
+                    child: Obx(() {
+                      return ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: CatController.to.catList.length,
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () {
+                              _switchSelectedCat(
+                                CatController.to.catList[index],
+                              );
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(right: 10.w),
+                              width: 55.w,
+                              height: 55.w,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color:
+                                      CatController
                                                   .to
-                                                  .catList[index]
-                                                  .image,
-                                            ),
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              }),
-                            )
-                            : Container(),
+                                                  .homeSelectedCat
+                                                  .value
+                                                  ?.id ==
+                                              CatController.to.catList[index].id
+                                          ? Color.fromRGBO(249, 229, 172, 1)
+                                          : Colors.grey,
+                                  width: 2.w,
+                                ),
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                    CatController.to.catList[index].image,
+                                  ),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    }),
                   ),
                 ],
               ),

@@ -166,6 +166,9 @@ class _CatState extends State<Cat> {
       CatController.to.addCat(cat);
 
       if (Get.arguments == null) {
+        CatController.to.setHomeSelectedCat(cat);
+        CatController.to.setChartSelectedCat(cat);
+        CatController.to.setProfileSelectedCat(cat);
         Get.offAllNamed("/");
       } else {
         Get.back();
@@ -269,6 +272,10 @@ class _CatState extends State<Cat> {
 
       CatController.to.addCat(cat);
       if (arguments == null) {
+        CatController.to.setHomeSelectedCat(cat);
+        CatController.to.setChartSelectedCat(cat);
+        CatController.to.setProfileSelectedCat(cat);
+
         Get.offAllNamed("/");
       } else {
         Get.back();

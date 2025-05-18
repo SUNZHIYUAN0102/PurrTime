@@ -225,3 +225,26 @@ Map<String, dynamic> _$UpdateTodoDtoToJson(UpdateTodoDto instance) =>
       'date': instance.date?.toIso8601String(),
       'isCompleted': instance.isCompleted,
     };
+
+WeightDto _$WeightDtoFromJson(Map<String, dynamic> json) => WeightDto(
+      date: json['date'] as String,
+      $value: (json['value'] as num).toDouble(),
+    );
+
+Map<String, dynamic> _$WeightDtoToJson(WeightDto instance) => <String, dynamic>{
+      'date': instance.date,
+      'value': instance.$value,
+    };
+
+ExpenseDto _$ExpenseDtoFromJson(Map<String, dynamic> json) => ExpenseDto(
+      name: json['name'] as String,
+      total: (json['total'] as num).toDouble(),
+      percentage: (json['percentage'] as num).toDouble(),
+    );
+
+Map<String, dynamic> _$ExpenseDtoToJson(ExpenseDto instance) =>
+    <String, dynamic>{
+      'name': instance.name,
+      'total': instance.total,
+      'percentage': instance.percentage,
+    };

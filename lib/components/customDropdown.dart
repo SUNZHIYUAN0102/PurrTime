@@ -77,13 +77,18 @@ class _CustomDropdownState extends State<CustomDropdown> {
                     showWhenUnlinked: false,
                     offset: Offset(0, size.height - 10.h),
                     child: Material(
+                      color: Colors.grey[300],
                       borderRadius: BorderRadius.circular(8.sp),
+                      elevation: 12, // 添加这一行，数值越大阴影越明显
+                      shadowColor: Colors.black.withOpacity(0.3),
                       child: ListView(
                         padding: EdgeInsets.zero,
                         shrinkWrap: true,
                         children:
                             widget.options.map((option) {
                               return ListTile(
+                                selectedColor: Colors.black,
+                                textColor: Colors.grey[600],
                                 selected: selectedValue == option,
                                 title: Text(option),
                                 onTap: () {

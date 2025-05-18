@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:purr_time/pages/navigations/charts.dart';
+import 'package:purr_time/pages/navigations/charts/charts.dart';
 import 'package:purr_time/pages/navigations/home.dart';
 import 'package:purr_time/pages/navigations/myPets.dart';
 import 'package:purr_time/pages/navigations/todo.dart';

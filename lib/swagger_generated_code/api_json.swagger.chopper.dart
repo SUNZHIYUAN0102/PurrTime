@@ -277,4 +277,46 @@ final class _$ApiJson extends ApiJson {
     );
     return client.send<dynamic, dynamic>($request);
   }
+
+  @override
+  Future<Response<List<String>>> _chartsMonthCatIdGet(
+      {required String? catId}) {
+    final Uri $url = Uri.parse('/charts/month/${catId}');
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+    );
+    return client.send<List<String>, String>($request);
+  }
+
+  @override
+  Future<Response<List<WeightDto>>> _chartsCatCatIdWeightYearMonthGet({
+    required String? catId,
+    required num? year,
+    required num? month,
+  }) {
+    final Uri $url = Uri.parse('/charts/cat/${catId}/weight/${year}/${month}');
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+    );
+    return client.send<List<WeightDto>, WeightDto>($request);
+  }
+
+  @override
+  Future<Response<List<ExpenseDto>>> _chartsCatCatIdExpenseYearMonthGet({
+    required String? catId,
+    required num? year,
+    required num? month,
+  }) {
+    final Uri $url = Uri.parse('/charts/cat/${catId}/expense/${year}/${month}');
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+    );
+    return client.send<List<ExpenseDto>, ExpenseDto>($request);
+  }
 }

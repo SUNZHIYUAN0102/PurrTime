@@ -363,6 +363,72 @@ abstract class ApiJson extends ChopperService {
   ///@param id
   @Delete(path: '/todo/{id}')
   Future<chopper.Response> _todoIdDelete({@Path('id') required String? id});
+
+  ///
+  ///@param catId
+  Future<chopper.Response<List<String>>> chartsMonthCatIdGet(
+      {required String? catId}) {
+    return _chartsMonthCatIdGet(catId: catId);
+  }
+
+  ///
+  ///@param catId
+  @Get(path: '/charts/month/{catId}')
+  Future<chopper.Response<List<String>>> _chartsMonthCatIdGet(
+      {@Path('catId') required String? catId});
+
+  ///
+  ///@param catId
+  ///@param year
+  ///@param month
+  Future<chopper.Response<List<WeightDto>>> chartsCatCatIdWeightYearMonthGet({
+    required String? catId,
+    required num? year,
+    required num? month,
+  }) {
+    generatedMapping.putIfAbsent(WeightDto, () => WeightDto.fromJsonFactory);
+
+    return _chartsCatCatIdWeightYearMonthGet(
+        catId: catId, year: year, month: month);
+  }
+
+  ///
+  ///@param catId
+  ///@param year
+  ///@param month
+  @Get(path: '/charts/cat/{catId}/weight/{year}/{month}')
+  Future<chopper.Response<List<WeightDto>>> _chartsCatCatIdWeightYearMonthGet({
+    @Path('catId') required String? catId,
+    @Path('year') required num? year,
+    @Path('month') required num? month,
+  });
+
+  ///
+  ///@param catId
+  ///@param year
+  ///@param month
+  Future<chopper.Response<List<ExpenseDto>>> chartsCatCatIdExpenseYearMonthGet({
+    required String? catId,
+    required num? year,
+    required num? month,
+  }) {
+    generatedMapping.putIfAbsent(ExpenseDto, () => ExpenseDto.fromJsonFactory);
+
+    return _chartsCatCatIdExpenseYearMonthGet(
+        catId: catId, year: year, month: month);
+  }
+
+  ///
+  ///@param catId
+  ///@param year
+  ///@param month
+  @Get(path: '/charts/cat/{catId}/expense/{year}/{month}')
+  Future<chopper.Response<List<ExpenseDto>>>
+      _chartsCatCatIdExpenseYearMonthGet({
+    @Path('catId') required String? catId,
+    @Path('year') required num? year,
+    @Path('month') required num? month,
+  });
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -1497,6 +1563,122 @@ extension $UpdateTodoDtoExtension on UpdateTodoDto {
         date: (date != null ? date.value : this.date),
         isCompleted:
             (isCompleted != null ? isCompleted.value : this.isCompleted));
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class WeightDto {
+  const WeightDto({
+    required this.date,
+    required this.$value,
+  });
+
+  factory WeightDto.fromJson(Map<String, dynamic> json) =>
+      _$WeightDtoFromJson(json);
+
+  static const toJsonFactory = _$WeightDtoToJson;
+  Map<String, dynamic> toJson() => _$WeightDtoToJson(this);
+
+  @JsonKey(name: 'date')
+  final String date;
+  @JsonKey(name: 'value')
+  final double $value;
+  static const fromJsonFactory = _$WeightDtoFromJson;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is WeightDto &&
+            (identical(other.date, date) ||
+                const DeepCollectionEquality().equals(other.date, date)) &&
+            (identical(other.$value, $value) ||
+                const DeepCollectionEquality().equals(other.$value, $value)));
+  }
+
+  @override
+  String toString() => jsonEncode(this);
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(date) ^
+      const DeepCollectionEquality().hash($value) ^
+      runtimeType.hashCode;
+}
+
+extension $WeightDtoExtension on WeightDto {
+  WeightDto copyWith({String? date, double? $value}) {
+    return WeightDto(date: date ?? this.date, $value: $value ?? this.$value);
+  }
+
+  WeightDto copyWithWrapped({Wrapped<String>? date, Wrapped<double>? $value}) {
+    return WeightDto(
+        date: (date != null ? date.value : this.date),
+        $value: ($value != null ? $value.value : this.$value));
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class ExpenseDto {
+  const ExpenseDto({
+    required this.name,
+    required this.total,
+    required this.percentage,
+  });
+
+  factory ExpenseDto.fromJson(Map<String, dynamic> json) =>
+      _$ExpenseDtoFromJson(json);
+
+  static const toJsonFactory = _$ExpenseDtoToJson;
+  Map<String, dynamic> toJson() => _$ExpenseDtoToJson(this);
+
+  @JsonKey(name: 'name')
+  final String name;
+  @JsonKey(name: 'total')
+  final double total;
+  @JsonKey(name: 'percentage')
+  final double percentage;
+  static const fromJsonFactory = _$ExpenseDtoFromJson;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is ExpenseDto &&
+            (identical(other.name, name) ||
+                const DeepCollectionEquality().equals(other.name, name)) &&
+            (identical(other.total, total) ||
+                const DeepCollectionEquality().equals(other.total, total)) &&
+            (identical(other.percentage, percentage) ||
+                const DeepCollectionEquality()
+                    .equals(other.percentage, percentage)));
+  }
+
+  @override
+  String toString() => jsonEncode(this);
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(name) ^
+      const DeepCollectionEquality().hash(total) ^
+      const DeepCollectionEquality().hash(percentage) ^
+      runtimeType.hashCode;
+}
+
+extension $ExpenseDtoExtension on ExpenseDto {
+  ExpenseDto copyWith({String? name, double? total, double? percentage}) {
+    return ExpenseDto(
+        name: name ?? this.name,
+        total: total ?? this.total,
+        percentage: percentage ?? this.percentage);
+  }
+
+  ExpenseDto copyWithWrapped(
+      {Wrapped<String>? name,
+      Wrapped<double>? total,
+      Wrapped<double>? percentage}) {
+    return ExpenseDto(
+        name: (name != null ? name.value : this.name),
+        total: (total != null ? total.value : this.total),
+        percentage: (percentage != null ? percentage.value : this.percentage));
   }
 }
 
