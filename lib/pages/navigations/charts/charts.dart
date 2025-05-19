@@ -20,10 +20,10 @@ class _ChartsState extends State<Charts> {
     // TODO: implement initState
     super.initState();
 
-    getRecordsTimeList();
+    _getRecordsTimeList();
   }
 
-  String dateType = "Month";
+  String timeType = "Month";
 
   List<String> timeList = [];
   List<ExpenseDto> expenseRecords = [];
@@ -31,10 +31,20 @@ class _ChartsState extends State<Charts> {
 
   String currTime = "";
 
-  void getRecordsTimeList() async {
+  void _getRecordsTimeList() async {
     try {
-      if (dateType == "Month") {
+      if (timeType == "Month") {
         timeList = await ChartsApi.getRecordMonth(
+          CatController.to.chartSelectedCat.value!.id,
+        );
+
+        setState(() {
+          timeList = timeList;
+        });
+
+        _setCurrTime(timeList[timeList.length - 1]);
+      } else {
+        timeList = await ChartsApi.getRecordYear(
           CatController.to.chartSelectedCat.value!.id,
         );
 
@@ -54,24 +64,32 @@ class _ChartsState extends State<Charts> {
       currTime = time;
     });
 
-    if (dateType == "Month") {
+    if (timeType == "Month") {
       _getCatMonthlyWeightRecords();
       _getCatMonthlyExpenseRecords();
-    } else {}
+    } else {
+      _getCatYearlyWeightRecords();
+      _getCatYearlyExpenseRecords();
+    }
   }
 
-  void _changeDateType(String type) {
+  void _changeTimeType(String type) {
     setState(() {
-      dateType = type;
+      timeType = type;
     });
+
+    _getRecordsTimeList();
   }
 
   void _setChartSelectedCat(CatDto cat) {
     CatController.to.setChartSelectedCat(cat);
 
-    if (dateType == "Month") {
+    if (timeType == "Month") {
       _getCatMonthlyWeightRecords();
       _getCatMonthlyExpenseRecords();
+    } else {
+      _getCatYearlyWeightRecords();
+      _getCatYearlyExpenseRecords();
     }
   }
 
@@ -107,6 +125,36 @@ class _ChartsState extends State<Charts> {
     }
   }
 
+  void _getCatYearlyWeightRecords() async {
+    try {
+      weightRecords = await ChartsApi.getCatYearlyWeightRecords(
+        CatController.to.chartSelectedCat.value!.id,
+        currTime,
+      );
+
+      setState(() {
+        weightRecords = weightRecords;
+      });
+    } catch (e) {
+      print("Error in get reocrd month: $e");
+    }
+  }
+
+  void _getCatYearlyExpenseRecords() async {
+    try {
+      expenseRecords = await ChartsApi.getCatYearlyExpenseRecords(
+        CatController.to.chartSelectedCat.value!.id,
+        currTime,
+      );
+
+      setState(() {
+        expenseRecords = expenseRecords;
+      });
+    } catch (e) {
+      print("Error in get reocrd month: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,12 +176,12 @@ class _ChartsState extends State<Charts> {
                 flex: 1,
                 child: GestureDetector(
                   onTap: () {
-                    _changeDateType("Month");
+                    _changeTimeType("Month");
                   },
                   child: Container(
                     height: double.infinity,
                     decoration: BoxDecoration(
-                      color: dateType == "Month" ? Colors.black : Colors.white,
+                      color: timeType == "Month" ? Colors.black : Colors.white,
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(50.r),
                         bottomLeft: Radius.circular(50.r),
@@ -144,7 +192,7 @@ class _ChartsState extends State<Charts> {
                         "Month",
                         style: TextStyle(
                           color:
-                              dateType == "Month" ? Colors.white : Colors.black,
+                              timeType == "Month" ? Colors.white : Colors.black,
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w500,
                         ),
@@ -158,12 +206,12 @@ class _ChartsState extends State<Charts> {
                 flex: 1,
                 child: GestureDetector(
                   onTap: () {
-                    _changeDateType("Year");
+                    _changeTimeType("Year");
                   },
                   child: Container(
                     height: double.infinity,
                     decoration: BoxDecoration(
-                      color: dateType == "Year" ? Colors.black : Colors.white,
+                      color: timeType == "Year" ? Colors.black : Colors.white,
                       borderRadius: BorderRadius.only(
                         topRight: Radius.circular(50.r),
                         bottomRight: Radius.circular(50.r),
@@ -174,7 +222,7 @@ class _ChartsState extends State<Charts> {
                         "Year",
                         style: TextStyle(
                           color:
-                              dateType == "Year" ? Colors.white : Colors.black,
+                              timeType == "Year" ? Colors.white : Colors.black,
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w500,
                         ),
@@ -278,7 +326,10 @@ class _ChartsState extends State<Charts> {
                 child: Column(
                   spacing: 20.h,
                   children: [
-                    WeightChart(weightRecords: weightRecords),
+                    WeightChart(
+                      weightRecords: weightRecords,
+                      timeType: timeType,
+                    ),
                     ExpenseRanking(expenseRecords: expenseRecords),
                   ],
                 ),

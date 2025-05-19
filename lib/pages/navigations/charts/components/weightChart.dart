@@ -5,7 +5,12 @@ import 'package:purr_time/swagger_generated_code/api_json.swagger.dart';
 
 class WeightChart extends StatelessWidget {
   final List<WeightDto> weightRecords;
-  const WeightChart({super.key, required this.weightRecords});
+  final String timeType;
+  const WeightChart({
+    super.key,
+    required this.weightRecords,
+    required this.timeType,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +56,7 @@ class WeightChart extends StatelessWidget {
                       final value = spot.y.toInt();
                       final date = spot.x.toInt().toString().padLeft(2, '0');
                       return LineTooltipItem(
-                        "Day $date\n$value kg",
+                        "${timeType == "Month" ? "Day" : "Month"} $date\n$value kg",
                         const TextStyle(
                           color: Colors.white,
                           fontSize: 12,
@@ -80,16 +85,22 @@ class WeightChart extends StatelessWidget {
                     showTitles: true,
                     interval: 1,
                     getTitlesWidget: (value, meta) {
-                      final day = value.toInt();
+                      final val = value.toInt();
 
-                      int lastDay =
-                          double.parse(
-                            weightRecords[weightRecords.length - 1].date,
-                          ).toInt();
+                      if (timeType == "Month") {
+                        int lastDay =
+                            double.parse(
+                              weightRecords[weightRecords.length - 1].date,
+                            ).toInt();
 
-                      if ([1, 5, 10, 15, 20, 25].contains(day) ||
-                          day == lastDay) {
-                        return Text(day.toString());
+                        if ([1, 5, 10, 15, 20, 25].contains(val) ||
+                            val == lastDay) {
+                          return Text(val.toString());
+                        }
+                      } else {
+                        if ([1, 3, 6, 9, 12].contains(val)) {
+                          return Text(val.toString());
+                        }
                       }
 
                       return const SizedBox.shrink();
