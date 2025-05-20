@@ -37,22 +37,23 @@ class _ChartsState extends State<Charts> {
         timeList = await ChartsApi.getRecordMonth(
           CatController.to.chartSelectedCat.value!.id,
         );
-
-        setState(() {
-          timeList = timeList;
-        });
-
-        _setCurrTime(timeList[timeList.length - 1]);
       } else {
         timeList = await ChartsApi.getRecordYear(
           CatController.to.chartSelectedCat.value!.id,
         );
+      }
 
-        setState(() {
-          timeList = timeList;
-        });
+      setState(() {
+        timeList = timeList;
+      });
 
+      if (timeList.isNotEmpty) {
         _setCurrTime(timeList[timeList.length - 1]);
+      } else {
+        setState(() {
+          expenseRecords = [];
+          weightRecords = [];
+        });
       }
     } catch (e) {
       print("Error in get reocrd time: $e");
@@ -84,13 +85,7 @@ class _ChartsState extends State<Charts> {
   void _setChartSelectedCat(CatDto cat) {
     CatController.to.setChartSelectedCat(cat);
 
-    if (timeType == "Month") {
-      _getCatMonthlyWeightRecords();
-      _getCatMonthlyExpenseRecords();
-    } else {
-      _getCatYearlyWeightRecords();
-      _getCatYearlyExpenseRecords();
-    }
+    _getRecordsTimeList();
   }
 
   void _getCatMonthlyWeightRecords() async {

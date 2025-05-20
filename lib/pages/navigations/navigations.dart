@@ -19,12 +19,9 @@ class Navigations extends StatefulWidget {
 
 class _NavigationsState extends State<Navigations> {
   int _selectedIndex = 0;
-  final List<Widget> _pages = [
-    const Home(),
-    const Charts(),
-    const ToDo(),
-    const MyPets(),
-  ];
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  late List<Widget> _pages;
 
   _onItemTapped(int index) {
     setState(() {
@@ -37,6 +34,15 @@ class _NavigationsState extends State<Navigations> {
     // TODO: implement initState
     super.initState();
 
+    setState(() {
+      _pages = [
+        Home(scaffoldKey: _scaffoldKey),
+        const Charts(),
+        const ToDo(),
+        const MyPets(),
+      ];
+    });
+
     FlutterNativeSplash.remove(); // remove the splash screen
   }
 
@@ -48,6 +54,7 @@ class _NavigationsState extends State<Navigations> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       body: IndexedStack(index: _selectedIndex, children: _pages),
       bottomNavigationBar: StylishBottomBar(
         currentIndex: _selectedIndex,

@@ -14,7 +14,8 @@ import 'package:purr_time/store/user.dart';
 import 'package:purr_time/swagger_generated_code/api_json.swagger.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  final GlobalKey<ScaffoldState> scaffoldKey;
+  const Home({super.key, required this.scaffoldKey});
 
   @override
   State<Home> createState() => _HomeState();
@@ -128,11 +129,16 @@ class _HomeState extends State<Home> with RouteAware {
             return Row(
               spacing: 10.w,
               children: [
-                Container(
-                  margin: EdgeInsets.only(left: 16.w),
-                  decoration: BoxDecoration(shape: BoxShape.circle),
-                  clipBehavior: Clip.hardEdge,
-                  child: Image.network(UserController.to.user.value!.avatar!),
+                GestureDetector(
+                  onTap: () {
+                    widget.scaffoldKey.currentState?.openDrawer();
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(left: 16.w),
+                    decoration: BoxDecoration(shape: BoxShape.circle),
+                    clipBehavior: Clip.hardEdge,
+                    child: Image.network(UserController.to.user.value!.avatar!),
+                  ),
                 ),
                 Text(
                   "Welcome, ${UserController.to.user.value!.username}",
