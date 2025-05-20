@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:purr_time/apis/charts.dart';
+import 'package:purr_time/main.dart';
 import 'package:purr_time/pages/navigations/charts/components/expenseRanking.dart';
 import 'package:purr_time/pages/navigations/charts/components/weightChart.dart';
 import 'package:purr_time/store/cat.dart';
@@ -14,12 +15,24 @@ class Charts extends StatefulWidget {
   State<Charts> createState() => _ChartsState();
 }
 
-class _ChartsState extends State<Charts> {
+class _ChartsState extends State<Charts> with RouteAware {
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
+    _getRecordsTimeList();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    routeObserver.subscribe(this, ModalRoute.of(context)!);
+  }
+
+  @override
+  void didPopNext() {
     _getRecordsTimeList();
   }
 

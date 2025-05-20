@@ -7,7 +7,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:purr_time/apis/cats.dart';
 import 'package:purr_time/apis/user.dart';
-import 'package:purr_time/swagger_generated_code/api_json.swagger.dart';
 import 'package:purr_time/utils/dioHelper.dart';
 import 'package:purr_time/routes.dart';
 import 'package:purr_time/store/cat.dart';
