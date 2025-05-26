@@ -290,7 +290,6 @@ class _ChartsState extends State<Charts> with RouteAware {
           ),
 
           Container(
-            margin: EdgeInsets.only(bottom: 15.h),
             width: double.infinity,
             height: 40.h,
             decoration: BoxDecoration(
@@ -332,11 +331,14 @@ class _ChartsState extends State<Charts> with RouteAware {
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
                 child: Column(
-                  spacing: 20.h,
+                  spacing: 25.h,
                   children: [
-                    WeightChart(
-                      weightRecords: weightRecords,
-                      timeType: timeType,
+                    Container(
+                      margin: EdgeInsets.only(top: 25.h),
+                      child: WeightChart(
+                        weightRecords: weightRecords,
+                        timeType: timeType,
+                      ),
                     ),
                     ExpenseRanking(expenseRecords: expenseRecords),
                   ],

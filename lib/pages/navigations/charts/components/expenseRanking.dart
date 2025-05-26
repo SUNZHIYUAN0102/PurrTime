@@ -33,7 +33,15 @@ class ExpenseRanking extends StatelessWidget {
                 padding: EdgeInsets.symmetric(vertical: 15.h),
                 decoration: BoxDecoration(
                   border: Border(
-                    bottom: BorderSide(color: Colors.grey[300]!, width: 1.w),
+                    // last item color is transparent
+                    bottom: BorderSide(
+                      color:
+                          (item == expenseRecords.last &&
+                                  expenseRecords.length > 1)
+                              ? Colors.transparent
+                              : Colors.grey[300]!,
+                      width: 1.w,
+                    ),
                   ),
                 ),
                 child: Row(

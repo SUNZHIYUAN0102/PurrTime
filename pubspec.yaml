@@ -59,6 +59,7 @@ dependencies:
   stylish_bottom_bar: ^1.1.1
   fl_chart: ^1.0.0
   percent_indicator: ^4.2.5
+  timelines_plus: ^1.0.6
   
 flutter_native_splash:
   background_image: "images/splash.png"

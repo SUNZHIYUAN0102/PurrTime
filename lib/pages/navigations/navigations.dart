@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:purr_time/pages/navigations/activities/activities.dart';
 import 'package:purr_time/pages/navigations/charts/charts.dart';
 import 'package:purr_time/pages/navigations/home.dart';
 import 'package:purr_time/pages/navigations/myPets.dart';
-import 'package:purr_time/pages/navigations/todo.dart';
 import 'package:purr_time/store/token.dart';
 import 'package:purr_time/store/user.dart';
 import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
@@ -38,7 +38,7 @@ class _NavigationsState extends State<Navigations> {
       _pages = [
         Home(scaffoldKey: _scaffoldKey),
         const Charts(),
-        const ToDo(),
+        const Activities(),
         const MyPets(),
       ];
     });
@@ -72,7 +72,7 @@ class _NavigationsState extends State<Navigations> {
           ),
           BottomBarItem(
             icon: const Icon(Icons.list_alt_outlined),
-            title: const Text('To Do'),
+            title: const Text('Activities'),
             selectedColor: Colors.black,
           ),
           BottomBarItem(

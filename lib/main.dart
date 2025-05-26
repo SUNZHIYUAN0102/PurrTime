@@ -59,27 +59,33 @@ Future<String> configInitialRoute() async {
   final box = GetStorage();
   final token = box.read('token');
 
-  if (token == null || JwtDecoder.isExpired(token)) {
+  try {
+    if (token == null || JwtDecoder.isExpired(token)) {
+      TokenController.to.clearToken();
+      return "/welcome";
+    }
+
+    final user = await UserApi.getUser();
+    if (user.username == null || user.avatar == null) {
+      return "/process/userInfo";
+    }
+
+    UserController.to.setUser(user);
+
+    final catList = await CatsApi.getUserCats();
+    if (catList.isEmpty) {
+      return "/cat";
+    }
+
+    CatController.to.setCatList(catList);
+    CatController.to.setHomeSelectedCat(catList[0]);
+    CatController.to.setChartSelectedCat(catList[0]);
+    CatController.to.setProfileSelectedCat(catList[0]);
+
+    return "/";
+  } catch (e) {
+    print(e);
     TokenController.to.clearToken();
     return "/welcome";
   }
-
-  final user = await UserApi.getUser();
-  if (user.username == null || user.avatar == null) {
-    return "/process/userInfo";
-  }
-
-  UserController.to.setUser(user);
-
-  final catList = await CatsApi.getUserCats();
-  if (catList.isEmpty) {
-    return "/cat";
-  }
-
-  CatController.to.setCatList(catList);
-  CatController.to.setHomeSelectedCat(catList[0]);
-  CatController.to.setChartSelectedCat(catList[0]);
-  CatController.to.setProfileSelectedCat(catList[0]);
-
-  return "/";
 }
