@@ -4,6 +4,18 @@ import 'package:intl/intl.dart';
 import 'package:purr_time/pages/navigations/activities/components/weeklyCalendar.dart';
 import 'package:timelines_plus/timelines_plus.dart';
 
+class Activity {
+  final String title;
+  final String description;
+  final DateTime date;
+
+  Activity({
+    required this.title,
+    required this.description,
+    required this.date,
+  });
+}
+
 class Activities extends StatefulWidget {
   const Activities({super.key});
 
@@ -12,6 +24,35 @@ class Activities extends StatefulWidget {
 }
 
 class _ActivitiesState extends State<Activities> {
+  // for cats
+  List<Activity> activities = [
+    Activity(
+      title: "Wake Up",
+      description: "Wake up from 5 hours of sleep.",
+      date: DateTime(2025, 5, 27, 6, 30),
+    ),
+    Activity(
+      title: "Play",
+      description: "Play with a toy for 30 minutes.",
+      date: DateTime(2025, 5, 27, 7, 0),
+    ),
+    Activity(
+      title: "Eat",
+      description: "Eat breakfast for 15 minutes.",
+      date: DateTime(2025, 5, 27, 7, 30),
+    ),
+    Activity(
+      title: "Nap",
+      description: "Take a nap for 2 hours.",
+      date: DateTime(2025, 5, 27, 8, 0),
+    ),
+    Activity(
+      title: "Groom",
+      description: "Groom for 30 minutes.",
+      date: DateTime(2025, 5, 27, 10, 0),
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,44 +97,85 @@ class _ActivitiesState extends State<Activities> {
             ),
 
             Expanded(
-              child: FixedTimeline.tileBuilder(
-                builder: TimelineTileBuilder.connected(
-                  contentsAlign: ContentsAlign.alternating,
-                  contentsBuilder: (context, index) {
-                    return Padding(
-                      padding: EdgeInsets.only(
-                        left: index % 2 == 0 ? 15.w : 0,
-                        right: index % 2 == 0 ? 0 : 15.w,
-                      ),
-                      child: Container(
-                        margin: EdgeInsets.only(bottom: 10.h),
-                        height: 50.h,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.r),
-                          color: Colors.grey[200],
+              child: SingleChildScrollView(
+                child: FixedTimeline.tileBuilder(
+                  theme: TimelineThemeData(nodePosition: 0),
+                  builder: TimelineTileBuilder.connected(
+                    contentsAlign: ContentsAlign.basic,
+                    contentsBuilder: (context, index) {
+                      return Padding(
+                        padding: EdgeInsets.only(left: 15.w),
+                        child: Container(
+                          margin: EdgeInsets.only(bottom: 10.h),
+                          constraints: BoxConstraints(minHeight: 50.h),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.r),
+                            color: Colors.grey[200],
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 10.h,
+                              vertical: 10.h,
+                            ),
+                            child: Column(
+                              spacing: 5.h,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      activities[index].title,
+                                      style: TextStyle(
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    Text(
+                                      DateFormat.jm().format(
+                                        activities[index].date,
+                                      ),
+                                      style: TextStyle(
+                                        fontSize: 12.sp,
+                                        color: Colors.grey[500],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Text(
+                                  activities[index].description,
+                                  style: TextStyle(
+                                    fontSize: 14.sp,
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                        child: Padding(padding: EdgeInsets.symmetric()),
-                      ),
-                    );
-                  },
+                      );
+                    },
 
-                  indicatorBuilder: (context, index) {
-                    return OutlinedDotIndicator(
-                      size: 12.w,
-                      color: Colors.blue,
-                      borderWidth: 1.5.w,
-                    );
-                  },
+                    indicatorBuilder: (context, index) {
+                      return OutlinedDotIndicator(
+                        size: 12.w,
+                        color: Colors.blue,
+                        borderWidth: 1.5.w,
+                      );
+                    },
 
-                  connectorBuilder: (context, index, type) {
-                    return SolidLineConnector(
-                      color: Colors.blue,
-                      space: 1.5.w,
-                      indent: type == ConnectorType.start ? 0 : 4.h,
-                      endIndent: type == ConnectorType.end ? 0 : 4.h,
-                    );
-                  },
-                  itemCount: 3,
+                    connectorBuilder: (context, index, type) {
+                      return SolidLineConnector(
+                        color: Colors.blue,
+                        space: 1.5.w,
+                        indent: type == ConnectorType.start ? 0 : 4.h,
+                        endIndent: type == ConnectorType.end ? 0 : 4.h,
+                      );
+                    },
+                    itemCount: activities.length,
+                  ),
                 ),
               ),
             ),
