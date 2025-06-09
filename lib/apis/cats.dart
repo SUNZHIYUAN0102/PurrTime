@@ -5,9 +5,20 @@ class CatsApi {
   static Future<List<CatDto>> getUserCats() async {
     try {
       final response = await DioHelper.get("/cats");
+
       final List<dynamic> data = response.data;
 
-      return data.map((json) => CatDto.fromJson(json)).toList();
+      final converted =
+          data.map((cat) {
+            if (cat is Map<String, dynamic> && cat["birth"] is String) {
+              final utc = DateTime.parse(cat["birth"]);
+              final local = utc.toLocal();
+              cat["birth"] = local.toIso8601String();
+            }
+            return cat;
+          }).toList();
+
+      return converted.map((json) => CatDto.fromJson(json)).toList();
     } catch (e) {
       print("Error in getUserCats: $e");
       rethrow;
@@ -17,6 +28,14 @@ class CatsApi {
   static Future<CatDto> getCatById(String catId) async {
     try {
       final response = await DioHelper.get("/cats/$catId");
+
+      // Convert the birth date from UTC to local time if necessary
+      if (response.data is Map<String, dynamic> &&
+          response.data["birth"] is String) {
+        final utc = DateTime.parse(response.data["birth"]);
+        response.data["birth"] = utc.toLocal().toIso8601String();
+      }
+
       return CatDto.fromJson(response.data);
     } catch (e) {
       print("Error in getCatById: $e");

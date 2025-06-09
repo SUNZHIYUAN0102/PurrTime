@@ -166,6 +166,7 @@ class _CatState extends State<Cat> {
       CatController.to.addCat(cat);
 
       if (Get.arguments == null) {
+        print("registration part add cat");
         CatController.to.setHomeSelectedCat(cat);
         CatController.to.setChartSelectedCat(cat);
         CatController.to.setProfileSelectedCat(cat);
